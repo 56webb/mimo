@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('franceTripTodos', JSON.stringify(state.todos));
   }
 
+  // 資料來源旗標：true = 來自 Google 試算表，false = 離線快照或預設行程
+  let dataFromSheet = false;
+  let sheetSyncTime = '';
+
   // ===== 行程資料 (預設 Fallback 行程 - 與最新試算表對齊) =====
   let itineraryData = [
     { date: '9/15', time: '23:30', location: '桃園', type: 'transit', desc: '準備出發，飛往巴黎', detail: '記得攜帶護照、網卡、轉接頭。建議提前 3 小時抵達機場。' },
@@ -377,8 +381,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const uncompletedTodos = state.todos.filter(t => t.date === itemData.date && !t.completed);
       const badgeHtml = uncompletedTodos.length > 0 ? `<div class="calendar-todo-badge">${uncompletedTodos.length}</div>` : '';
 
+      // 資料來源徽章
+      const sourceBadge = dataFromSheet
+        ? `<div class="calendar-source-badge sheet" title="資料來自 Google 試算表（${sheetSyncTime}）">📊 試算表</div>`
+        : `<div class="calendar-source-badge fallback" title="離線快照 / 預設行程">📁 預設</div>`;
+
       cell.innerHTML = `
         ${badgeHtml}
+        ${sourceBadge}
         <div class="calendar-date">
           <span>${itemData.date}</span>
           ${timeHtml}
@@ -930,10 +940,15 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }
     
+    const sourceTag = dataFromSheet
+      ? `<div class="modal-source-tag sheet">📊 資料來源：Google 試算表（${sheetSyncTime} 同步）</div>`
+      : `<div class="modal-source-tag fallback">📁 資料來源：預設行程（等待網路恢復後會自動同步）</div>`;
+
     content.innerHTML = `
       <div class="modal-header">
         <div class="modal-date">📅 ${itemData.date} ${timeStr}</div>
         <h2 class="modal-title">${itemData.location}</h2>
+        ${sourceTag}
       </div>
       <div class="modal-body">
         <p style="font-size: 1.2rem; color: var(--c-text); margin-bottom: 20px;"><strong>📍 計畫：</strong>${itemData.desc}</p>
@@ -1314,12 +1329,13 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('franceTripItinerarySnapshotTime', new Date().toLocaleString());
       }
 
-      // 更新同步狀態徽章為成功
+      sheetSyncTime = new Date().toLocaleTimeString();
       if (statusBadge) {
         statusBadge.className = 'sync-status-badge synced';
         statusBadge.innerHTML = '🟢 試算表已同步';
-        statusBadge.title = `最後同步時間：${new Date().toLocaleTimeString()}`;
+        statusBadge.title = `最後同步時間：${sheetSyncTime}`;
       }
+      dataFromSheet = true;
     } catch (error) {
       console.warn('無法從 Google 試算表同步資料，載入離線緩存：', error);
       
@@ -1328,12 +1344,14 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (snapshot) {
         itineraryData = JSON.parse(snapshot);
+        dataFromSheet = false;
         if (statusBadge) {
           statusBadge.className = 'sync-status-badge offline';
           statusBadge.innerHTML = '🟡 離線快照模式';
           statusBadge.title = `載入離線緩存，快照時間：${snapshotTime} (錯誤原因: ${error.message})`;
         }
       } else {
+        dataFromSheet = false;
         if (statusBadge) {
           statusBadge.className = 'sync-status-badge fallback';
           statusBadge.innerHTML = '🔴 斷網預設行程';

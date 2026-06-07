@@ -554,6 +554,33 @@ button {
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+/* 資料來源徽章（試算表 / 預設） */
+.calendar-source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+  width: fit-content;
+  line-height: 1.4;
+}
+
+.calendar-source-badge.sheet {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.calendar-source-badge.fallback {
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
 /* 類型顏色 - 日曆版 */
 .cal-type-transit { background: rgba(139, 92, 246, 0.15); border-left: 4px solid var(--c-transit); }
 .cal-type-paris { background: rgba(236, 72, 153, 0.15); border-left: 4px solid var(--c-paris); }
@@ -1387,6 +1414,31 @@ details[open] .accordion-icon {
 
 .modal-title {
   font-size: 1.8rem;
+}
+
+/* Modal 資料來源標籤 */
+.modal-source-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-top: 8px;
+  letter-spacing: 0.01em;
+}
+
+.modal-source-tag.sheet {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.modal-source-tag.fallback {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .modal-body p {
