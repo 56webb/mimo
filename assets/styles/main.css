@@ -1,57 +1,61 @@
 /* ==========================================================================
-   🇫🇷 Voyage en France 2026 — Taste-Calibrated Editorial Design System
-   Enforcing anti-slop, calibrated palette, tactile physics & typographic rigor.
+   🇫🇷 Voyage en France 2026 — Taste + PencilPlaybook Perceptual Design System
+   Enforcing anti-slop, calibrated palette, tactile physics & perceptual ergonomics.
    ========================================================================== */
 
-/* ===== 核心設計變數 (Design Tokens) ===== */
+/* ===== 核心設計變數 (Design Tokens & Perceptual Defaults) ===== */
 :root {
-  /* 畫布與背景體系 (Canvas & Surfaces) */
+  /* 畫布與背景體系 (Canvas & Surfaces - APCA Contrast Compliant) */
   --canvas-bg: #080c14;
-  --surface-card: rgba(17, 24, 39, 0.9);
-  --surface-card-elevated: rgba(26, 36, 56, 0.95);
+  --surface-card: rgba(17, 24, 39, 0.92);
+  --surface-card-elevated: rgba(28, 38, 58, 0.98);
   --surface-subtle: rgba(255, 255, 255, 0.04);
-  --surface-glass: rgba(8, 12, 20, 0.85);
+  --surface-glass: rgba(8, 12, 20, 0.88);
   
-  /* 結構邊框 (Structural Hairlines) */
+  /* 結構邊框 (Structural Hairlines - 3:1 Non-text Contrast) */
   --border-whisper: rgba(255, 255, 255, 0.08);
-  --border-subtle: rgba(255, 255, 255, 0.12);
-  --border-ochre: rgba(217, 119, 6, 0.35);
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --border-ochre: rgba(217, 119, 6, 0.38);
   --border-focus: #d97706;
   
-  /* 文字階層 (Typographic Spectrum) */
+  /* 文字階層 (PencilPlaybook: Anti-halation on Dark Surfaces) */
   --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
+  --text-secondary: #cbd5e1; /* PencilPlaybook: #E2E8F0/#CBD5E1 prevents dark-bg halation */
+  --text-tertiary: #94a3b8;
   
   /* 主強調色 (Singular Primary Accent: Calibrated Ochre) */
   --accent-ochre: #d97706;
   --accent-ochre-hover: #b45309;
-  --accent-ochre-surface: rgba(217, 119, 6, 0.12);
-  --accent-ochre-border: rgba(217, 119, 6, 0.28);
+  --accent-ochre-surface: rgba(217, 119, 6, 0.14);
+  --accent-ochre-border: rgba(217, 119, 6, 0.32);
   
   /* 功能狀態色 (Functional Accents - Low Saturation) */
   --status-emerald: #10b981;
-  --status-emerald-surface: rgba(16, 185, 129, 0.12);
+  --status-emerald-surface: rgba(16, 185, 129, 0.14);
   --status-cyan: #0284c7;
-  --status-cyan-surface: rgba(2, 132, 199, 0.12);
+  --status-cyan-surface: rgba(2, 132, 199, 0.14);
   --status-rose: #e11d48;
-  --status-rose-surface: rgba(225, 29, 72, 0.12);
+  --status-rose-surface: rgba(225, 29, 72, 0.14);
 
   /* 字體族系 (Typography Architecture) */
   --font-serif: 'Noto Serif TC', serif;
   --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   
-  /* 圓角與間距 (Geometry) */
-  --radius-xl: 20px;
+  /* 圓角與間距 (PencilPlaybook Geometry: Card radius ≤ 16px, Button 10px) */
+  --radius-xl: 18px;
   --radius-lg: 14px;
   --radius-md: 10px;
   --radius-sm: 6px;
   
   /* 陰影與濾鏡 (Atmosphere) */
-  --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.08);
+  --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.55), 0 0 1px rgba(255, 255, 255, 0.08);
   --blur: blur(20px);
-  --transition-spring: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* PencilPlaybook 動效知覺曲線 (Easing & Timing) */
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --transition-spring: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
   
   --nav-height: 64px;
   --header-height: 54px;
