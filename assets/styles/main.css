@@ -1121,29 +1121,6 @@ body {
   margin-bottom: 6px;
 }
 
-.quick-email-chips {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.email-chip {
-  flex: 1;
-  padding: 6px 8px;
-  border-radius: var(--radius-sm);
-  background: var(--surface-subtle);
-  border: 1px solid var(--border-whisper);
-  color: var(--text-primary);
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition-spring);
-}
-
-.email-chip:active {
-  background: var(--accent-ochre);
-  color: #080c14;
-}
 
 .gate-input {
   width: 100%;

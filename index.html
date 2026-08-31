@@ -48,17 +48,13 @@
 
       <form id="accessGateForm" onsubmit="handleAccessSubmit(event)">
         <div class="gate-input-group">
-          <label class="gate-label">請選擇或輸入您的受邀 Email：</label>
-          <div class="quick-email-chips">
-            <button type="button" class="email-chip" onclick="selectQuickEmail('skunkqq@gmail.com')">Chin Yu (skunkqq)</button>
-            <button type="button" class="email-chip" onclick="selectQuickEmail('sasadako.wu@gmail.com')">Sadako (sasadako)</button>
-          </div>
-          <input type="email" id="gateEmailInput" class="gate-input" placeholder="輸入您的 Google Email..." required>
+          <label class="gate-label">請輸入受邀的 Gmail 地址：</label>
+          <input type="email" id="gateEmailInput" class="gate-input" placeholder="請輸入授權的 Gmail (例: yourname@gmail.com)" required autocomplete="email">
         </div>
 
         <div class="gate-input-group">
           <label class="gate-label">旅程通關密碼：</label>
-          <input type="password" id="gatePasscodeInput" class="gate-input" placeholder="請輸入 4 位數通關密碼 (預設: 2026)" value="2026" required>
+          <input type="password" id="gatePasscodeInput" class="gate-input" placeholder="請輸入 4 位數通關密碼..." required autocomplete="current-password">
         </div>
 
         <div id="gateErrorMsg" class="gate-error-msg"></div>
