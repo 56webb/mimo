@@ -1,262 +1,180 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="2026 法國旅遊行程指南 — 巴黎、迪士尼、比利時、聖米歇爾山">
-  <title>🗼 法國旅遊指南 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#090d16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="2026 法國深度自駕與巴黎蜜月旅行指南 — 重點導航、門票憑證、道閘密碼與私房口袋庫">
+  <title>🇫🇷 法國之旅 2026</title>
+  
+  <!-- 字體引入 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- 核心樣式 -->
   <link rel="stylesheet" href="assets/styles/main.css">
 </head>
 
 <body>
 
-  <!-- ===== 頂部導覽列 ===== -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-brand">
-      <span class="nav-flag">🇫🇷</span>
-      <span class="nav-title">法國之旅 2026</span>
-      <span class="sync-status-badge" id="syncStatusBadge">⏳ 同步中...</span>
+  <!-- ===== 1. 頂部簡約 App Bar ===== -->
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <span class="brand-flag">🇫🇷</span>
+      <h1 class="brand-title">法國之旅 2026</h1>
     </div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#overview" class="nav-link active" data-section="overview">行程總覽</a></li>
-      <li><a href="#timeline" class="nav-link" data-section="timeline">每日行程</a></li>
-      <li><a href="#todo-master" class="nav-link" data-section="todo-master">待辦總表</a></li>
-      <li><a href="#bookings" class="nav-link" data-section="bookings">訂位總覽</a></li>
-      <li><a href="#recommendations" class="nav-link" data-section="recommendations">美食與景點</a></li>
-      <li><a href="#tips" class="nav-link" data-section="tips">旅遊小撇步</a></li>
-      <li><a href="#notes" class="nav-link" data-section="notes">備忘錄</a></li>
-      <li><a href="#data-registry" class="nav-link" data-section="data-registry">資料紀錄</a></li>
-    </ul>
-    <button class="nav-toggle" id="navToggle" aria-label="切換選單">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <!-- ===== 英雄區塊 ===== -->
-  <header class="hero" id="overview">
-    <div class="hero-bg">
-      <div class="hero-particles" id="particles"></div>
-    </div>
-    <div class="hero-content">
-      <div class="hero-badge">✈ 2026 秋季歐洲行</div>
-      <h1 class="hero-title">
-        <span class="title-line">法比歐之旅</span>
-      </h1>
-      <p class="hero-desc">9月15日 — 10月7日 · 共23天的夢幻旅程</p>
-      <div class="hero-stats">
-        <div class="stat-item">
-          <span class="stat-number" id="countdownDays">--</span>
-          <span class="stat-label">距出發天數</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-number">23</span>
-          <span class="stat-label">旅遊天數</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-number">5</span>
-          <span class="stat-label">主要城市</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-number">1</span>
-          <span class="stat-label">個國家</span>
-        </div>
-      </div>
-      <div class="hero-locations">
-        <span class="loc-tag">🏰 巴黎</span>
-        <span class="loc-tag">🎢 迪士尼</span>
-        <span class="loc-tag">⛪ 聖米歇爾山</span>
-        <span class="loc-tag">🛍️ 雷恩</span>
-        <span class="loc-tag">🌊 聖馬洛</span>
-      </div>
-    </div>
-    <div class="hero-scroll-hint">
-      <span>向下滾動</span>
-      <div class="scroll-arrow"></div>
+    <div class="header-actions">
+      <button class="btn-icon" id="btnToggleSearch" aria-label="搜尋行程與憑證">🔍</button>
+      <button class="btn-icon" id="btnToggleTheme" aria-label="切換深淺模式">🌙</button>
     </div>
   </header>
 
-  <!-- ===== 主要內容 ===== -->
-  <main class="main-content">
+  <!-- ===== 2. 即時搜尋抽屜 ===== -->
+  <div class="search-drawer" id="searchDrawer">
+    <div class="search-input-wrapper">
+      <span class="search-icon-inside">🔍</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="搜尋密碼、景點、餐廳、飯店或代碼 (如: 645504, 羊肉)...">
+    </div>
+  </div>
 
-    <!-- ===== 行事曆 (每日行程) ===== -->
-    <section class="section" id="timeline">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">行程行事曆</h2>
-          <p class="section-subtitle">點擊日期卡片可查看詳細計畫與新增備忘</p>
-        </div>
+  <!-- ===== 3. 今日即時重點膠囊 (動態更新) ===== -->
+  <section class="hero-keynote-container" id="heroKeynoteSection">
+    <div class="keynote-card" id="keynoteCard">
+      <!-- 由 JS 動態注入今日重點卡片 -->
+    </div>
+  </section>
 
+  <!-- ===== 4. 橫向單手滑動日期軸 ===== -->
+  <section class="date-picker-section">
+    <div class="date-carousel" id="dateCarousel">
+      <!-- 由 JS 自動產生 9/15 - 10/7 每一天的點擊膠囊 -->
+    </div>
+  </section>
 
+  <!-- ===== 5. 核心分頁內容容器 ===== -->
+  <main class="tab-content-area">
 
-        <div class="calendar-wrapper" id="calendarContainer">
-          <!-- 由 JS 動態產生行事曆 -->
-        </div>
+    <!-- ── 分頁 1：每日行程時間軸 (Timeline) ── -->
+    <section class="tab-view active" id="view-timeline">
+      <div id="timelineContainer">
+        <!-- 由 JS 渲染當日或搜尋結果之卡片時間軸 -->
       </div>
     </section>
 
-    <!-- ===== 待辦事項總表 ===== -->
-    <section class="section section-dark" id="todo-master">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">待辦事項總表</h2>
-          <p class="section-subtitle">統整整趟旅程的所有任務</p>
-        </div>
-        <div class="todo-master-container" id="todoMasterContainer">
-          <!-- 由 JS 動態產生 -->
-        </div>
+    <!-- ── 分頁 2：住宿與憑證金庫 (Vault) ── -->
+    <section class="tab-view" id="view-vault">
+      <h2 class="vault-section-title">🏨 9 筆全程住宿預訂清單</h2>
+      <div class="vault-card-grid" id="hotelVaultGrid">
+        <!-- 由 JS 渲染 9 家飯店預約卡片 -->
+      </div>
+
+      <h2 class="vault-section-title" style="margin-top: 32px;">🎟️ 門票・車票與通關憑證</h2>
+      <div class="vault-card-grid" id="ticketVaultGrid">
+        <!-- 由 JS 渲染 莫內門票、修道院門票、高鐵票、語音導覽碼 -->
       </div>
     </section>
 
-    <!-- ===== 訂位總覽 ===== -->
-    <section class="section" id="bookings">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">📌 訂位總覽</h2>
-          <p class="section-subtitle">已確認的交通、住宿與景點訂票</p>
-        </div>
-        <div id="bookingsContainer">
-          <!-- 由 JS 動態產生 -->
-        </div>
+    <!-- ── 分頁 3：私房店家口袋庫 (Pocket Places) ── -->
+    <section class="tab-view" id="view-pocket">
+      <div class="pocket-filters" id="pocketFilters">
+        <button class="filter-chip active" data-category="all">全部私房</button>
+        <button class="filter-chip" data-category="coffee">☕ 咖啡甜點</button>
+        <button class="filter-chip" data-category="food">🥩 必吃法餐</button>
+        <button class="filter-chip" data-category="seafood">🦪 海鮮生蠔</button>
+        <button class="filter-chip" data-category="market">🛍️ 伴手市集</button>
+        <button class="filter-chip" data-category="photo">📸 拍照秘境</button>
+      </div>
+
+      <div class="pocket-card-grid" id="pocketCardGrid">
+        <!-- 由 JS 渲染私房名單卡片 -->
       </div>
     </section>
 
-
-    <section class="section" id="recommendations">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">必吃美食與景點推薦</h2>
-          <p class="section-subtitle">來自外部資料的精選推薦清單</p>
+    <!-- ── 分頁 4：自駕通關指南 (Driving SOS) ── -->
+    <section class="tab-view" id="view-driving">
+      <div class="sos-quick-banner">
+        <div>
+          <div class="sos-title">🚨 緊急求助專線 (France SOS)</div>
+          <div class="sos-subtitle">歐洲通用報警 112 ｜ 法國警察 17 ｜ 救護車 15</div>
         </div>
-        <div class="tips-grid" id="recommendationsGrid">
-          <!-- 由 JS 動態產生 -->
+        <a href="tel:112" class="btn-sos-call">撥打 112</a>
+      </div>
+
+      <div class="vault-ticket-card highlight" style="margin-bottom: 16px;">
+        <div class="vault-card-header">
+          <div class="vault-hotel-name">🚗 Sixt 雷恩取車 ➔ 迪士尼 Chessy 還車</div>
+          <span class="vault-date-badge">已付 €624.46</span>
+        </div>
+        <div class="vault-info-row">
+          <span>租車訂單代碼：</span>
+          <strong>9738701348 (Peugeot 3008 休旅)</strong>
+        </div>
+        <div class="vault-code-box">
+          <span class="code-title">雷恩 Effia 停車場 0 樓電梯密碼</span>
+          <span class="code-text">6060</span>
+          <button class="btn-copy-mini" onclick="copyToClipboard('6060', '雷恩停車場密碼')">複製</button>
+        </div>
+        <div class="vault-info-row">
+          <span>取車地點：</span>
+          <span>雷恩站北出口 Relay 左側手扶梯至 Sixt 櫃檯</span>
+        </div>
+        <div class="vault-info-row">
+          <span>還車地點：</span>
+          <span>9/30 18:00 前至 Marne-la-Vallée Chessy 還車</span>
         </div>
       </div>
-    </section>
 
-    <!-- ===== 旅遊小撇步 ===== -->
-    <section class="section section-dark" id="tips">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">旅遊小撇步</h2>
-          <p class="section-subtitle">實用資訊與注意事項</p>
+      <h2 class="vault-section-title">⚠️ 法國自駕核心避坑守則</h2>
+      <div class="rules-grid">
+        <div class="rule-box">
+          <div class="rule-box-title">🔄 圓環絕對優先權</div>
+          <div class="rule-box-desc">進圓環前必須減速禮讓「左方已在圓環內的車輛」。未禮讓會吃高額罰單。</div>
         </div>
-        <div class="tips-grid" id="tipsGrid">
-          <!-- 由 JS 動態產生 -->
+        <div class="rule-box">
+          <div class="rule-box-title">💳 信用卡 4 位數 PIN 碼</div>
+          <div class="rule-box-desc">高速公路收費站與無人加油機必須輸入預借現金 4 位數 PIN 碼才能感應扣款。</div>
         </div>
-      </div>
-    </section>
-
-    <!-- ===== 備忘錄 ===== -->
-    <section class="section" id="notes">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">旅行備忘錄</h2>
-          <p class="section-subtitle">記錄你的想法、待辦事項與重要資訊</p>
+        <div class="rule-box">
+          <div class="rule-box-title">⛽ 正確加油油品</div>
+          <div class="rule-box-desc">柴油車認明黃色「Gazole / B7/B10」；汽油車認明綠色「SP95-E10 / SP98」。切勿加錯！</div>
         </div>
-        <div class="notes-layout">
-          <!-- 新增備忘錄 -->
-          <div class="note-editor">
-            <div class="note-editor-header">
-              <h3>新增備忘</h3>
-            </div>
-            <select class="note-category-select" id="noteCategorySelect">
-              <option value="general">📝 一般備忘</option>
-              <option value="todo">✅ 待辦事項</option>
-              <option value="booking">🎫 訂票訂位</option>
-              <option value="packing">🧳 打包清單</option>
-              <option value="emergency">🚨 緊急資訊</option>
-            </select>
-            <input type="text" class="note-input-title" id="noteTitleInput" placeholder="備忘標題...">
-            <textarea class="note-input" id="noteContentInput" rows="3" placeholder="筆記內容..." required></textarea>
-
-            <div class="file-upload-wrapper" style="margin-bottom: 12px;">
-              <label for="noteImageInput" class="upload-btn">
-                📷 附加圖片 <span style="font-size: 0.8rem; opacity: 0.8;">(或在文字框按 Cmd+V 貼上)</span>
-              </label>
-              <input type="file" id="noteImageInput" accept="image/*" style="display: none;">
-              <div id="noteImagePreviewContainer"
-                style="display: none; margin-top: 10px; position: relative; max-width: 200px;">
-                <img id="noteImagePreview" src="" alt="預覽"
-                  style="width: 100%; border-radius: 8px; border: 1px solid var(--c-border);">
-                <button type="button" id="removeImageBtn"
-                  style="position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold;">✕</button>
-              </div>
-            </div>
-
-            <button id="noteSaveBtn" class="btn btn-primary" style="width: 100%;">新增筆記</button>
-          </div>
-
-          <!-- 備忘錄列表 -->
-          <div class="notes-list" id="notesList">
-            <div class="notes-empty" id="notesEmpty">
-              <div class="empty-icon">📋</div>
-              <p>還沒有備忘錄</p>
-              <p class="empty-sub">開始記錄你的旅遊重點吧！</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 資料整合紀錄 ===== -->
-    <section class="section section-dark" id="data-registry">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">資料整合紀錄</h2>
-          <p class="section-subtitle">系統自動追蹤並整合的外部資料清單</p>
-        </div>
-        <div class="registry-container"
-          style="background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-lg); padding: 24px; overflow-x: auto;">
-          <table style="width: 100%; text-align: left; border-collapse: collapse;">
-            <thead>
-              <tr style="border-bottom: 1px solid var(--c-border);">
-                <th style="padding: 12px; color: var(--c-accent);">資料來源檔案</th>
-                <th style="padding: 12px; color: var(--c-accent);">加入 DATA 目錄日期</th>
-                <th style="padding: 12px; color: var(--c-accent);">整合至網站日期</th>
-                <th style="padding: 12px; color: var(--c-accent);">解析內容摘要</th>
-              </tr>
-            </thead>
-            <tbody id="registryTableBody">
-              <!-- 由 JS 動態產生 -->
-            </tbody>
-          </table>
+        <div class="rule-box">
+          <div class="rule-box-title">🔒 防砸窗黃金守則</div>
+          <div class="rule-box-desc">行李放後車廂務必拉好遮物簾，車內座位與中控台不可留任何零錢、包包或外套。</div>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- ===== 頁尾 ===== -->
-  <footer class="footer">
-    <div class="container">
-      <p class="footer-text">🗼 法國旅遊指南 2026 · 旅程: 9/15 — 10/7</p>
-      <p class="footer-sub">Bon Voyage！旅途愉快 🇫🇷</p>
-    </div>
-  </footer>
+  <!-- ===== 6. 底部原生 App 導覽列 ===== -->
+  <nav class="bottom-nav">
+    <a class="nav-tab-item active" data-tab="timeline">
+      <span class="nav-tab-icon">📅</span>
+      <span>每日行程</span>
+    </a>
+    <a class="nav-tab-item" data-tab="vault">
+      <span class="nav-tab-icon">🏨</span>
+      <span>憑證金庫</span>
+    </a>
+    <a class="nav-tab-item" data-tab="pocket">
+      <span class="nav-tab-icon">📍</span>
+      <span>私房口袋</span>
+    </a>
+    <a class="nav-tab-item" data-tab="driving">
+      <span class="nav-tab-icon">🚗</span>
+      <span>自駕指南</span>
+    </a>
+  </nav>
 
-  <!-- ===== 日程詳情浮層 ===== -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" id="modal">
-      <button class="modal-close" id="modalClose">✕</button>
-      <div class="modal-content" id="modalContent"></div>
-    </div>
-  </div>
+  <!-- ===== 7. 浮動複製成功提示 (Toast) ===== -->
+  <div class="toast-notice" id="toastNotice">✅ 已複製到剪貼簿</div>
 
-  <!-- ===== 回到頂部按鈕 ===== -->
-  <button class="back-to-top" id="backToTop" aria-label="回到頂部">↑</button>
-
-  <!-- ===== Undo Toast 通知 ===== -->
-  <div id="undoToastContainer"></div>
-
+  <!-- 核心 JavaScript 腳本 -->
   <script src="js/app.js"></script>
 </body>
 

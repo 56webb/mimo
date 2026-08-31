@@ -1,0 +1,20 @@
+{
+  "spreadsheet_title": "MOO法之旅",
+  "publish_html_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKsRU4MxrVDOZOUosa5bUMDZG8w9kHqy_iPEKrGD6dB9Q_8SJcfPr7pT9hVLXJuUXbO6Z0o0TsX5Ns/pubhtml",
+  "publish_csv_base": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKsRU4MxrVDOZOUosa5bUMDZG8w9kHqy_iPEKrGD6dB9Q_8SJcfPr7pT9hVLXJuUXbO6Z0o0TsX5Ns/pub?output=csv",
+  "sheets": [
+    { "gid": "1948635274", "name": "AI版總表", "file": "AI版總表.csv" },
+    { "gid": "539933228", "name": "人類用的行程表_AI勿調整", "file": "人類用的行程表_AI勿調整.csv" },
+    { "gid": "294627883", "name": "拍婚紗_AI勿調整", "file": "拍婚紗_AI勿調整.csv" },
+    { "gid": "185810392", "name": "婚紗", "file": "婚紗.csv" },
+    { "gid": "503268453", "name": "初見巴黎滿滿博物館_915_920", "file": "初見巴黎滿滿博物館_915_920.csv" },
+    { "gid": "1003473039", "name": "巴黎迪士尼好讚讚_921_924", "file": "巴黎迪士尼好讚讚_921_924.csv" },
+    { "gid": "469056269", "name": "諾曼第自駕真好玩_925_101", "file": "諾曼第自駕真好玩_925_101.csv" },
+    { "gid": "1108649423", "name": "雙重博物館_102_107", "file": "雙重博物館_102_107.csv" },
+    { "gid": "602663680", "name": "法國開車注意事項", "file": "法國開車注意事項.csv" },
+    { "gid": "1487986267", "name": "迪士尼", "file": "迪士尼.csv" },
+    { "gid": "870785007", "name": "飯店", "file": "飯店.csv" },
+    { "gid": "861051227", "name": "機票", "file": "機票.csv" },
+    { "gid": "2145456948", "name": "工作表14", "file": "工作表14.csv" }
+  ]
+}

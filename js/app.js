@@ -1,1367 +1,1224 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // ===== Google 試算表發佈網址 =====
-  const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKsRU4MxrVDOZOUosa5bUMDZG8w9kHqy_iPEKrGD6dB9Q_8SJcfPr7pT9hVLXJuUXbO6Z0o0TsX5Ns/pub?output=csv';
+/**
+ * 🇫🇷 2026 法國旅行 Web App — 旗艦手機端核心驅動引擎
+ * 支援單手切換、今日即時高光、憑證金庫、私房口袋庫與自駕指南
+ */
 
-  // ===== 狀態管理與防錯處理 =====
-  let initialNotes = JSON.parse(localStorage.getItem('franceTripNotes'));
-  if (!Array.isArray(initialNotes)) initialNotes = [];
-
-  let initialTodos = JSON.parse(localStorage.getItem('franceTripTodos'));
-  if (!Array.isArray(initialTodos)) initialTodos = [];
-
-  const state = {
-    notes: initialNotes,
-    todos: initialTodos
-  };
-
-  function saveTodos() {
-    localStorage.setItem('franceTripTodos', JSON.stringify(state.todos));
+// ==========================================
+// 1. 全程 23 天結構化行程資料庫 (Single Source)
+// ==========================================
+const itineraryData = [
+  {
+    date: '9/15',
+    weekday: '二',
+    title: '台北 (TPE) ➔ 巴黎 (CDG) 啟程啟航',
+    tag: '跨國飛行',
+    summary: '搭乘長榮航空 BR87 直飛巴黎，迎接 23 天浪漫法蘭西之旅！',
+    keynote: {
+      code: 'BR87 (23:30出發)',
+      codeLabel: '航班編號',
+      spot: '桃園國際機場 T2 ➔ 巴黎戴高樂 T1',
+      hotel: '機上 (Overnight Flight)',
+      mapQuery: 'Taoyuan International Airport'
+    },
+    items: [
+      { time: '20:30', title: '抵達桃園機場第二航廈', desc: '辦理長榮航空報到手續、託運行李、通過安檢。', badges: ['機票已訂', '長榮航空'], map: 'Taiwan Taoyuan International Airport Terminal 2' },
+      { time: '23:30', title: '長榮航空 BR87 班機起飛', desc: '直飛巴黎戴高樂機場 (CDG)，飛行時間約 14 小時，機上好好休息養精蓄銳。', badges: ['直飛航班'], map: '' }
+    ]
+  },
+  {
+    date: '9/16',
+    weekday: '三',
+    title: '抵達巴黎 ➔ B&B Check-in ➔ 13區漫步',
+    tag: '初見巴黎',
+    summary: '07:30 抵達戴高樂機場，申辦 Navigo 週卡，入住 13 區 B&B 飯店。',
+    keynote: {
+      code: 'BB22426149',
+      codeLabel: '巴黎飯店訂單號 (9晚)',
+      spot: 'B&B HOTEL Paris Italie Porte de Choisy',
+      hotel: 'B&B HOTEL Paris Italie (已付款 €921.80)',
+      mapQuery: 'B&B HOTEL Paris Italie Porte de Choisy'
+    },
+    items: [
+      { time: '07:30', title: '平安降落巴黎戴高樂機場 (CDG)', desc: '出關提領大行李，於機場車站櫃檯申辦 Navigo 週卡（需貼 1 吋大頭照）。', badges: ['備大頭照', 'Navigo 1-5圈'], map: 'Paris Charles de Gaulle Airport' },
+      { time: '11:00', title: '搭乘 RER B 轉地鐵前往 13 區飯店', desc: '抵達 B&B HOTEL Paris Italie Porte de Choisy 寄放行李或提早入住。', badges: ['代碼: BB22426149'], map: 'B&B HOTEL Paris Italie Porte de Choisy' },
+      { time: '14:00', title: '13 區中國城 ＆ 義大利廣場周邊悠閒漫步', desc: '品嚐熱騰騰的道地越南河粉 (Pho 14)，採購水果飲料，回飯店調時差休整。', badges: ['美食探索'], map: 'Place d Italie Paris' }
+    ]
+  },
+  {
+    date: '9/17',
+    weekday: '四',
+    title: '11:00 試穿婚紗 ➔ 奧賽美術館 ➔ 協和廣場',
+    tag: '婚紗準備',
+    summary: '左岸試穿婚紗禮服，下午漫步奧賽美術館欣賞梵谷與莫內名作。',
+    keynote: {
+      code: '門禁2734 / 電梯1869',
+      codeLabel: '婚紗店通關代碼',
+      spot: 'The Bride Paris (22 rue de l\'Odeon)',
+      hotel: 'B&B HOTEL Paris Italie',
+      mapQuery: '22 rue de l Odeon Paris'
+    },
+    items: [
+      { time: '11:00', title: 'The Bride Paris 挑選與試穿婚紗', desc: '地址：22 rue de l\'Odeon (6區)。大門密碼【2734】，電梯密碼【1869】。試穿 3 套禮服並定裝。', badges: ['門禁: 2734', '電梯: 1869', '已預約'], map: '22 rue de l Odeon Paris' },
+      { time: '14:00', title: '奧賽美術館 (Musée d\'Orsay)', desc: '持博物館通票入場，欣賞大鐘樓天窗、梵谷《星夜》、莫內《睡蓮》與雷諾瓦名作。', badges: ['博物館通票'], map: 'Musee d Orsay Paris' },
+      { time: '17:30', title: '協和廣場 ＆ 杜樂麗花園漫步', desc: '遠眺埃及方尖碑與艾菲爾鐵塔遠景，享受巴黎初秋微風。', badges: ['免費景點'], map: 'Place de la Concorde Paris' }
+    ]
+  },
+  {
+    date: '9/18',
+    weekday: '五',
+    title: '先賢祠 ➔ 盧森堡公園 ➔ 莎士比亞書店',
+    tag: '左岸文藝',
+    summary: '漫步拉丁區文藝核心，走進居禮夫人與雨果長眠的先賢祠。',
+    keynote: {
+      code: '持 PMP 通票',
+      codeLabel: '入場方式',
+      spot: '先賢祠 (Panthéon) ＆ 莎士比亞書店',
+      hotel: 'B&B HOTEL Paris Italie',
+      mapQuery: 'Pantheon Paris'
+    },
+    items: [
+      { time: '09:30', title: '先賢祠 (Panthéon) 偉人殿堂', desc: '仰望傅科擺與巨大穹頂，參觀伏爾泰、盧梭、雨果、大仲馬、居禮夫人地下墓穴。', badges: ['博物館通票'], map: 'Pantheon Paris' },
+      { time: '12:00', title: '盧森堡公園 (Jardin du Luxembourg)', desc: '坐在綠色鐵椅曬太陽，看著噴泉旁玩小帆船的孩子，享受最道地的巴黎慢生活。', badges: ['必去花園'], map: 'Jardin du Luxembourg Paris' },
+      { time: '15:00', title: '莎士比亞書店 ＆ 塞納河畔舊書攤', desc: '走進面對聖母院的傳奇英文老書店，買書蓋專屬紀念藏書章。', badges: ['私房口袋'], map: 'Shakespeare and Company Paris' }
+    ]
+  },
+  {
+    date: '9/19',
+    weekday: '六',
+    title: '龐畢度中心 ➔ 瑪黑區漫步 ➔ 婚紗前夜養膚',
+    tag: '現代文藝',
+    summary: '登龐畢度透明水管電梯俯瞰巴黎全景，瑪黑區選品店採購，晚上早睡！',
+    keynote: {
+      code: '明晨 04:00 開工',
+      codeLabel: '明日拍攝備忘',
+      spot: '瑪黑區小巷 ＆ 龐畢度頂樓',
+      hotel: 'B&B HOTEL Paris Italie',
+      mapQuery: 'Centre Pompidou Paris'
+    },
+    items: [
+      { time: '10:00', title: '龐畢度現代藝術中心 (Centre Pompidou)', desc: '搭乘外露紅色手扶梯直達 6 樓觀景台，俯瞰聖心堂與艾菲爾鐵塔。', badges: ['博物館通票'], map: 'Centre Pompidou Paris' },
+      { time: '13:00', title: '瑪黑區 (Le Marais) 歷史街區漫步', desc: '穿梭古老拱廊孚日廣場 (Place des Vosges)，品嚐 L\'As du Fallafel 猶太口袋餅。', badges: ['美食街區'], map: 'Place des Vosges Paris' },
+      { time: '19:00', title: '提早返回飯店・敷面膜養膚早睡', desc: '整理明日婚紗便鞋與道具，設定 03:45 鬧鐘，備戰明日日出婚紗大片！', badges: ['早睡養膚'], map: '' }
+    ]
+  },
+  {
+    date: '9/20',
+    weekday: '日',
+    title: '💍 巴黎蜜月婚紗大片拍攝日！',
+    tag: '重頭戲',
+    summary: '04:00 專業化妝師梳畫，07:00 日出開拍艾菲爾鐵塔、羅浮宮與塞納河！',
+    keynote: {
+      code: '04:00 梳畫 / 07:00 開拍',
+      codeLabel: '今日拍攝時間',
+      spot: '夏佑宮鐵塔 ➔ 羅浮宮 ➔ 亞歷山大三世橋',
+      hotel: 'B&B HOTEL Paris Italie',
+      mapQuery: 'Place du Trocadero Paris'
+    },
+    items: [
+      { time: '04:00', title: '飯店內造型師梳畫與著裝', desc: '化妝師抵達飯店進行專業日出新娘妝髮，換穿第一套主婚紗。', badges: ['專業梳畫'], map: '' },
+      { time: '07:00', title: '第一站：夏佑宮 (Trocadéro) 日出鐵塔空景', desc: '趁清晨無人晨光，拍下艾菲爾鐵塔與廣場最乾淨壯麗的經典大片！', badges: ['日出機位', '必拍神照'], map: 'Place du Trocadero Paris' },
+      { time: '09:00', title: '第二站：羅浮宮金字塔 ＆ 迴廊古典婚紗', desc: '玻璃金字塔倒影、卡魯塞爾凱旋門、古典石雕拱廊。', badges: ['經典大片'], map: 'Pyramide du Louvre Paris' },
+      { time: '11:00', title: '第三站：亞歷山大三世橋 ＆ 塞納河畔水岸', desc: '金碧輝煌的飛馬雕像、塞納河石造護岸，完美定格巴黎極致浪漫！', badges: ['大功告成'], map: 'Pont Alexandre III Paris' }
+    ]
+  },
+  {
+    date: '9/21',
+    weekday: '一',
+    title: '聖禮拜堂 ➔ 橘園睡蓮 ➔ 16:00 Chez Janou',
+    tag: '印象睡蓮',
+    summary: '晨光穿透聖禮拜堂彩繪玻璃，沉浸橘園 360 度睡蓮，享用小酒館燉肉。',
+    keynote: {
+      code: '16:00 已訂位',
+      codeLabel: 'Chez Janou 預約',
+      spot: '聖禮拜堂 ➔ 橘園美術館 ➔ 瑪黑區',
+      hotel: 'B&B HOTEL Paris Italie',
+      mapQuery: 'Chez Janou Paris'
+    },
+    items: [
+      { time: '09:30', title: '聖禮拜堂 (Sainte-Chapelle) 彩繪玻璃', desc: '15 米高、1113 幕聖經故事彩繪玻璃窗，晨光穿透宛如走進萬花筒！', badges: ['需預約09:30', '博物館通票'], map: 'Sainte Chapelle Paris' },
+      { time: '13:30', title: '橘園美術館 (Musée de l\'Orangerie)', desc: '坐在專屬橢圓形展廳中央，360 度沉浸在莫內巨幅《睡蓮全景畫》中。', badges: ['博物館通票', '需約時段'], map: 'Musee de l Orangerie Paris' },
+      { time: '16:00', title: '⭐Chez Janou 南法普羅旺斯傳統小酒館', desc: '✅ 已預訂 16:00！必吃招牌法式油封鴨、香煎干貝與傳奇「整盆無限續加巧克力慕斯」！', badges: ['✅已訂位', '私房名店'], map: 'Chez Janou Paris' }
+    ]
+  },
+  {
+    date: '9/22',
+    weekday: '二',
+    title: '巴黎聖母院內部 ➔ 西堤島 ➔ 塞納河日落遊船',
+    tag: '聖母院浴火重生',
+    summary: '走進重建後全新開放的巴黎聖母院，傍晚搭乘遊船欣賞塞納河兩岸夕陽。',
+    keynote: {
+      code: '官方 App 預約',
+      codeLabel: '聖母院入場',
+      spot: '巴黎聖母院 (Notre-Dame) ＆ 塞納河遊船',
+      hotel: 'B&B HOTEL Paris Italie',
+      mapQuery: 'Cathedrale Notre Dame de Paris'
+    },
+    items: [
+      { time: '10:00', title: '巴黎聖母院 (Cathédrale Notre-Dame) 參觀', desc: '瞻仰浴火重生的哥德式巨木穹頂、神聖玫瑰花窗與管風琴。', badges: ['免費入場', 'App預約'], map: 'Cathedrale Notre Dame de Paris' },
+      { time: '14:00', title: '西堤島古監獄 ＆ 新橋 (Pont Neuf)', desc: '漫步巴黎最古老的新橋，坐在太子廣場長椅享用冰淇淋。', badges: ['博物館通票'], map: 'Pont Neuf Paris' },
+      { time: '18:00', title: '塞納河觀光遊船 (Bateaux-Mouches / Vedettes)', desc: '航行塞納河，看金色夕陽將聖母院、羅浮宮與奧賽美術館染成粉紫色。', badges: ['浪漫夕陽'], map: 'Vedettes du Pont Neuf Paris' }
+    ]
+  },
+  {
+    date: '9/23',
+    weekday: '三',
+    title: '杜樂麗花園 ➔ 羅浮宮三寶 ➔ 金字塔夜景',
+    tag: '羅浮宮深度遊',
+    summary: '從地下卡魯塞爾避開排隊，深度鑑賞勝利女神、蒙娜麗莎與維納斯！',
+    keynote: {
+      code: 'V260781545820',
+      codeLabel: '羅浮宮預約代碼',
+      spot: '地下卡魯塞爾購物廊入口 (Galerie du Carrousel)',
+      hotel: 'B&B HOTEL Paris Italie',
+      mapQuery: 'Pyramide du Louvre Paris'
+    },
+    items: [
+      { time: '13:30', title: '地下卡魯塞爾購物廊 (Galerie du Carrousel) 入口', desc: '避開地面金字塔長隊，直接由倒金字塔地下通道快速通關安檢！', badges: ['避人潮秘技'], map: 'Carrousel du Louvre Paris' },
+      { time: '14:00', title: '⭐羅浮宮博物館 (Musée du Louvre) 鎮館三寶', desc: '直奔達文西《蒙娜麗莎》、薩莫色雷斯的《勝利女神》、《米洛的維納斯》。', badges: ['已預約門票', '鎮館三寶'], map: 'Musee du Louvre Paris' },
+      { time: '19:30', title: '羅浮宮金字塔夜間點燈倒影', desc: '貝聿銘玻璃金字塔打上溫暖金光，在無風水池旁拍下極致對稱倒影神照。', badges: ['夜景必拍'], map: 'Pyramide du Louvre Paris' }
+    ]
+  },
+  {
+    date: '9/24',
+    weekday: '四',
+    title: '楓丹白露宮 ➔ 巴比松畫家村 ➔ 巴黎整裝',
+    tag: '皇家森林',
+    summary: '探訪拿破崙深愛的楓丹白露宮馬蹄形階梯，晚上收大行李備戰明日高鐵自駕！',
+    keynote: {
+      code: '明晨 06:48 高鐵',
+      codeLabel: '明日高鐵代碼: 4WCP2R',
+      spot: '楓丹白露宮 ＆ 拿破崙告別階梯',
+      hotel: 'B&B HOTEL Paris Italie (最後1晚)',
+      mapQuery: 'Chateau de Fontainebleau'
+    },
+    items: [
+      { time: '09:00', title: '搭乘 Transilien R 線前往楓丹白露 (Fontainebleau)', desc: '巴黎里昂車站出發，持 Navigo 週卡免費搭乘，40 分鐘直達。', badges: ['Navigo可用'], map: 'Chateau de Fontainebleau' },
+      { time: '10:30', title: '楓丹白露宮內部與皇家森林花園', desc: '參觀拿破崙退位小客廳、教宗套房與弗朗索瓦一世畫廊。', badges: ['博物館通票'], map: 'Chateau de Fontainebleau' },
+      { time: '18:00', title: '返回巴黎打包 2 大行李・確認明日 Sixt 取車證件', desc: '備齊護照、台灣駕照正本、國際駕照、實體信用卡與 4 位數 PIN 碼。', badges: ['自駕證件檢查'], map: '' }
+    ]
+  },
+  {
+    date: '9/25',
+    weekday: '五',
+    title: '🚄 高鐵 ➔ 雷恩取車 ➔ 聖馬洛 ➔ 康卡勒生蠔 ➔ 聖米山',
+    tag: '自駕啟程',
+    summary: '06:48 高鐵直奔雷恩取休旅車，登上聖馬洛古城大貝島，入住聖米山 Mercure！',
+    keynote: {
+      code: '取車密碼【6060】',
+      codeLabel: '雷恩停車場電梯碼',
+      spot: '雷恩 Sixt ➔ 聖馬洛城牆 ➔ 康卡勒港',
+      hotel: 'Hôtel Mercure Mont Saint-Michel (QQDDDWJZ)',
+      mapQuery: 'Hotel Mercure Mont Saint Michel'
+    },
+    items: [
+      { time: '06:48', title: 'SNCF 高鐵 TGV 出發 (Paris ➔ Rennes)', desc: '✅ 已購票 (代碼: 4WCP2R)。06:48 蒙帕納斯站出發，08:15 準時抵達雷恩。', badges: ['TGV: 4WCP2R'], map: 'Gare Montparnasse Paris' },
+      { time: '08:30', title: '⭐雷恩火車站 Sixt 取車 (Peugeot 3008 休旅)', desc: '北出口下手扶梯至櫃檯，至 Effia 停車場輸入密碼【6060】上 7 樓取車（刷扣€300押金/全車錄影）。', badges: ['Sixt: 9738701348', '密碼: 6060'], map: 'Gare de Rennes' },
+      { time: '10:30', title: '聖馬洛古城 (Saint-Malo) 漫步海景城牆', desc: '停 Q-Park 停車場，走古城牆 (Remparts) 遠眺國家碉堡，買焦糖奶油酥。', badges: ['海景城牆'], map: 'Intra-Muros Saint-Malo' },
+      { time: '13:30', title: '大貝島 (Grand Bé) 乾潮徒步跨海', desc: '⭐ 迎合 13:54 乾潮最低水位！走乾燥石道探訪夏多布里昂墓。', badges: ['乾潮 13:54'], map: 'Grand Be Saint-Malo' },
+      { time: '15:30', title: '康卡勒 (Cancale) 港邊現開生蠔市場', desc: '在生蠔市場購買產地現開生蠔，坐在防波堤上看海現擠檸檬享用！', badges: ['私房生蠔'], map: 'Marche aux Huitres Cancale' },
+      { time: '18:15', title: '入住 Hôtel Mercure Mont Saint-Michel', desc: '輸入道閘密碼進入 Caserne 管制區，停飯店專屬免費停車場。', badges: ['✅訂單: QQDDDWJZ', '含早餐'], map: 'Hotel Mercure Mont Saint Michel' },
+      { time: '19:15', title: '庫埃農河水壩 (Barrage) 賞滿潮落日夜景', desc: '⭐ 19:26 滿潮倒影 ＋ 19:50 夕陽 ＋ 20:00 外牆點燈第一名機位！', badges: ['滿潮 19:26', '必拍神位'], map: 'Barrage sur le Couesnon' },
+      { time: '20:30', title: '⭐Restaurant Le Pré Salé 頂級黑面鹽沼羊肉晚餐', desc: '就在 Mercure 飯店旁，享用法國國寶級 AOP 鹽沼草飼羊肉法餐！', badges: ['鹽沼羊大餐'], map: 'Restaurant Le Pre Sale' }
+    ]
+  },
+  {
+    date: '9/26',
+    weekday: '六',
+    title: '🏰 聖米山晨光包島 ➔ La Ferme 羊肉 ➔ 草原拍羊 ➔ 翁夫勒夕陽',
+    tag: '聖米山大滿貫',
+    summary: '07:30 首班車滿潮包島，14:00 農莊羊肉大餐，草甸拍黑面羊，翁夫勒老港野餐！',
+    keynote: {
+      code: '道閘密碼【645504】',
+      codeLabel: 'La Ferme 專屬道閘碼',
+      spot: '聖米歇爾山 ➔ La Roche Torin ➔ 翁夫勒老港',
+      hotel: 'B&B HOTEL Honfleur (BB22633724)',
+      mapQuery: 'La Ferme Saint-Michel Mont-Saint-Michel'
+    },
+    items: [
+      { time: '07:30', title: '搭第 1 班接駁車進島・晨光無人包島漫步', desc: '⭐ 07:45 滿潮(係數87)！戴耳機開 VoiceMap (兌換碼【0B6CBA60】) 聽官方離線導覽。', badges: ['滿潮 07:45', 'VoiceMap: 0B6CBA60'], map: 'Mont-Saint-Michel' },
+      { time: '09:00', title: '修道院 (Abbaye) 開門第 1 批深度參觀', desc: '門票於 KKday 當場手機直接購買即可（即買即出電子票免排隊，掃碼入場）。', badges: ['KKday現場手機買', '空中迴廊'], map: 'Abbaye du Mont-Saint-Michel' },
+      { time: '14:00', title: '⭐La Ferme Saint-Michel 頂級鹽沼羊午餐', desc: '✅ 已預約 14:00！道閘密碼【645504】，停餐廳私人車位，保管 Ticket，離場刷付 10€。享用炭烤羊排＋燉羊肩肉！', badges: ['✅已訂位', '道閘: 645504', '電話: 0233584679'], map: 'La Ferme Saint-Michel Mont-Saint-Michel' },
+      { time: '15:45', title: '⭐La Roche Torin（羅什托蘭海角）拍黑面羊大景', desc: '廣袤草甸旁拍攝成群黑面鹽沼羊低頭吃草與聖米歇爾山遠景國家地理級大片！', badges: ['拍羊秘境', '免費大景'], map: 'Pointe de la Roche Torin Courtils' },
+      { time: '19:25', title: '翁夫勒 E.Leclerc 超市採購晚餐 ＆ Check-in', desc: '採購烤全雞與冰蘋果酒，B&B HOTEL Honfleur 入住 (代碼: BB22633724 / 現場付 €70.98)。', badges: ['代碼: BB22633724', '免費停車'], map: 'B&B HOTEL Honfleur' },
+      { time: '19:46', title: '⭐翁夫勒老港 (Vieux Bassin) 看夕陽倒影 ＆ 野餐', desc: '⭐ 19:46 日落！坐在水岸長椅看粉紫夕陽染紅木帆船石屋，享受烤雞法棍大餐與 20:00 暖黃街燈夜景！', badges: ['夕陽 19:46', '老港野餐'], map: 'Vieux Bassin Honfleur' }
+    ]
+  },
+  {
+    date: '9/27',
+    weekday: '日',
+    title: '翁夫勒 ➔ 諾曼第大橋 ➔ 象鼻海岸 ➔ 20:00 盧昂百年老餐廳',
+    tag: '白堊雙象絕壁',
+    summary: '自駕橫跨諾曼第大橋，健行象鼻海岸阿瓦爾懸崖，20:00 盧昂 1345 年古老餐廳晚餐！',
+    keynote: {
+      code: 'ID: 790B-8602-147D-CA61',
+      codeLabel: 'La Couronne 訂位代碼',
+      spot: '象鼻海岸阿瓦爾懸崖 ➔ 盧昂大教堂 ➔ 舊市集廣場',
+      hotel: '盧昂市區飯店 (待預訂 1 晚)',
+      mapQuery: 'La Couronne Rouen'
+    },
+    items: [
+      { time: '09:00', title: '翁夫勒日間老港 ＆ 聖凱瑟琳全木造教堂', desc: '欣賞全法最大雙中殿木造教堂（翻轉船底木造天花板）。', badges: ['木造教堂'], map: 'Eglise Sainte-Catherine Honfleur' },
+      { time: '10:30', title: '自駕橫跨「諾曼第大橋 (Pont de Normandie)」', desc: '走 A29 高速公路橫跨塞納河出海口之巨型斜張橋（過橋費約 5.80€）。', badges: ['過橋費 5.80€'], map: 'Pont de Normandie' },
+      { time: '13:00', title: '⭐象鼻海岸 (Étretat) 雙象絕壁健行', desc: '攀登左側阿瓦爾懸崖看巨象吸水海蝕門與針形岩；右側阿蒙懸崖水手聖母教堂。', badges: ['阿瓦爾懸崖', '海蝕門'], map: 'Falaise d Aval Etretat' },
+      { time: '16:30', title: '自駕前往歷史首府盧昂 (Rouen) Check-in', desc: '一路沿塞納河谷推進，抵達盧昂市區飯店 Check-in 卸行李。', badges: ['歷史古都'], map: 'Rouen France' },
+      { time: '20:00', title: '⭐La Couronne 1345 百年老餐廳燭光晚餐', desc: '✅ 已預約 20:00！(TheFork ID: 790B-8602-147D-CA61)。創於 1345 年全法最古老小酒館，品嚐傳統諾曼第法餐！', badges: ['✅已訂位', 'TheFork: 790B-8602-147D-CA61', '創於1345年'], map: 'La Couronne Rouen' }
+    ]
+  },
+  {
+    date: '9/28',
+    weekday: '一',
+    title: '盧昂都市深度漫活 ➔ 莫內真跡 ➔ 傍晚住吉維尼/Vernon',
+    tag: '印象首府',
+    summary: '走進莫內筆下的盧昂大教堂，登天文大時鐘樓頂，盧昂美術館賞莫內真跡！',
+    keynote: {
+      code: '常設展免費',
+      codeLabel: '盧昂美術館',
+      spot: '盧昂大教堂 ➔ 大時鐘 ➔ 莫內真跡 ➔ Vernon',
+      hotel: '吉維尼 / 韋爾農 (Vernon) 周邊飯店 (待訂 1 晚)',
+      mapQuery: 'Cathedrale Notre-Dame de Rouen'
+    },
+    items: [
+      { time: '09:00', title: '盧昂聖母大教堂 (Cathédrale Notre-Dame) 深度參觀', desc: '莫內繪製 30 多幅名作的本尊，感受極致挑高穹頂與神聖光影。', badges: ['莫內名畫地標'], map: 'Cathedrale Notre-Dame de Rouen' },
+      { time: '10:30', title: '文藝復興大時鐘街 ＆ 鐘樓登頂俯瞰', desc: '登上金色天文大時鐘樓頂，360 度俯瞰童話哥德尖塔與半木結構屋頂。', badges: ['360度俯瞰'], map: 'Le Gros-Horloge Rouen' },
+      { time: '13:45', title: '⭐盧昂美術館 (Musée des Beaux-Arts)', desc: '親眼瞻仰莫內《盧昂大教堂》系列油畫真跡與卡拉瓦喬大師名作。', badges: ['莫內真跡', '免費常設展'], map: 'Musee des Beaux-Arts de Rouen' },
+      { time: '17:30', title: '自駕 A13 前往吉維尼 / 韋爾農 (Vernon) 入住', desc: '約 72km / 55 分鐘，抵達塞納河畔小鎮飯店 Check-in，享用鄉村晚餐。', badges: ['塞納河畔'], map: 'Vernon France' }
+    ]
+  },
+  {
+    date: '9/29',
+    weekday: '二',
+    title: '🌸 莫內睡蓮花園 ➔ 塞納河老磨坊 ➔ 凡爾賽宮周邊',
+    tag: '睡蓮花園',
+    summary: '09:30 第一批進莫內睡蓮花園，百年玫瑰花園午餐，探訪斷橋懸空老磨坊！',
+    keynote: {
+      code: '2624364336390402463',
+      codeLabel: '莫內花園門票訂單號',
+      spot: '莫內故居 ＆ 日本拱橋睡蓮池',
+      hotel: '凡爾賽宮周邊飯店 (待預訂 1 晚)',
+      mapQuery: 'Fondation Claude Monet Giverny'
+    },
+    items: [
+      { time: '09:15', title: '抵達吉維尼小鎮 ＆ 停入免費大停車場', desc: '停 Parking du Verger，步行 3 分鐘至莫內之家入口。', badges: ['免費停車'], map: 'Parking du Verger Giverny' },
+      { time: '09:30', title: '⭐吉維尼：莫內之家與睡蓮花園深度參觀', desc: '✅ 門票已購 (訂單號: 2624364336390402463・已存 data/)！一開門直衝水上花園拍無人晨光倒影日本橋與睡蓮池。', badges: ['✅門票已購27€', 'Order: 2624364336390402463'], map: 'Fondation Claude Monet Giverny' },
+      { time: '12:00', title: 'Restaurant Baudy 百年玫瑰花園法式午餐', desc: '在昔日塞尚、雷諾瓦、羅丹等印象派大師聚會的百年老餐廳露天花園用餐。', badges: ['大師聚會所'], map: 'Restaurant Baudy Giverny' },
+      { time: '13:45', title: '拍照秘境：韋爾農懸空老磨坊 (Vieux Moulin)', desc: '建在塞納河中世紀斷橋殘墩上的木造懸空古磨坊，莫內畫作本尊。', badges: ['拍照秘境'], map: 'Vieux Moulin de Vernon' },
+      { time: '17:00', title: '自駕前往凡爾賽宮周邊飯店 Check-in', desc: '入住凡爾賽宮周邊飯店，早睡備戰明日凡爾賽鏡廳衝刺！', badges: ['備戰凡爾賽'], map: 'Versailles France' }
+    ]
+  },
+  {
+    date: '9/30',
+    weekday: '三',
+    title: '👑 凡爾賽宮鏡廳衝刺 ➔ 18:00 迪士尼還車 ➔ 入住迪士尼',
+    tag: '鏡廳衝刺',
+    summary: '09:00 第一場直衝二樓鏡廳拍無人空景，15:30 出發直奔迪士尼準時還車！',
+    keynote: {
+      code: '18:00 前還車',
+      codeLabel: 'Sixt 還車期限',
+      spot: '凡爾賽宮鏡廳 ➔ 迪士尼 Chessy 車站',
+      hotel: 'Zenitude Hôtel-Résidences Chessy (3 晚)',
+      mapQuery: 'Chateau de Versailles'
+    },
+    items: [
+      { time: '08:30', title: '抵達凡爾賽宮正門停車 ＆ 準備安檢', desc: '停 Place d\'Armes 停車場，提前抵達金黃大門排隊等候 09:00 開門。', badges: ['提前排隊'], map: 'Place d Armes Versailles' },
+      { time: '09:00', title: '⭐凡爾賽宮「鏡廳衝刺法」深度參觀', desc: '一開門直衝二樓鏡廳拍無人金碧輝煌空景！參觀國王套房與皇家大花園。', badges: ['鏡廳衝刺法', '第一場入場'], map: 'Galerie des Glaces Versailles' },
+      { time: '15:30', title: '⚠️準時啟程直奔巴黎迪士尼 Chessy (走外環高架)', desc: '走 A86 ➔ A4 外環高架，預留 2 小時應對平日下班車潮，完全免進巴黎市區！', badges: ['預留2小時'], map: '' },
+      { time: '17:35', title: '迪士尼站外加油站加滿油 (Full Tank)', desc: '於車站外 2 公里處將油箱加滿，保留加油發票供還車查驗。', badges: ['加滿油箱'], map: 'Gare de Marne-la-Vallee Chessy' },
+      { time: '18:00', title: '🏁 Chessy Gare Sixt 順利還車！', desc: '拍照記錄儀表板里程與油量，櫃檯交付鑰匙，完美完成 6 天諾曼第自駕！', badges: ['✅還車完成', 'Sixt: 9738701348'], map: 'Gare de Marne-la-Vallee Chessy' },
+      { time: '18:30', title: 'Zenitude 飯店 Check-in ＆ 迪士尼小鎮慶祝夜', desc: '入住 Zenitude Hôtel-Résidences Chessy，晚上漫步 Disney Village 吃大餐慶祝！', badges: ['宿迪士尼', '入住3晚'], map: 'Zenitude Hotel-Residences Chessy' }
+    ]
+  },
+  {
+    date: '10/1',
+    weekday: '四',
+    title: '🎢 巴黎迪士尼主樂園 (Parc Disneyland) 全日制霸！',
+    tag: '迪士尼主園',
+    summary: '開園直衝巨雷山與太空山，觀賞 19:00 大遊行與夢幻無人機城堡煙火秀！',
+    keynote: {
+      code: '19:00 遊行 / 閉園煙火',
+      codeLabel: '必看重頭戲',
+      spot: '睡美人城堡 ➔ 巨雷山 ➔ 太空山',
+      hotel: 'Zenitude Hôtel-Résidences Chessy',
+      mapQuery: 'Disneyland Paris'
+    },
+    items: [
+      { time: '08:30', title: '入園先衝熱門三大設施', desc: '直奔 Frontierland「巨雷山 (Big Thunder Mountain)」與 Discoveryland「星戰太空山」。', badges: ['開園先攻'], map: 'Disneyland Paris' },
+      { time: '19:00', title: '迪士尼百萬巨星歡樂大遊行 (Disney Stars on Parade)', desc: '主街 (Main Street U.S.A.) 兩側卡位，看米奇米妮與噴火巨龍花車！', badges: ['必看遊行'], map: 'Main Street USA Disneyland Paris' },
+      { time: '22:00', title: '⭐Disney Illuminations 睡美人城堡無人機煙火秀', desc: '無人機空中編隊 ＋ 城堡雷射投影 ＋ 震撼煙火，此生必看夢幻大秀！', badges: ['城堡煙火秀', '無人機編隊'], map: 'Sleeping Beauty Castle Disneyland Paris' }
+    ]
+  },
+  {
+    date: '10/2',
+    weekday: '五',
+    title: '🎬 華特迪士尼影城 (Walt Disney Studios Park)',
+    tag: '漫威與皮克斯',
+    summary: '先攻料理鼠王 4D 冒險、驚魂古塔自由落體與復仇者聯盟漫威基地！',
+    keynote: {
+      code: '料理鼠王 4D / 漫威基地',
+      codeLabel: '影城必玩設施',
+      spot: '料理鼠王 ➔ 驚魂古塔 ➔ 漫威復仇者聯盟',
+      hotel: 'Zenitude Hôtel-Résidences Chessy (最後1晚)',
+      mapQuery: 'Walt Disney Studios Park'
+    },
+    items: [
+      { time: '09:00', title: '料理鼠王 4D 冒險 (Ratatouille: The Adventure)', desc: '化身小小小米，在巴黎廚房地板展開 3D 穿梭狂奔！', badges: ['影城第一名'], map: 'Walt Disney Studios Park' },
+      { time: '11:00', title: '驚魂古塔 (The Twilight Zone Tower of Terror)', desc: '好萊塢老飯店鬧鬼電梯，超刺激無預警多次垂直墜落！', badges: ['心跳加速'], map: 'Walt Disney Studios Park' },
+      { time: '14:00', title: '復仇者聯盟基地 (Avengers Campus)', desc: '蜘蛛人 3D 射蛛絲互動體驗 ＋ 鋼鐵人超光速雲霄飛車！', badges: ['漫威宇宙'], map: 'Avengers Campus Disneyland Paris' }
+    ]
+  },
+  {
+    date: '10/3',
+    weekday: '六',
+    title: '迪士尼退房 ➔ 巴黎市區 Check-in ➔ 聖馬丁運河 ➔ 瑪黑購物',
+    tag: '重返巴黎',
+    summary: '重返巴黎市區飯店入住，漫步聖馬丁運河鐵橋，瑪黑區香氛服飾選品！',
+    keynote: {
+      code: '巴黎市區飯店 3 晚',
+      codeLabel: '住宿安排',
+      spot: '聖馬丁運河 ➔ 瑪黑區選品店 ➔ 孚日廣場',
+      hotel: '巴黎市區飯店 (待預訂 3 晚)',
+      mapQuery: 'Canal Saint-Martin Paris'
+    },
+    items: [
+      { time: '10:30', title: '搭乘 RER A 線返回巴黎市區', desc: '直達巴黎市區飯店 Check-in 卸行李。', badges: ['RER A線'], map: 'Paris France' },
+      { time: '14:00', title: '聖馬丁運河 (Canal Saint-Martin) 文青漫步', desc: '《艾蜜莉的異想世界》打水漂鐵橋，周邊獨立咖啡館與文創選品店。', badges: ['文青街區'], map: 'Canal Saint-Martin Paris' },
+      { time: '17:00', title: '瑪黑區香氛選品 (Diptyque / Buly 1803 / Le Labo)', desc: '採購巴黎經典香氛、護手霜與伴手禮。', badges: ['香氛購物'], map: 'Le Marais Paris' }
+    ]
+  },
+  {
+    date: '10/4',
+    weekday: '日',
+    title: '蒙馬特高地 ➔ 聖心堂 ➔ 愛牆 ➔ 歌劇院區拉法葉百貨',
+    tag: '巴黎俯瞰',
+    summary: '登蒙馬特全城最高點聖心堂，愛牆拍照，雙磨坊咖啡館，拉法葉穹頂採購！',
+    keynote: {
+      code: '粉紅玻璃花房',
+      codeLabel: '午餐推薦: Pink Mamma',
+      spot: '聖心堂俯瞰 ➔ 愛牆 ➔ 拉法葉頂樓天台',
+      hotel: '巴黎市區飯店',
+      mapQuery: 'Basilique du Sacre-Coeur Paris'
+    },
+    items: [
+      { time: '09:30', title: '聖心堂 (Basilique du Sacré-Cœur) 俯瞰全巴黎', desc: '坐在白色大教堂前階梯，俯瞰晨光下的巴黎全景天際線。', badges: ['全城制高點'], map: 'Basilique du Sacre-Coeur Paris' },
+      { time: '11:00', title: '愛牆 (Mur des Je t\'aime) ＆ 雙磨坊咖啡館', desc: '由 250 種語言寫滿「我愛你」的深藍瓷磚牆，打卡《艾蜜莉》雙磨坊咖啡館。', badges: ['浪漫打卡'], map: 'Le Mur des Je t aime Paris' },
+      { time: '12:30', title: '⭐Pink Mamma 頂樓玻璃花房義式午餐', desc: '四層樓絕美花房餐廳，品嚐招牌現刨松露手工麵與佛羅倫斯大牛排！', badges: ['私房口袋名店'], map: 'Pink Mamma Paris' },
+      { time: '15:00', title: '拉法葉百貨 (Galeries Lafayette) 拜占庭玻璃穹頂', desc: '登頂樓免費露天觀景台拍巴黎歌劇院與艾菲爾鐵塔，採購精品伴手禮。', badges: ['穹頂天台', '退稅採購'], map: 'Galeries Lafayette Paris' }
+    ]
+  },
+  {
+    date: '10/5',
+    weekday: '一',
+    title: '莎士比亞書店 ➔ 巴黎左岸漫活 ➔ 整理行李與核對退稅單',
+    tag: '漫活打包',
+    summary: '花神咖啡館露天座喝熱可可，聖日耳曼大道漫步，晚間統一整理退稅單！',
+    keynote: {
+      code: '先退稅再託運！',
+      codeLabel: '明日機場口訣',
+      spot: '花神咖啡館 ➔ 聖日耳曼大道 ➔ 整理退稅單',
+      hotel: '巴黎市區飯店',
+      mapQuery: 'Cafe de Flore Paris'
+    },
+    items: [
+      { time: '10:00', title: '⭐花神咖啡館 (Café de Flore) 晨光露天座', desc: '坐在綠色露天座點一杯濃郁熱巧克力與雙蛋可頌，享受左岸文化氣息。', badges: ['左岸地標'], map: 'Cafe de Flore Paris' },
+      { time: '14:00', title: '聖日耳曼大道精品小巷 ＆ 奇美跳蚤尋寶', desc: '悠閒漫步巴黎街頭，買馬卡龍 (Pierre Hermé) 與最後紀念品。', badges: ['悠閒慢活'], map: 'Boulevard Saint-Germain Paris' },
+      { time: '19:00', title: '⚠️統一整理退稅單 (Tax Free) ＆ 打包秤重', desc: '核對所有退稅單條碼清晰度，分好手提與託運商品，設定明日 06:00 鬧鐘！', badges: ['退稅單核對', '行李打包'], map: '' }
+    ]
+  },
+  {
+    date: '10/6',
+    weekday: '二',
+    title: 'CDG 戴高樂機場 PABLO 掃描退稅 ➔ 11:20 BR88 返台',
+    tag: '返程歸國',
+    summary: '07:00 抵達戴高樂機場，PABLO 機器掃碼退稅，搭乘長榮 BR88 班機返台！',
+    keynote: {
+      code: 'BR88 (11:20起飛)',
+      codeLabel: '返台航班',
+      spot: '戴高樂機場 T1 ➔ PABLO 退稅機',
+      hotel: '機上 (Overnight Flight)',
+      mapQuery: 'Paris Charles de Gaulle Airport Terminal 1'
+    },
+    items: [
+      { time: '07:00', title: '抵達戴高樂機場第一航廈 (CDG T1)', desc: '提前 4 小時抵達，直奔 PABLO 退稅機掃描退稅單條碼（綠燈免海關，紅燈走海關窗口）。', badges: ['PABLO退稅機', '先退稅再託運'], map: 'Paris Charles de Gaulle Airport Terminal 1' },
+      { time: '08:30', title: '長榮航空櫃檯託運行李 ＆ 出境安檢', desc: '確認退稅單已投郵筒（若需退信用卡），順利出境免稅店採購最後伴手禮。', badges: ['行李託運'], map: '' },
+      { time: '11:20', title: '長榮航空 BR88 班機起飛返台', desc: '告別美麗的法蘭西，帶著滿滿蜜月回憶與大片平安歸國！', badges: ['平安歸國'], map: '' }
+    ]
+  },
+  {
+    date: '10/7',
+    weekday: '三',
+    title: '06:30 平安抵達台灣桃園國際機場 (TPE)',
+    tag: '甜蜜回家',
+    summary: '06:30 降落桃園機場，提領行李平安返家，完美結束 23 天法國之旅！',
+    keynote: {
+      code: '06:30 降落 TPE',
+      codeLabel: '抵台時間',
+      spot: '桃園國際機場 T2 ➔ 溫暖的家',
+      hotel: '溫暖的家',
+      mapQuery: 'Taiwan Taoyuan International Airport'
+    },
+    items: [
+      { time: '06:30', title: '班機準時降落桃園國際機場', desc: '通過檢疫出關，提領行李，平安返家！', badges: ['圓滿結束'], map: 'Taiwan Taoyuan International Airport' }
+    ]
   }
+];
 
-  // 資料來源旗標：true = 來自 Google 試算表，false = 離線快照或預設行程
-  let dataFromSheet = false;
-  let sheetSyncTime = '';
+// ==========================================
+// 2. 全程 9 筆住宿清單資料庫 (Hotels Vault)
+// ==========================================
+const hotelsData = [
+  {
+    name: 'B&B HOTEL Paris Italie Porte de Choisy 3 étoiles',
+    city: '巴黎 13 區',
+    dates: '9/16 (三) ~ 9/24 (四) · 9 晚',
+    code: 'BB22426149',
+    price: '€921.80 (含稅費 / 已全額付款)',
+    payment: '已付款',
+    checkin: '14:00',
+    checkout: '12:00',
+    address: 'Porte de Choisy, 13區 巴黎',
+    phone: '+33 1 46 70 12 12',
+    highlight: true
+  },
+  {
+    name: 'Hôtel Mercure Mont Saint-Michel',
+    city: '聖米歇爾山 (La Caserne 管制區內)',
+    dates: '9/25 (五) ~ 9/26 (六) · 1 晚',
+    code: 'QQDDDWJZ',
+    price: '€195.50 (含雙人自助早餐 / 已全額付款)',
+    payment: '已付款',
+    checkin: '15:00 (9/23-24 收道閘碼)',
+    checkout: '12:00 (可免費寄放行李)',
+    address: 'Route du Mont Saint-Michel, 50170',
+    phone: '+33 2 33 60 14 18',
+    highlight: true
+  },
+  {
+    name: 'B&B HOTEL Honfleur',
+    city: '翁夫勒 (Honfleur)',
+    dates: '9/26 (六) ~ 9/27 (日) · 1 晚',
+    code: 'BB22633724',
+    price: '€70.98 (現場付款 / 附專屬免費停車場)',
+    payment: '現場付款',
+    checkin: '14:00',
+    checkout: '12:00',
+    address: 'Chemin du Banc, 14600 La Rivière-Saint-Sauveur',
+    phone: '08 92 78 80 44',
+    highlight: true
+  },
+  {
+    name: '盧昂市區飯店 (歷史老城區)',
+    city: '盧昂 (Rouen)',
+    dates: '9/27 (日) ~ 9/28 (一) · 1 晚',
+    code: '待預訂',
+    price: '待定 (建議選附停車場飯店)',
+    payment: '未付款',
+    checkin: '15:00',
+    checkout: '11:00',
+    address: '盧昂大教堂與大時鐘周邊',
+    phone: '',
+    highlight: false
+  },
+  {
+    name: '吉維尼 / 韋爾農 (Vernon) 周邊飯店',
+    city: '吉維尼 / 韋爾農',
+    dates: '9/28 (一) ~ 9/29 (二) · 1 晚',
+    code: '待預訂',
+    price: '待定',
+    payment: '未付款',
+    checkin: '15:00',
+    checkout: '11:00',
+    address: 'Vernon / Giverny 周邊',
+    phone: '',
+    highlight: false
+  },
+  {
+    name: '凡爾賽宮周邊飯店',
+    city: '凡爾賽 (Versailles)',
+    dates: '9/29 (二) ~ 9/30 (三) · 1 晚',
+    code: '待預訂',
+    price: '待定',
+    payment: '未付款',
+    checkin: '15:00',
+    checkout: '11:00',
+    address: '凡爾賽宮步行或開車 10 分鐘內',
+    phone: '',
+    highlight: false
+  },
+  {
+    name: 'Zenitude Hôtel-Résidences Chessy',
+    city: '巴黎迪士尼 (Chessy / Marne-la-Vallée)',
+    dates: '9/30 (三) ~ 10/2 (五) · 3 晚',
+    code: '待確認訂房代碼',
+    price: '已預訂',
+    payment: '已預訂',
+    checkin: '15:00',
+    checkout: '11:00',
+    address: 'Chessy 迪士尼接駁區',
+    phone: '',
+    highlight: true
+  },
+  {
+    name: '巴黎市區飯店 (左岸 / 13區 / 市區)',
+    city: '巴黎市區',
+    dates: '10/3 (六) ~ 10/5 (一) · 3 晚',
+    code: '待預訂',
+    price: '待定',
+    payment: '未付款',
+    checkin: '14:00',
+    checkout: '12:00',
+    address: '巴黎市區地鐵站周邊',
+    phone: '',
+    highlight: false
+  }
+];
 
-  // ===== 行程資料 (預設 Fallback 行程 - 與最新試算表對齊) =====
-  let itineraryData = [
-    { date: '9/15', time: '23:30', location: '桃園', type: 'transit', desc: '準備出發，飛往巴黎', detail: '記得攜帶護照、網卡、轉接頭。建議提前 3 小時抵達機場。' },
-    { date: '9/16', time: '07:55', location: '戴高樂', type: 'transit', desc: '抵達戴高樂，前往購物村', detail: '辦理入境手續、領取行李，購買交通票券或加值。第一晚入住 Zenitude Hôtel-Résidences Chessy，下午逛河谷購物村 (La Vallée Village)。' },
-    { date: '9/17', location: '迪士尼', type: 'disney', desc: '迪士尼雙園遊玩', detail: '入住 Zenitude Hôtel-Résidences Chessy (第 2 晚)。建議下載 Disneyland Paris App 掌握排隊時間，預約餐廳。晚上別錯過煙火與無人機燈光秀！💡可對照後半部「四、 巴黎迪士尼限定法國製紀念品」清單去精品商店尋寶！' },
-    { date: '9/18', location: '迪士尼', type: 'disney', desc: '迪士尼雙園 ➔ 巴黎市區', detail: '入住 Zenitude Hôtel-Résidences Chessy (第 3 晚)。繼續攻略未完成的設施或看遊行，可到專屬商店尋找法國製聯名小物。傍晚返回巴黎市區辦理入住。' },
-    { date: '9/19', location: '巴黎', type: 'paris', desc: '巴黎市區觀光 (通票Day1)', detail: '初探巴黎，博物館通票六天開通第一天！可安排羅浮宮、塞納河畔漫步或艾菲爾鐵塔。' },
-    { date: '9/20', location: '巴黎', type: 'paris', desc: '巴黎深度遊 (通票Day2)', detail: '使用博物館通票。可安排奧塞美術館、蒙馬特高地、聖心堂。' },
-    { date: '9/21', location: '巴黎', type: 'paris', desc: '巴黎深度遊 (通票Day3)', detail: '使用博物館通票。可安排凱旋門、香榭麗舍大道、精品購物。' },
-    { date: '9/22', location: '巴黎', type: 'paris', desc: '巴黎深度遊 (通票Day4)', detail: '使用博物館通票。可安排瑪黑區特色小店、龐畢度中心。' },
-    { date: '9/23', location: '巴黎', type: 'paris', desc: '巴黎 ➔ 諾曼地/凡爾賽一日遊', detail: '使用博物館通票。上：凡爾賽宮 莫內花園 盧昂 埃特爾塔 諾曼地。凡爾賽宮一日遊，感受皇家奢華。' },
-    { date: '9/24', location: '巴黎', type: 'paris', desc: '巴黎 ➔ 羅亞爾河城堡一日遊', detail: '使用博物館通票。下：楓丹白露 香波爾城堡 子爵。晚上住蒙帕納斯車站附近，以利明早搭車。' },
-    { date: '9/25', location: '聖馬洛', type: 'michel', desc: '🟢 Day1 高鐵直達海盜古城，慢活探索首日', detail: '🚄 <strong>SNCF 跨城火車 (Paris Montparnasse ➔ Rennes)</strong><br>• 班次：✅ <strong>已訂票 06:48</strong> (訂位代碼：<strong>4WCP2R</strong>，2 人共 68.00 €)<br>• 08:00 抵達雷恩後直接轉乘 TER 火車前往聖馬洛。<br><br>💡 <strong>今日行程規劃：</strong><br>• 09:00 - 12:00：抵達聖馬洛寄放行李，登上壯觀的舊城牆 (Les Remparts) 欣賞翡翠海岸無敵海景。<br>• 12:00 - 14:00：悠閒午餐，在舊城區小巷找薄餅店品嚐蕎麥煎餅與蘋果酒 (Cidre)。<br>• 14:00 之後：逛舊城區 (Intra-Muros) 石板路弄，若逢退潮可由沙灘徒步至大貝島 (Grand Bé)。<br><br><strong>🌊 今日潮汐資訊 (9/25)</strong><br>🔸 滿潮 (Pleine mer)：07:08、19:26 (大潮係數 77/82)<br>🔹 乾潮 (Basse mer)：01:34、13:54' },
-    { date: '9/26', location: '聖米歇爾', type: 'michel', desc: '🟢 Day2 取車出發 ➔ 康卡勒生蠔 ➔ 聖米歇爾山', detail: '🚗 <strong>今日自駕取車與停車全攻略：</strong><br>• 09:30 - 10:15：散步至聖馬洛火車站租車櫃檯取車。⚠️ <strong>週六取車最安全</strong>，SIXT、Avis 等週六正常營業（週日多全面公休）。若想回舊城晃晃，請停 <strong>Parking Paul Féval</strong>（含全車人免費接駁車票）。<br><br>🚗 <strong>康卡勒停車密技：</strong><br>• 直接導航海堤附近的 <strong>Place de la République</strong> 或 <strong>Port de la Houle</strong>。<br>• 若海堤車位滿了，往山坡開 3 分鐘有社區免費停車場，再走路下坡到生蠔市集。<br><br>🚗 <strong>聖米歇爾山停車密技（重要！）：</strong><br>• 絕對不要直接跟著導航走。抵達外圍閘門時，走 <strong>「Hôtels / Résidents」專用車道</strong>，輸入飯店給的 <strong>6 位數 Code</strong>，欄杆升起後停進 <strong>P3 專用停車場</strong>，再換乘免費接駁車進山。<br><br>💡 <strong>今日行程：</strong><br>• 10:30 - 13:00：康卡勒現開生蠔（週末照常營業）。<br>• 14:00 之後：參觀聖山頂部修道院，傍晚等待聖山點燈。<br>• 🛒 <strong>重要防呆：</strong>傍晚務必找大型超市 (Carrefour/E.Leclerc) 買齊礦泉水、水果、零食！明天週日超市下午 12:30 後全面公休。<br><br><strong>🌊 今日潮汐資訊 (9/26)</strong><br>🔸 滿潮 (Pleine mer)：07:45、20:02 (大潮係數 87/92)<br>🔹 乾潮 (Basse mer)：02:15、14:35' },
-    { date: '9/27', location: '翁夫勒', type: 'michel', desc: '🟡 Day3 最美半木屋童話村 ➔ 印象派明信片港口', detail: '🚗 <strong>今日自駕與停車全攻略：</strong><br>• 早上 10:00 出發，開車 1.5 小時至奧日地區伯夫龍，再 45 分鐘至翁夫勒。<br><br>🚗 <strong>翁夫勒停車密技：</strong><br>• 舊港周邊是<strong>單行道地獄</strong>，切勿硬鑽。請直接導航 <strong>Parking du Centre (Plage)</strong> 或 <strong>Parking de l\'Est</strong> 大型露天停車場，步行 5 分鐘到港區，省去 20 分鐘冤枉路。<br><br>💡 <strong>今日行程：</strong><br>• 11:30 - 13:00：造訪彩色半木構造法國最美村莊【奧日地區伯夫龍 Beuvron-en-Auge】。💡 <strong>週日用餐提醒：</strong>部分餐廳週日公休或只開中午，抵達請立刻先點餐！<br>• 13:00 - 13:45：輕鬆開車前往翁夫勒（車程約 45 分鐘）。<br>• 14:00 之後：翁夫勒舊港 (Vieux Bassin) 慢活午後，藝術畫廊週日正常營業，夜晚在港邊賞帆船倒影、享用諾曼第海鮮晚餐。' },
-    { date: '9/28', location: '維爾農', type: 'paris', desc: '🟠 Day4 巨象斷崖 ➔ 魯昂大教堂（避開血拼） ➔ 維爾農老水車', detail: '🚗 <strong>今日自駕路線：翁夫勒→諾曼第大橋→埃特雷塔(45分)→魯昂(1h15m)→維爾農(1h)</strong><br><br>🚗 <strong>埃特雷塔停車密技：</strong><br>• 首選 <strong>Parking de la Falaise d\'Aval</strong>（走上去就是西側斷崖），但通常 09:30 前就全滿。<br>• 若已滿，不要在小鎮裡繞，立刻果斷改停 <strong>Parking du Grand Val</strong>（車位較多），步行 15 分鐘到海邊。<br><br>🚗 <strong>魯昂停車密技：</strong><br>• 直接導航地下停車場 <strong>Parking Indigo Rouen Cathédrale</strong> 或 <strong>Parking Espace Palais</strong>，電梯上來直接就是舊城區心臟。<br><br>💡 <strong>今日行程：</strong><br>• 09:45 - 12:30：埃特雷塔 (Étretat) 白堊斷崖漫步，爬上斷崖頂端體驗莫內寫生視野。<br>• 13:45 - 16:00：魯昂聖母大教堂（莫內名畫主角）+ 大時鐘 (Gros-Horloge)。⚠️ <strong>週一效應：</strong>獨立小店/甜點店多公休，純觀光不購物。<br>• 💡 <strong>晚餐注意：</strong>很多餐廳週一、週二雙休，請提前 Google Maps 確認並訂位。<br>• 傍晚至維爾農，在塞納河畔漫步遠眺老水車。' },
-    { date: '9/29', location: '巴黎', type: 'paris', desc: '🔵 Day5 莫內睡蓮名畫實景 ➔ 巴黎西郊無痛還車', detail: '💡 <strong>今日行程：</strong><br>• 10:00 - 12:30：【壓軸亮點：吉維尼莫內之家與花園】🟢 <strong>最棒的拍照日：</strong>週二早上人少、不含週末觀光團。請提前 1-2 個月在官網預約 <strong>10:00 入場電子票 (e-ticket)</strong>，現場不售票。欣賞日本橋、睡蓮池、莫內故居。<br>• 12:30 - 14:30：吉維尼小鎮法式午餐與咖啡。<br>• 14:30 - 16:00：開車約 1 小時至拉德芳斯。<br>• ⚠️ <strong>國道繳費防呆 (Flux Libre 新制)：</strong>開過 A13 高速公路後，務必於 72 小時內上網 <strong>(sanef.com)</strong> 輸入車牌繳費，否則回國收高額罰單！<br><br>🚗 <strong>拉德芳斯還車密技（重要！）：</strong><br>• 拉德芳斯是 3D 立體地下迷宮。請認清合約上的還車停車場名稱（如 <strong>Parking Centre / Westfield Les 4 Temps</strong>）。<br>• 接近拉德芳斯時，眼睛盯著路上的 <strong>「Retour Location / Car Rental Return」</strong>，跟著地下專用車道走。開錯層數導航會斷訊！<br>• 還車後在原地轉乘<strong>地鐵 1 號線或 RER A 線</strong>進巴黎市中心，完美收官！' },
-    { date: '9/30', location: '巴黎', type: 'paris', desc: '巴黎慢活自由行', detail: '保留彈性的空白天，漫步巴黎街角。' },
-    { date: '10/1', location: '巴黎', type: 'paris', desc: '巴黎深度遊', detail: '拉丁區、萬神殿、盧森堡公園、花神咖啡館。' },
-    { date: '10/2', location: '巴黎', type: 'paris', desc: '巴黎深度遊', detail: '塞納河畔漫步、左岸咖啡、莎士比亞書店。' },
-    { date: '10/3', location: '巴黎', type: 'paris', desc: '巴黎深度遊', detail: '塞納河遊船晚餐，欣賞巴黎閃耀夜景。' },
-    { date: '10/4', location: '巴黎', type: 'paris', desc: '巴黎深度遊', detail: '自由活動，體驗 Picard 冷凍食品或逛當地市集。' },
-    { date: '10/5', location: '巴黎', type: 'paris', desc: '巴黎最後巡禮', detail: '確認行李重量，整理退稅單據。最後的美食饗宴。' },
-    { date: '10/6', time: '11:20', location: '戴高樂', type: 'transit', desc: '前往機場準備搭機', detail: '建議提前 4 小時抵達機場辦理退稅手續，排隊人潮通常很多。' },
-    { date: '10/7', time: '06:40', location: '桃園', type: 'transit', desc: '平安抵達台灣', detail: '旅途結束，帶著滿滿的回憶回家！' }
-  ];
+// ==========================================
+// 3. 門票・車票與通關憑證資料庫 (Passes Vault)
+// ==========================================
+const ticketsData = [
+  {
+    name: '吉維尼莫內花園門票 (Fondation Claude Monet)',
+    type: '門票憑證',
+    date: '9/29 (二) 09:30 入場',
+    code: 'Order Ref: 2624364336390402463',
+    price: '€27.00 (2人門票・已付款)',
+    desc: 'PDF 電子票已存放在 data/Tickets_2624364336390402463.pdf，09:30 開門直衝日本橋睡蓮池！',
+    actionText: '打開 PDF 門票',
+    actionUrl: 'data/Tickets_2624364336390402463.pdf',
+    isCopyable: true,
+    copyValue: '2624364336390402463'
+  },
+  {
+    name: '聖米歇爾山官方語音導覽 (VoiceMap)',
+    type: '語音導覽',
+    date: '9/26 (六) 07:30 漫步使用',
+    code: '兌換碼: 0B6CBA60',
+    price: '餐廳贈送 (免費 2 次下載)',
+    desc: '下載 VoiceMap App ➔ Visit codes ➔ 輸入【0B6CBA60】下載離線音檔，自備耳機漫步！',
+    actionText: '下載 VoiceMap App',
+    actionUrl: 'https://apps.apple.com/fr/app/voicemap-les-guides-tours/id852027939',
+    isCopyable: true,
+    copyValue: '0B6CBA60'
+  },
+  {
+    name: '盧昂 La Couronne 1345 百年老餐廳',
+    type: '餐廳訂位',
+    date: '9/27 (日) 20:00 晚餐',
+    code: 'TheFork ID: 790B-8602-147D-CA61',
+    price: '已確認預約 (2 位成人)',
+    desc: '創立於 1345 年全法最古老小酒館，位於聖女貞德舊市集廣場 31 號。',
+    actionText: '📍 Google 導航',
+    actionUrl: 'https://www.google.com/maps/search/?api=1&query=La+Couronne+Rouen',
+    isCopyable: true,
+    copyValue: '790B-8602-147D-CA61'
+  },
+  {
+    name: 'La Ferme Saint-Michel 黑面鹽沼羊午餐',
+    type: '餐廳訂位',
+    date: '9/26 (六) 14:00 午餐',
+    code: '道閘密碼: 645504',
+    price: '已確認預約 (Chin Yu)',
+    desc: '道閘輸入密碼【645504】進場停餐廳專屬車位，保管 Ticket，離場機器刷付 10€ 通行費。',
+    actionText: '📍 Google 導航',
+    actionUrl: 'https://www.google.com/maps/search/?api=1&query=La+Ferme+Saint-Michel+Mont+Saint-Michel',
+    isCopyable: true,
+    copyValue: '645504'
+  },
+  {
+    name: 'SNCF 高鐵 TGV (巴黎蒙帕納斯 ➔ 雷恩)',
+    type: '火車車票',
+    date: '9/25 (五) 06:48 - 08:15',
+    code: '訂位代碼: 4WCP2R',
+    price: '€68.00 (2人票・已購)',
+    desc: '06:48 Paris Montparnasse 準時發車，08:15 抵達 Rennes 雷恩站準備取車。',
+    actionText: '查看車票截圖',
+    actionUrl: 'data/SNCF_ticket_9_25.png',
+    isCopyable: true,
+    copyValue: '4WCP2R'
+  },
+  {
+    name: 'Sixt 諾曼第自駕租車 (Peugeot 3008 休旅)',
+    type: '租車憑證',
+    date: '9/25 08:30 雷恩取 ➔ 9/30 18:00 迪士尼還',
+    code: '訂單代碼: 9738701348',
+    price: '€624.46 (零自付全險・已付清)',
+    desc: '雷恩 Effia 停車場 0 樓電梯輸入密碼【6060】上 7 樓取車。9/30 Chessy 還車。',
+    actionText: '撥打 Sixt 專線',
+    actionUrl: 'tel:+33170976111',
+    isCopyable: true,
+    copyValue: '9738701348'
+  },
+  {
+    name: '聖米歇爾山修道院門票 (Abbaye)',
+    type: '景點門票',
+    date: '9/26 (六) 09:00 第一批入場',
+    code: 'KKday 當場手機買即可',
+    price: '即買即出電子票',
+    desc: '無需提前綁死時段，當場以手機在 KKday 線上直接購買，掃描 QR Code 快速通關！',
+    actionText: '🛒 KKday 即買即用',
+    actionUrl: 'https://www.kkday.com/zh-tw/product/249775?cid=2298',
+    isCopyable: false
+  }
+];
 
+// ==========================================
+// 4. 私房店家與靈感口袋名單 (Pocket Places)
+// ==========================================
+const pocketPlacesData = [
+  {
+    name: 'Le Procope (普羅可布咖啡館)',
+    city: '巴黎 6 區 (左岸)',
+    category: 'food',
+    catLabel: '☕ 傳奇百年法餐',
+    specialty: '全巴黎最古老咖啡館(1686年)・拿破崙帽子真跡・傳統油封鴨/生蠔拼盤',
+    address: '13 Rue de l\'Ancienne Comédie, 75006 Paris',
+    hours: '12:00 - 00:00 (全年無休)',
+    mapUrl: 'https://maps.app.goo.gl/dy5QtARPd9ZAst1B9',
+    note: '伏爾泰/盧梭/拿破崙常客・左岸文藝歷史殿堂'
+  },
+  {
+    name: 'Pink Mamma',
+    city: '巴黎 9 區 (歌劇院/蒙馬特)',
+    category: 'food',
+    catLabel: '🍝 絕美玻璃花房',
+    specialty: '頂樓玻璃溫室花房採光極美・招牌現刨松露手工麵・佛羅倫斯大牛排・巨盆提拉米蘇',
+    address: '20bis Rue de Douai, 75009 Paris',
+    hours: '12:00-14:30, 18:45-22:45',
+    mapUrl: 'https://maps.app.goo.gl/WPyntVFKJbjxni5h9',
+    note: 'IG爆紅四層樓網美名店・建議提早官網預約頂樓 Glass Roof'
+  },
+  {
+    name: 'Marché aux Huîtres Cancale (生蠔市場)',
+    city: '布列塔尼 (康卡勒)',
+    category: 'seafood',
+    catLabel: '🦪 產地現開生蠔',
+    specialty: '產地現開 1-4 號新鮮生蠔・野生海膽・蠔殼直接丟回海灘',
+    address: 'Place de la Chapelle, 35260 Cancale',
+    hours: '09:00 - 19:00 (每日營業)',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Marche+aux+Huitres+Cancale',
+    note: '坐在堤防邊看海現擠檸檬吃生蠔・銅板價神級享受'
+  },
+  {
+    name: 'Maison Georges Larnicol',
+    city: '布列塔尼 (聖馬洛)',
+    category: 'coffee',
+    catLabel: '🥐 百年焦糖奶油酥',
+    specialty: 'Kouign-amann 焦糖奶油酥・法式蛋白霜・精緻手工黑巧克力',
+    address: '6 Rue Saint-Vincent, 35400 Saint-Malo',
+    hours: '09:00 - 19:30',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Maison+Georges+Larnicol+Saint-Malo',
+    note: 'MOF 法國最佳工藝師名店・聖馬洛古城必買伴手禮'
+  },
+  {
+    name: 'La Couronne 1345',
+    city: '諾曼第 (盧昂)',
+    category: 'food',
+    catLabel: '🥩 全法最古老餐廳',
+    specialty: '全法最古老小酒館(創於1345年)・傳統諾曼第燉肉・蘋果白蘭地',
+    address: '31 Place du Vieux-Marché, 76000 Rouen',
+    hours: '12:00-14:00, 19:00-22:00',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=La+Couronne+Rouen',
+    note: '✅ 9/27 20:00 已預約 (TheFork ID: 790B-8602-147D-CA61)'
+  },
+  {
+    name: 'Confiserie Jeanne d\'Arc',
+    city: '諾曼第 (盧昂)',
+    category: 'market',
+    catLabel: '🍬 百年特產蘋果糖',
+    specialty: '盧昂特產「糖蘋果 (Sucre de Pomme)」・焦糖奶油糖',
+    address: '43 Rue Rollon, 76000 Rouen',
+    hours: '09:30 - 19:00 (週日一休)',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Confiserie+Jeanne+d+Arc+Rouen',
+    note: '諾曼第歷史最悠久蘋果糖老店・伴手禮首選'
+  },
+  {
+    name: 'Restaurant Baudy',
+    city: '諾曼第 (吉維尼)',
+    category: 'food',
+    catLabel: '🍷 百年玫瑰花園',
+    specialty: '蘋果酒燉豬肉・法式鹹派・百年玫瑰花園露天座',
+    address: '81 Rue Claude Monet, 27620 Giverny',
+    hours: '11:45-15:00, 19:00-21:30 (週一休)',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Restaurant+Baudy+Giverny',
+    note: '昔日塞尚、雷諾瓦、羅丹等印象派大師聚會老店'
+  },
+  {
+    name: 'Vieux Moulin de Vernon (懸空老磨坊)',
+    city: '諾曼第 (韋爾農)',
+    category: 'photo',
+    catLabel: '📸 塞納河斷橋磨坊',
+    specialty: '建在中世紀斷橋殘墩上的木造懸空古磨坊・莫內多幅名畫本尊',
+    address: 'Rue Pierre Bonnard, 27200 Vernon',
+    hours: '全天開放 (戶外觀景)',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Vieux+Moulin+de+Vernon',
+    note: '塞納河畔絕美倒影拍照機位'
+  },
+  {
+    name: 'Café de Flore (花神咖啡館)',
+    city: '巴黎 6 區 (左岸)',
+    category: 'coffee',
+    catLabel: '☕ 左岸靈魂咖啡',
+    specialty: '雙蛋火腿可頌・濃郁熱巧克力・綠色露天座看巴黎街景',
+    address: '172 Bd Saint-Germain, 75006 Paris',
+    hours: '07:30 - 01:30',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cafe+de+Flore+Paris',
+    note: '薩特與西蒙波娃故居・巴黎文化地標'
+  },
+  {
+    name: 'Marché d\'Aligre (阿利格爾市集)',
+    city: '巴黎 12 區 (巴士底周邊)',
+    category: 'market',
+    catLabel: '🛍️ 在地百年跳蚤市集',
+    specialty: '露天蔬果・起司冷肉熟食・二手古董首飾與黑膠唱片',
+    address: 'Place d\'Aligre, 75012 Paris',
+    hours: '07:30 - 13:30 (週一休)',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Marche+d+Aligre+Paris',
+    note: '巴黎在地人最愛百年市集・生活感十足'
+  }
+];
 
-  // ===== 旅遊小撇步資料 (含解析資料) =====
-  const tipsData = {
-    '交通與通訊': [
-      { icon: '🎫', title: '交通票券 (Navigo)', content: 'Navigo 週卡 (22.8歐+卡費5歐) 可無限搭乘1-5圈，需自備1吋大頭照。加值時間為週一至四，週末買青年票。另有 Navigo Easy 可用手機加值。' },
-      { icon: '📱', title: '網路與導航', content: '推薦下載 Citymapper，提供詳細地鐵與公車轉乘資訊，並會顯示有無電梯，搬行李必備！' }
-    ],
-    '自駕與停車': [
-      { icon: '🅿️', title: '自駕停車線條標誌', content: '白色虛線+PAYANT：付費停車格，需立刻去路邊Horodateur點單機買時段並將收據置於擋風玻璃內備查。白色虛線+LIVRAISON：卸貨格，週日/國定假日可免費停；雙實線卸貨格則任何時間皆嚴禁停放(會被拖吊)。藍線(Zone Bleue)：限時免費，需放置停車計時轉盤(Disque de stationnement)，租車時可查副駕駛座手套箱。' },
-      { icon: '🏢', title: '中大型城市停車策略', content: '中大型城市(如雷恩、魯昂、拉德芳斯)路邊車位難停且有限停 2 小時規定。強烈建議直接導航搜尋當地的 Indigo 或 EFFIA 連鎖地下停車場，進場抽卡、出場前去自動繳費機(Caisse Auto)刷卡、插卡出場，安全、位置大且不限時。' },
-      { icon: '📱', title: '必備停車 App 與繳費', content: '手機下載 EasyPark 或 PayByPhone，路邊停車可線上選時間、扣款與遠端加時，逛街忘我也能遠端延長。⚠️ 自駕 A13 高速公路實施 Flux Libre (無柵欄感應門架)，通過後務必 72 小時內自行上網 (sanef.com) 輸入車牌繳費，否則回國收高額罰單！' }
-    ],
-    '🚗 諾曼第5天行程停車密技': [
-      { icon: '🟢', title: 'Day2｜康卡勒 Cancale 生蠔市集', content: '直接導航海堤附近的 Place de la République 或 Port de la Houle 付費停車格。若靠近海堤的格子滿了，往山坡上開 3 分鐘會有社區的免費公有停車場，再走路下坡到生蠔市集。' },
-      { icon: '🟢', title: 'Day2｜聖米歇爾山 Mont Saint-Michel', content: '絕對不要直接跟著導航走！抵達外圍閘門時，走「Hôtels / Résidents」專用車道，在機器輸入飯店給你的 6 位數 Code，欄杆升起後停進靠近接駁車站的 P3 專用停車場，再換乘免費接駁車進山。' },
-      { icon: '🟡', title: 'Day3｜翁夫勒 Honfleur 舊港', content: '舊港周邊是單行道地獄，別硬鑽！直接導航 Parking du Centre (Plage) 或 Parking de l\'Est 這兩個露天大型停車場，步行到港區只要 5 分鐘，省去至少 20 分鐘的繞圈冤枉路。' },
-      { icon: '🟠', title: 'Day4｜埃特雷塔 Étretat 斷崖', content: '海灘正後方的 Parking de la Falaise d\'Aval 位置最完美，但通常 09:30 前就全滿。如果滿了，不要在小鎮裡繞，立刻果斷右轉開去 Parking du Grand Val（車位較多），步行 15 分鐘到海邊。' },
-      { icon: '🟠', title: 'Day4｜魯昂 Rouen 舊城', content: '不要浪費時間在路邊，直接導航地下停車場 Parking Indigo Rouen Cathédrale 或 Parking Espace Palais，電梯上來直接就是舊城區心臟地帶。⚠️ 週一獨立小店/甜點店多公休，純觀光不購物。' },
-      { icon: '🔵', title: 'Day5｜拉德芳斯 La Défense 還車', content: '拉德芳斯是個巨大 3D 地下迷宮！認清合約寫的還車停車場名稱（如 Parking Centre / Westfield Les 4 Temps）。接近時眼睛盯著路上的「Retour Location / Car Rental Return」指標，跟著地下專用車道走。一旦開錯層數導航會斷訊！還車後在原地轉地鐵 1 號線或 RER A 線進巴黎。' }
-    ],
-    '安全與須知': [
-      { icon: '💰', title: '安全與防竊', content: '貴重物品不露白，包包拉鍊拉上並往前背。若有陌生人搭訕填問卷或幫忙買票，請直接無視快步走過。' },
-      { icon: '🗣️', title: '禮貌用語', content: '開口前務必先說 Bonjour (您好)，服務結束後說 Merci (謝謝)，這在法國是非常重要的基本禮貌！' }
-    ],
-    '景點與文化': [
-      { icon: '🏛️', title: '博物館免費日', content: '每月第一週日多數博物館免費 (如：奧塞、龐畢度)。羅浮宮每週二休館，每月第一週六晚上免費。請提前上官網預約。' }
-    ]
-  };
+// ==========================================
+// 5. 狀態管理與變數
+// ==========================================
+let currentSelectedDate = '9/26'; // 預設聚焦自駕高光日 (可自由切換)
+let currentTab = 'timeline';
 
-  // ===== 美食與景點推薦 (來自解析資料) =====
-  const recommendationsData = {
-    '平價美食與餐廳': [
-      { icon: '🥖', title: 'Au Paradis du Gourmand', content: '冠軍長棍麵包 (1.2歐)、烤雞。地址: 156 rue Raymond Losserand' },
-      { icon: '🍲', title: 'La Petite Hostellerie', content: '聖母院旁高CP值餐廳。10歐套餐 (前菜+主餐+甜點)，推洋蔥湯、紅酒燉牛肉。' },
-      { icon: '🧊', title: 'Picard 冷凍食品', content: '法國到處都有，大推 Paella Valenciana 海鮮飯 (5.4歐)。' }
-    ],
-    '人氣海鮮與特色小吃': [
-      { icon: '🦐', title: 'Pedra Alta', content: 'CP值極高的葡式海鮮盤 (約48.4歐)，適合2-3人分享，吃不完可打包。' },
-      { icon: '🥙', title: 'L\'As du Fallafel', content: '瑪黑區薔薇街的猶太口袋餅，素食丸子口味 (6歐)。' },
-      { icon: '🥐', title: 'Pierre Hermé', content: '推薦玫瑰可頌與馬卡龍！(限特定分店，如: 72 Rue Bonaparte)' }
-    ],
-    '特殊體驗': [
-      { icon: '🌊', title: '聖米歇爾山潮汐', content: '已整合 2026 年潮汐表，大潮日有機會看到奇景「Mascaret (潮湧)」。' }
-    ]
-  };
+// ==========================================
+// 6. 核心渲染函數
+// ==========================================
 
-  // ===== 資料整合紀錄 =====
-  const dataRegistry = [
-    { file: 'st_michel_tide_2026.pdf', url: 'data/st_michel_tide_2026.pdf', added: '2026-04-26', integrated: '2026-04-26', summary: '聖米歇爾山 2026 潮汐表與大潮資訊' },
-    { file: 'rennes_st_michel_bus_2026.pdf', url: 'data/rennes_st_michel_bus_2026.pdf', added: '2026-04-26', integrated: '2026-04-26', summary: '2026 年雷恩與聖米歇爾山接駁巴士時刻表' },
-    { file: 'SNCF_ticket_9_25.png', url: 'data/SNCF_ticket_9_25.png', added: '2026-04-26', integrated: '2026-04-26', summary: 'SNCF 跨城火車票訂票憑證 (巴黎 ➔ 雷恩)：06:48 出發，訂位代碼 4WCP2R' },
-    { file: 'paris_safety_tips.jpg', url: 'data/paris_safety_tips.jpg', added: '2026-04-10', integrated: '2026-04-26', summary: '巴黎旅遊禮儀與安全防竊守則' },
-    { file: 'paris_food_cheap.jpg', url: 'data/paris_food_cheap.jpg', added: '2026-04-10', integrated: '2026-04-26', summary: '平價美食: 冠軍麵包店、Picard、Top Sushi' },
-    { file: 'paris_food_hostellerie.jpg', url: 'data/paris_food_hostellerie.jpg', added: '2026-04-10', integrated: '2026-04-26', summary: '平價餐廳: La Petite Hostellerie (聖母院旁)' },
-    { file: 'paris_food_popular.jpg', url: 'data/paris_food_popular.jpg', added: '2026-04-10', integrated: '2026-04-26', summary: '人氣餐廳: OSMOZ, Leon 淡菜, Pedra Alta, 可麗餅' },
-    { file: 'paris_dessert_must_eat.jpg', url: 'data/paris_dessert_must_eat.jpg', added: '2026-04-10', integrated: '2026-04-26', summary: '必吃點心: L\'As du Fallafel, Pierre Herme' },
-    { file: 'paris_museum_hours.jpg', url: 'data/paris_museum_hours.jpg', added: '2026-04-10', integrated: '2026-04-26', summary: '巴黎各大博物館營業時間與免費參觀日整理' },
-    { file: 'paris_navigo_pass.jpg', url: 'data/paris_navigo_pass.jpg', added: '2026-04-10', integrated: '2026-04-26', summary: '交通攻略: Navigo Pass 週卡使用規則與範圍' },
-    { file: 'paris_transit_tips.jpg', url: 'data/paris_transit_tips.jpg', added: '2026-04-10', integrated: '2026-04-26', summary: '交通攻略: Navigo Easy、週末青年票、Citymapper' }
-  ];
+// (1) 渲染橫向日期膠囊
+function renderDateCarousel() {
+  const container = document.getElementById('dateCarousel');
+  if (!container) return;
 
-  // ===== 景點知識庫與避坑攻略 (方案 B + D) =====
-  const attractionWiki = {
-    '迪士尼': {
-      title: '🎢 巴黎迪士尼雙園攻略',
-      mapQuery: 'Disneyland+Paris',
-      wiki: `
-        <strong>🏰 園區簡介：</strong>巴黎迪士尼包含主樂園 (Disneyland Park) 和影城 (Walt Disney Studios Park)。這是全歐洲唯一的迪士尼，充滿精緻的法式童話色彩。<br>
-        <strong>⏰ 雙園遊玩黃金順序：</strong>建議早上開園<strong>先攻 Walt Disney Studios</strong>！因為這裡有最新的「漫威復仇者聯盟基地」與「料理鼠王 (Ratatouille)」3D 冒險，且此園區通常較早關門。傍晚後移往 Disneyland Park 玩巨雷山、太空山，並留在城堡前觀看全球唯一的法式無人機燈光秀與絕美煙火！<br>
-        <strong>🛍️ 尋找「法國製 (Fabriqué en France)」聯名好物：</strong><br>
-        • Longchamp x 迪士尼聯名摺疊包（米奇在巴黎鐵塔旁）。<br>
-        • Saint James x 迪士尼聯名條紋海魂衫（布列塔尼純棉手工製造）。<br>
-        • 園區內有香水之都 Grasse 製造的官方訂製香水。避免一般量產玩偶，請多常留意背後標籤！
-      `
-    },
-    '戴高樂': {
-      title: '✈ 戴高樂機場生存指南',
-      mapQuery: 'Charles+de+Gaulle+Airport',
-      wiki: `
-        <strong>💰 終極退稅 (Détaxe) 避坑：</strong><br>
-        • 離境當天<strong>務必提早 4 小時抵達機場</strong>！退稅排隊人潮極多。<br>
-        • 託運前先去尋找「PABLO 自動退稅機」（有繁體中文介面），掃描所有退稅單上的條碼。<br>
-        • <strong>綠燈 🟢</strong>：代表退稅成功，可以直接去退稅信箱投遞單據，或等待信用卡退稅（約 2-4 週，退稅率 12%）。<br>
-        • <strong>紅燈 🔴</strong>：代表需要海關人工審核。這時必須攜帶「購買的未開封商品、護照、登機證」前往隔壁海關櫃檯排隊人工蓋章，審核通過後才能拿到退稅！所以<strong>絕對不要先託運行李</strong>！
-      `
-    },
-    '羅浮宮': {
-      title: '🏛️ 羅浮宮快速參觀與尋寶祕訣',
-      mapQuery: 'Louvre+Museum',
-      wiki: `
-        <strong>🚇 避開地面排隊的「秘密通道」：</strong><br>
-        羅浮宮金字塔正門排隊排最長。推薦走地下的<strong>「卡魯塞爾購物廊 (Galerie du Carrousel) 入口」</strong>，直接從地鐵 Palais Royal - Musée du Louvre 站地下連通道走進購物廊，那裡的安檢排隊人數通常只有地面的四分之一！<br>
-        <strong>🏃 鎮館三寶快速攻略路線：</strong><br>
-        進館後直衝：<br>
-        1. <strong>薩莫色雷斯的勝利女神</strong> (德農館 Denon Wing，大樓梯頂端)。<br>
-        2. <strong>蒙娜麗莎 (Mona Lisa)</strong> (德農館 1 樓 711 展廳)。看完後迅速沿指示牌前往：<br>
-        3. <strong>米洛的維納斯 (Venus de Milo)</strong> (敘利館 Sully Wing 1 樓)。<br>
-        • <em>地頭蛇建議：</em>羅浮宮每週二閉館。每週五晚上有夜間延長開放至 21:45，此時遊客較少，漫步羅浮宮極具氣氛。
-      `
-    },
-    '奧塞': {
-      title: '🎨 奧塞美術館極致美學之旅',
-      mapQuery: 'Musee+d+Orsay',
-      wiki: `
-        <strong>💡 展區分佈與必看金三角：</strong><br>
-        奧塞是由舊火車站改建而成的殿堂，收藏了全球最頂級的印象派大師傑作。<br>
-        • <strong>直奔五樓</strong>：精華中的精華！梵谷的《隆河的星夜》與《自畫像》、莫內的《藍色睡蓮》、雷諾瓦的《煎餅磨坊的舞會》都在這裡。<br>
-        • <strong>必拍網美景點</strong>：五樓盡頭的「巨型車站舊時鐘」，可以透過鏤空面盤拍出巴黎與聖心堂的背光剪影，極美！<br>
-        • <strong>二樓</strong>：羅丹的雕塑、莫內後期的立體大作、以及梵谷的多幅晚期作品。
-      `
-    },
-    '凡爾賽': {
-      title: '🏰 凡爾賽宮金碧輝煌的秘密',
-      mapQuery: 'Palace+of+Versailles',
-      wiki: `
-        <strong>🏃 避開人海的「鏡廳衝刺法」：</strong><br>
-        凡爾賽宮每天有上萬遊客。最聰明的路線是<strong>「一開門直接忽略前面的房間，直奔二樓最底部的鏡廳 (Galerie des Glaces)」</strong>！這時鏡廳空無一人，您可以拍到最完美、陽光穿透水晶吊燈倒映在 357 面鏡子上的壯麗空景。拍完後再慢條斯理地回頭參觀國王與王后套房。<br>
-        <strong>🌲 花園與大運河：</strong><br>
-        花園占地極廣，徒步會非常累，強烈建議在入口處租借電動高爾夫球車 (Golf Cart) 或搭乘小火車 (Little Train) 參觀莫內大特里亞農宮與農莊。<br>
-        ⚠️ <em>重要：</em>即使持有博物館通票，也必須提前在官網預約免費場次，且遲到會被拒絕入場！
-      `
-    },
-    '聖米歇爾': {
-      title: '⛪ 聖米歇爾山超大潮汐與朝盛指南',
-      mapQuery: 'Mont+Saint-Michel',
-      wiki: `
-        <strong>🌊 大潮汐係數 (Coefficient de Marée) 解讀：</strong><br>
-        我們 9/25-27 待在此地。9/27 的大潮係數高達 95/97 (超大潮！)。當係數超過 90 時，海水會徹底淹沒聯外橋樑，聖米歇爾山會在日落時分變身為一座完全與世隔絕的「孤立海上仙山」，景觀極度震撼！<br>
-        <strong>🧗 「下山走大街，上山走城牆」：</strong><br>
-        聖米歇爾山內的主街 (Grande Rue) 狹窄且極度擁擠。地頭蛇的聰明路線是：上山時避開主街，<strong>直接沿著兩旁的古老防衛城牆 (Remparts) 拾級而上</strong>，不僅涼爽、視野開闊，還能俯瞰整片沙洲大潮，完全避開人潮！<br>
-        <strong>🍳 普拉嬤嬤烘蛋 (La Mère Poulard) 誠實建議：</strong><br>
-        店內一份烘蛋定價高達 40-60 歐元！如果您只是想嚐鮮，可以選擇側面的「外帶窗口」，點一份手拿版的烘蛋，價格只要內用的三分之一，省錢又解饞！
-      `
-    },
-    '雷恩': {
-      title: '🛍️ 布列塔尼首府雷恩散步攻略',
-      mapQuery: 'Rennes+France',
-      wiki: `
-        <strong>🏰 彩木屋與中世紀老城：</strong><br>
-        雷恩是前往聖米歇爾山與北法聖馬洛的交通樞紐。老城區內保留了極多 15-17 世紀、色彩繽紛的<strong>「半木構造彩木屋 (Maisons à pans de bois)」</strong>，漫步在鋪滿鵝卵石的巷弄，彷彿走入中世紀童話世界。<br>
-        <strong>☕ 必嚐布列塔尼傳統美食：</strong><br>
-        來到此地，一定要品嚐正宗的「蕎麥鹹薄餅 (Galette)」搭配當地特產的「蘋果氣泡酒 (Cidre)」，這是布列塔尼旅人的最高享受！
-      `
-    },
-    '聖馬洛': {
-      title: '🌊 聖馬洛海盜城牆與超大潮之旅',
-      mapQuery: 'St.+Malo+France',
-      wiki: `
-        <strong>🏰 兩公里防衛古城牆環行 (Remparts)：</strong><br>
-        聖馬洛 (Saint-Malo) 是一座被巨型花崗岩城牆重重包圍的古老海盜城。強烈建議**沿著環城牆步行一圈（約 2 公里）**，右手邊是浩瀚大西洋，左手邊是古樸的花崗岩石屋，海風拂面，極有史詩感。<br>
-        <strong>🌊 全歐洲最壯觀的潮差景觀：</strong><br>
-        這裡的潮差高達十幾公尺！乾潮時，您可以直接徒步走到海中的「國家堡壘 (Fort National)」；但在幾小時後的滿潮時，剛才的陸地會完全被驚濤駭浪淹沒。9/27 適逢 97 超大潮，漲潮時巨浪拍擊石牆濺起數十公尺高的浪花，是令人屏息的自然奇觀。<br>
-        🥞 <strong>海盜城特色甜點</strong>：必買 Kouign-Amann（布列塔尼奶油焦糖酥餅），極為香甜酥脆！
-      `
-    }
-  };
-
-  // ===== Undo Toast 共用函式 =====
-  // 傳入: label(描述文字), onCommit(時間到後正式刪除), onUndo(按復原後還原)
-  function showUndoToast(label, onCommit, onUndo) {
-    const DELAY = 60 * 1000; // 60 秒
-    const container = document.getElementById('undoToastContainer');
-
-    // 建立 toast 元素
-    const toast = document.createElement('div');
-    toast.className = 'undo-toast';
-    toast.innerHTML = `
-      <div class="undo-toast-msg">
-        <span class="undo-toast-label">已刪除</span>
-        <span class="undo-toast-title">${label}</span>
+  container.innerHTML = itineraryData.map(day => {
+    const isActive = day.date === currentSelectedDate ? 'active' : '';
+    const hasBooking = day.keynote && day.keynote.code ? 'has-booking' : '';
+    return `
+      <div class="date-pill ${isActive} ${hasBooking}" data-date="${day.date}">
+        <span class="pill-weekday">${day.weekday}</span>
+        <span class="pill-day">${day.date}</span>
+        <span class="pill-badge-dot"></span>
       </div>
-      <span class="undo-countdown">60</span>
-      <button type="button" class="undo-btn">↩ 復原</button>
-      <div class="undo-toast-progress"></div>
     `;
-    container.appendChild(toast);
+  }).join('');
 
-    // 倒數顯示
-    let remaining = 60;
-    const countdownEl = toast.querySelector('.undo-countdown');
-    const ticker = setInterval(() => {
-      remaining--;
-      countdownEl.textContent = remaining;
-      if (remaining <= 0) clearInterval(ticker);
-    }, 1000);
-
-    // 時間到 → 正式刪除
-    const commitTimer = setTimeout(() => {
-      clearInterval(ticker);
-      dismissToast(toast);
-      onCommit();
-    }, DELAY);
-
-    // 復原按鈕
-    toast.querySelector('.undo-btn').addEventListener('click', () => {
-      clearTimeout(commitTimer);
-      clearInterval(ticker);
-      dismissToast(toast);
-      onUndo();
+  // 綁定點擊事件
+  container.querySelectorAll('.date-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const selectedDate = pill.getAttribute('data-date');
+      selectDate(selectedDate);
     });
+  });
+}
 
-    function dismissToast(el) {
-      el.classList.add('toast-hiding');
-      setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 350);
+// (2) 選擇指定日期
+function selectDate(dateStr) {
+  currentSelectedDate = dateStr;
+
+  // 更新膠囊樣式並滾動居中
+  const pills = document.querySelectorAll('.date-pill');
+  pills.forEach(pill => {
+    if (pill.getAttribute('data-date') === dateStr) {
+      pill.classList.add('active');
+      pill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    } else {
+      pill.classList.remove('active');
     }
-  }
+  });
 
-  // ===== 訂位資料 =====
-  const bookings = [
-    {
-      category: 'transit',
-      icon: '🚄',
-      status: 'confirmed',
-      title: 'SNCF 跨城火車',
-      subtitle: 'Paris Montparnasse → Rennes',
-      date: '2026/09/25 (週五)',
-      time: '06:48 出發',
-      confirmCode: '4WCP2R',
-      price: '68.00 €',
-      passengers: '2 人 (Chang)',
-      note: '請提前 30 分鐘到月台，攜帶護照備查。車程約 1.5–2 小時。'
-    }
-  ];
+  // 切換至每日行程頁
+  switchTab('timeline');
 
-  // ===== 初始化功能 =====
-  initNavbar();
-  initCountdown();
-  renderRecommendations();
-  renderTips();
-  renderBookings();
-  renderRegistry();
-  initNotes();
-  initBackToTop();
+  // 重新渲染今日高光膠囊與時間軸
+  renderKeynoteCard(dateStr);
+  renderTimeline(dateStr);
+}
 
-  // 非同步載入 Google 試算表行程並動態渲染行事曆與待辦總表
-  fetchAndRenderItinerary();
+// (3) 渲染今日即時重點高光膠囊
+function renderKeynoteCard(dateStr) {
+  const container = document.getElementById('keynoteCard');
+  if (!container) return;
 
-  // ===== 導覽列功能 =====
-  function initNavbar() {
-    const navbar = document.getElementById('navbar');
-    const navToggle = document.getElementById('navToggle');
-    const navLinks = document.getElementById('navLinks');
-    const links = document.querySelectorAll('.nav-link');
+  const day = itineraryData.find(d => d.date === dateStr) || itineraryData[0];
+  const keynote = day.keynote;
 
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
+  container.innerHTML = `
+    <div class="keynote-header">
+      <span class="keynote-badge">📌 ${day.date} (${day.weekday}) 當日焦點</span>
+      <span class="keynote-countdown">${day.tag}</span>
+    </div>
+    <h2 class="keynote-title">${day.title}</h2>
+    <p class="keynote-summary">${day.summary}</p>
+    
+    <div class="keynote-grid">
+      <div class="keynote-pill">
+        <span class="pill-label">${keynote.codeLabel || '重要代碼/密碼'}</span>
+        <div class="pill-value">
+          <span class="code-highlight">${keynote.code}</span>
+          ${keynote.code ? `<button class="btn-copy-mini" onclick="copyToClipboard('${keynote.code.replace(/[^a-zA-Z0-9]/g, '')}', '${keynote.codeLabel}')">複製</button>` : ''}
+        </div>
+      </div>
+
+      <div class="keynote-pill">
+        <span class="pill-label">今晚入住飯店</span>
+        <div class="pill-value" style="font-size: 0.82rem; line-height: 1.2;">
+          <span>${keynote.hotel}</span>
+        </div>
+      </div>
+
+      <div class="keynote-pill keynote-pill-full">
+        <span class="pill-label">核心目標與導航</span>
+        <div class="pill-value" style="font-size: 0.85rem;">
+          <span>${keynote.spot}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="keynote-actions">
+      ${keynote.mapQuery ? `
+        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(keynote.mapQuery)}" target="_blank" class="btn-action-primary">
+          <span>📍 Google 導航</span>
+        </a>
+      ` : ''}
+      <button class="btn-action-secondary" onclick="switchTab('vault')">
+        <span>🏨 查看訂房憑證</span>
+      </button>
+    </div>
+  `;
+}
+
+// (4) 渲染時間軸卡片列表
+function renderTimeline(dateStr, searchKeyword = '') {
+  const container = document.getElementById('timelineContainer');
+  if (!container) return;
+
+  let daysToRender = [];
+  if (searchKeyword.trim()) {
+    // 搜尋模式：列出符合關鍵字的所有項目
+    const kw = searchKeyword.toLowerCase();
+    itineraryData.forEach(day => {
+      const matchedItems = day.items.filter(item => 
+        item.title.toLowerCase().includes(kw) || 
+        item.desc.toLowerCase().includes(kw) ||
+        (day.keynote && day.keynote.code && day.keynote.code.toLowerCase().includes(kw))
+      );
+      if (matchedItems.length > 0 || day.title.toLowerCase().includes(kw)) {
+        daysToRender.push({ ...day, items: matchedItems.length > 0 ? matchedItems : day.items });
       }
-
-      // Scroll Spy
-      let current = '';
-      const sections = document.querySelectorAll('.section');
-      
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (pageYOffset >= sectionTop - 100) {
-          current = section.getAttribute('id');
-        }
-      });
-
-      links.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').substring(1) === current) {
-          link.classList.add('active');
-        }
-      });
     });
-
-    navToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-    });
-
-    links.forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-      });
-    });
+  } else {
+    // 單日模式
+    const day = itineraryData.find(d => d.date === dateStr);
+    if (day) daysToRender.push(day);
   }
 
-  // ===== 倒數計時 =====
-  function initCountdown() {
-    const countdownEl = document.getElementById('countdownDays');
-    // 設定出發日期 2026/09/15
-    const departureDate = new Date('2026-09-15T23:30:00');
-    
-    function updateCountdown() {
-      const now = new Date();
-      const diffTime = departureDate - now;
-      
-      if (diffTime > 0) {
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        countdownEl.textContent = diffDays;
-      } else {
-        countdownEl.textContent = '0';
-        countdownEl.style.color = '#10b981'; // 出發啦！
-      }
-    }
-    
-    updateCountdown();
-    setInterval(updateCountdown, 1000 * 60 * 60); // 每小時更新
+  if (daysToRender.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+        <p style="font-size: 2rem; margin-bottom: 8px;">🔍</p>
+        <p>找不到符合「${searchKeyword}」的行程或憑證</p>
+      </div>
+    `;
+    return;
   }
 
-  // ===== 渲染行事曆 =====
-  function renderCalendar() {
-    const container = document.getElementById('calendarContainer');
-    container.innerHTML = '';
+  container.innerHTML = daysToRender.map(day => `
+    <div class="timeline-header-card">
+      <div class="th-date-row">
+        <span class="th-date-title">${day.date} (${day.weekday}) · ${day.title}</span>
+        <span class="th-tag">${day.tag}</span>
+      </div>
+      <p class="th-summary">${day.summary}</p>
+    </div>
 
-    const grid = document.createElement('div');
-    grid.className = 'calendar-grid';
-
-    itineraryData.forEach(itemData => {
-      const cell = document.createElement('div');
-      cell.className = `calendar-cell has-data cal-type-${itemData.type}`;
-      
-      const timeHtml = itemData.time ? `<span class="calendar-time">${itemData.time}</span>` : '';
-      
-      // 加上表情符號圖示
-      const icons = {
-        transit: '✈️',
-        paris: '🗼',
-        disney: '🏰',
-        belgium: '🍫',
-        michel: '⛪'
-      };
-      const icon = icons[itemData.type] || '📍';
-
-      // 計算這天有沒有未完成的待辦事項
-      const uncompletedTodos = state.todos.filter(t => t.date === itemData.date && !t.completed);
-      const badgeHtml = uncompletedTodos.length > 0 ? `<div class="calendar-todo-badge">${uncompletedTodos.length}</div>` : '';
-
-      // 資料來源徽章
-      const sourceBadge = dataFromSheet
-        ? `<div class="calendar-source-badge sheet" title="資料來自 Google 試算表（${sheetSyncTime}）">📊 試算表</div>`
-        : `<div class="calendar-source-badge fallback" title="離線快照 / 預設行程">📁 預設</div>`;
-
-      cell.innerHTML = `
-        ${badgeHtml}
-        ${sourceBadge}
-        <div class="calendar-date">
-          <span>${itemData.date}</span>
-          ${timeHtml}
-        </div>
-        <div class="calendar-item">
-          ${icon} ${itemData.location}
-        </div>
-      `;
-
-      // 點擊事件
-      cell.addEventListener('click', () => openModal(itemData));
-      grid.appendChild(cell);
-    });
-
-    container.appendChild(grid);
-  }
-
-  // ===== 共用渲染展開式清單函式 =====
-  function renderAccordion(containerId, dataMap) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    
-    container.className = 'accordion-container';
-
-    Object.entries(dataMap).forEach(([category, items]) => {
-      const details = document.createElement('details');
-      details.className = 'accordion-item';
-      
-      const summary = document.createElement('summary');
-      summary.className = 'accordion-header';
-      summary.innerHTML = `<span class="accordion-title-text">${category}</span><span class="accordion-icon">▼</span>`;
-      
-      const content = document.createElement('div');
-      content.className = 'accordion-content';
-      
-      items.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'accordion-card';
-        div.innerHTML = `
-          <div class="acc-icon">${item.icon}</div>
-          <div class="acc-text">
-            <h4 class="acc-title">${item.title}</h4>
-            <p class="acc-desc">${item.content}</p>
-          </div>
-        `;
-        content.appendChild(div);
-      });
-      
-      details.appendChild(summary);
-      details.appendChild(content);
-      container.appendChild(details);
-    });
-  }
-
-  // ===== 渲染推薦 =====
-  function renderRecommendations() {
-    renderAccordion('recommendationsGrid', recommendationsData);
-  }
-
-  // ===== 渲染小撇步 =====
-  function renderTips() {
-    renderAccordion('tipsGrid', tipsData);
-  }
-
-  // ===== 渲染訂位總覽 =====
-  function renderBookings() {
-    const container = document.getElementById('bookingsContainer');
-    if (!container) return;
-    container.innerHTML = '';
-
-    const categoryMeta = {
-      transit:    { label: '交通', color: '#0284c7', bg: '#e0f2fe' },
-      hotel:      { label: '住宿', color: '#7c3aed', bg: '#ede9fe' },
-      attraction: { label: '景點', color: '#d97706', bg: '#fef3c7' }
-    };
-
-    // 依分類分組
-    const groups = {};
-    bookings.forEach(b => {
-      if (!groups[b.category]) groups[b.category] = [];
-      groups[b.category].push(b);
-    });
-
-    const categoryOrder = ['transit', 'hotel', 'attraction'];
-    const categoryIcons = { transit: '🚄', hotel: '🏨', attraction: '🎡' };
-
-    categoryOrder.forEach(cat => {
-      const items = groups[cat];
-      if (!items) return;
-
-      const meta = categoryMeta[cat];
-
-      const groupEl = document.createElement('div');
-      groupEl.className = 'booking-group';
-
-      const groupHeader = document.createElement('div');
-      groupHeader.className = 'booking-group-header';
-      groupHeader.innerHTML = `
-        <span class="booking-cat-icon">${categoryIcons[cat]}</span>
-        <span class="booking-cat-label">${meta.label}</span>
-        <span class="booking-cat-count">${items.length} 筆</span>
-      `;
-      groupEl.appendChild(groupHeader);
-
-      const cardsWrap = document.createElement('div');
-      cardsWrap.className = 'booking-cards';
-
-      items.forEach(b => {
-        const card = document.createElement('div');
-        card.className = 'booking-card';
-
-        const statusHtml = b.status === 'confirmed'
-          ? '<span class="booking-status confirmed">✅ 已確認</span>'
-          : '<span class="booking-status pending">⏳ 待確認</span>';
-
-        card.innerHTML = `
-          <div class="booking-left">
-            <div class="booking-icon" style="background:${meta.bg}; color:${meta.color};">${b.icon}</div>
-          </div>
-          <div class="booking-body">
-            <div class="booking-top-row">
-              <div>
-                <div class="booking-title">${b.title}</div>
-                <div class="booking-subtitle">${b.subtitle}</div>
+    <div class="timeline-list">
+      ${day.items.map(item => `
+        <div class="timeline-item">
+          <div class="tl-bullet">⏱</div>
+          <div class="tl-content-card">
+            ${item.time ? `<span class="tl-time-badge">${item.time}</span>` : ''}
+            <h3 class="tl-title">${item.title}</h3>
+            <p class="tl-desc">${item.desc}</p>
+            
+            ${item.badges && item.badges.length > 0 ? `
+              <div class="tl-badges-row">
+                ${item.badges.map(b => {
+                  let cls = 'status-info';
+                  if (b.includes('已預約') || b.includes('已購') || b.includes('✅')) cls = 'status-ok';
+                  if (b.includes('密碼') || b.includes('代碼') || b.includes('645504') || b.includes('6060')) cls = 'code-tag';
+                  if (b.includes('注意') || b.includes('需約') || b.includes('自備')) cls = 'status-warn';
+                  return `<span class="badge-pill ${cls}">${b}</span>`;
+                }).join('')}
               </div>
-              ${statusHtml}
-            </div>
-            <div class="booking-details">
-              <div class="booking-detail-item">
-                <span class="booking-detail-label">📅 日期</span>
-                <span class="booking-detail-val">${b.date}</span>
+            ` : ''}
+
+            ${item.map ? `
+              <div class="tl-action-bar">
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map)}" target="_blank" class="btn-tl-mini">
+                  <span>📍 開啟導航</span>
+                </a>
               </div>
-              ${b.time ? `<div class="booking-detail-item">
-                <span class="booking-detail-label">🕐 時間</span>
-                <span class="booking-detail-val">${b.time}</span>
-              </div>` : ''}
-              ${b.confirmCode ? `<div class="booking-detail-item">
-                <span class="booking-detail-label">🎫 訂位代碼</span>
-                <span class="booking-detail-val booking-code">${b.confirmCode}</span>
-              </div>` : ''}
-              ${b.price ? `<div class="booking-detail-item">
-                <span class="booking-detail-label">💰 金額</span>
-                <span class="booking-detail-val">${b.price}</span>
-              </div>` : ''}
-              ${b.passengers ? `<div class="booking-detail-item">
-                <span class="booking-detail-label">👤 乘客</span>
-                <span class="booking-detail-val">${b.passengers}</span>
-              </div>` : ''}
-            </div>
-            ${b.note ? `<div class="booking-note">💡 ${b.note}</div>` : ''}
+            ` : ''}
           </div>
-        `;
-        cardsWrap.appendChild(card);
-      });
-
-      groupEl.appendChild(cardsWrap);
-      container.appendChild(groupEl);
-    });
-
-    // 若無任何訂位
-    if (bookings.length === 0) {
-      container.innerHTML = `
-        <div class="booking-empty">
-          <div style="font-size: 3rem; margin-bottom: 16px;">🎫</div>
-          <p style="color: var(--c-text-muted);">還沒有任何訂位紀錄，快去搶票吧！</p>
         </div>
-      `;
-    }
-  }
+      `).join('')}
+    </div>
+  `).join('<div style="margin: 28px 0; border-bottom: 1px dashed var(--border-subtle);"></div>');
+}
 
-  // ===== 渲染資料整合紀錄 =====
-  function renderRegistry() {
-    const tbody = document.getElementById('registryTableBody');
-    
-    dataRegistry.forEach(row => {
-      const el = document.createElement('tr');
-      el.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-      
-      el.innerHTML = `
-        <td style="padding: 12px; font-family: monospace; font-size: 0.9rem;">
-          <a href="${row.url}" target="_blank" style="color: var(--c-primary-light); text-decoration: underline;">
-            ${row.file}
+// (5) 渲染住宿與憑證金庫
+function renderHotelVault() {
+  const container = document.getElementById('hotelVaultGrid');
+  if (!container) return;
+
+  container.innerHTML = hotelsData.map(hotel => `
+    <div class="vault-ticket-card ${hotel.highlight ? 'highlight' : ''}">
+      <div class="vault-card-header">
+        <div>
+          <h3 class="vault-hotel-name">${hotel.name}</h3>
+          <span style="font-size: 0.78rem; color: var(--gold);">${hotel.city}</span>
+        </div>
+        <span class="vault-date-badge">${hotel.payment}</span>
+      </div>
+
+      <div class="vault-info-row">
+        <span>入住時段：</span>
+        <strong>${hotel.dates}</strong>
+      </div>
+      <div class="vault-info-row">
+        <span>入住 / 退房時間：</span>
+        <span>Check-in: ${hotel.checkin} ｜ Check-out: ${hotel.checkout}</span>
+      </div>
+      <div class="vault-info-row">
+        <span>預訂金額：</span>
+        <span>${hotel.price}</span>
+      </div>
+
+      ${hotel.code ? `
+        <div class="vault-code-box">
+          <span class="code-title">訂單代碼 / 訂房編號</span>
+          <span class="code-text">${hotel.code}</span>
+          ${hotel.code !== '待預訂' && hotel.code !== '待確認訂房代碼' ? `
+            <button class="btn-copy-mini" onclick="copyToClipboard('${hotel.code}', '訂房代碼')">複製</button>
+          ` : ''}
+        </div>
+      ` : ''}
+
+      <div class="vault-info-row" style="margin-top: 8px;">
+        <span>地址：</span>
+        <span>${hotel.address}</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 10px;">
+        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hotel.name + ' ' + hotel.address)}" target="_blank" class="btn-tl-mini" style="flex: 1; justify-content: center;">
+          <span>📍 導航至飯店</span>
+        </a>
+        ${hotel.phone ? `
+          <a href="tel:${hotel.phone.replace(/[^0-9+]/g, '')}" class="btn-tl-mini" style="flex: 1; justify-content: center;">
+            <span>📞 撥打電話</span>
           </a>
-        </td>
-        <td style="padding: 12px; font-size: 0.9rem;">${row.added}</td>
-        <td style="padding: 12px; font-size: 0.9rem; color: var(--c-primary-light);">${row.integrated}</td>
-        <td style="padding: 12px; font-size: 0.95rem;">${row.summary}</td>
-      `;
-      tbody.appendChild(el);
-    });
-  }
-
-  // ===== 備忘錄系統 =====
-  function initNotes() {
-    const titleInput = document.getElementById('noteTitleInput');
-    const textarea = document.getElementById('noteContentInput');
-    const categorySelect = document.getElementById('noteCategorySelect');
-    const saveBtn = document.getElementById('noteSaveBtn');
-    
-    const imageInput = document.getElementById('noteImageInput');
-    const imagePreviewContainer = document.getElementById('noteImagePreviewContainer');
-    const imagePreview = document.getElementById('noteImagePreview');
-    const removeImageBtn = document.getElementById('removeImageBtn');
-    let currentImageBase64 = null;
-
-    // 初始渲染
-    renderNotes();
-
-    // 處理圖片的共用函式
-    function processImageFile(file, previewEl, containerEl, callback) {
-      if (!file || !file.type.startsWith('image/')) return;
-
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 800; // 壓縮圖片避免撐爆 localStorage
-          let width = img.width;
-          let height = img.height;
-
-          if (width > MAX_WIDTH) {
-            height = Math.round((height * MAX_WIDTH) / width);
-            width = MAX_WIDTH;
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-
-          const base64 = canvas.toDataURL('image/jpeg', 0.6);
-          previewEl.src = base64;
-          containerEl.style.display = 'block';
-          if (callback) callback(base64);
-        };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // 處理圖片上傳與壓縮 (主表單 - 點擊上傳)
-    if (imageInput) {
-      imageInput.addEventListener('change', function(e) {
-        processImageFile(e.target.files[0], imagePreview, imagePreviewContainer, (b64) => {
-          currentImageBase64 = b64;
-        });
-      });
-    }
-
-    // 處理圖片貼上 (主表單 - Cmd+V)
-    if (textarea) {
-      textarea.addEventListener('paste', function(e) {
-        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-        for (let index in items) {
-          const item = items[index];
-          if (item.kind === 'file' && item.type.startsWith('image/')) {
-            const file = item.getAsFile();
-            processImageFile(file, imagePreview, imagePreviewContainer, (b64) => {
-              currentImageBase64 = b64;
-            });
-            // 不使用 preventDefault()，讓如果同時貼上文字與圖片時，文字依然能貼上
-          }
-        }
-      });
-    }
-
-    if (removeImageBtn) {
-      removeImageBtn.addEventListener('click', () => {
-        currentImageBase64 = null;
-        imageInput.value = '';
-        imagePreviewContainer.style.display = 'none';
-        imagePreview.src = '';
-      });
-    }
-
-    if (saveBtn) {
-      saveBtn.addEventListener('click', () => {
-        const title = titleInput.value.trim();
-        const content = textarea.value.trim();
-        const category = categorySelect.options[categorySelect.selectedIndex];
-        
-        if (!title && !content && !currentImageBase64) {
-          alert('請輸入備忘錄標題、內容或圖片！');
-          return;
-        }
-
-        const newNote = {
-          id: Date.now().toString(),
-          title: title || '無標題備忘',
-          content: content,
-          categoryVal: category.value,
-          categoryText: category.text,
-          date: new Date().toLocaleDateString('zh-TW', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
-          image: currentImageBase64
-        };
-
-        state.notes.unshift(newNote); // 加到最前面
-        saveNotes();
-        renderNotes();
-        
-        // 清空輸入框
-        titleInput.value = '';
-        textarea.value = '';
-        currentImageBase64 = null;
-        if (imageInput) imageInput.value = '';
-        if (imagePreviewContainer) imagePreviewContainer.style.display = 'none';
-        if (imagePreview) imagePreview.src = '';
-      });
-    }
-
-    // 支援 Auto Enter 功能 (單行標題按 Enter 直接送出，多行內容按 Cmd+Enter 或 Ctrl+Enter 送出)
-    if (titleInput) {
-      titleInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          if (saveBtn) saveBtn.click();
-        }
-      });
-    }
-
-    if (textarea) {
-      textarea.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-          e.preventDefault();
-          if (saveBtn) saveBtn.click();
-        }
-      });
-    }
-  }
-
-  function renderNotes() {
-    const list = document.getElementById('notesList');
-    list.innerHTML = '';
-
-    if (state.notes.length === 0) {
-      list.innerHTML = `
-        <div class="notes-empty" id="notesEmpty" style="display: block;">
-          <div class="empty-icon">📋</div>
-          <p>還沒有備忘錄</p>
-          <p class="empty-sub">開始記錄你的旅遊重點吧！</p>
-        </div>
-      `;
-      return;
-    }
-    
-    // 類別顏色對應
-    const catColors = {
-      'general': 'var(--c-primary-light)',
-      'todo': 'var(--c-michel)',
-      'booking': 'var(--c-disney)',
-      'packing': 'var(--c-belgium)',
-      'emergency': 'var(--c-secondary)'
-    };
-
-    state.notes.forEach(note => {
-      const el = document.createElement('div');
-      el.className = 'note-item';
-      el.style.borderLeftColor = catColors[note.categoryVal] || 'var(--c-primary-light)';
-      
-      el.innerHTML = `
-        <div class="note-item-header">
-          <div class="note-item-title">
-            <span>${note.categoryText.split(' ')[0]}</span> ${note.title}
-          </div>
-          <div class="note-item-meta">${note.date}</div>
-        </div>
-        ${note.image ? `<img src="${note.image}" class="note-image-display" style="margin-top: 10px; margin-bottom: 10px; width: 100%; border-radius: 8px; border: 1px solid var(--c-border); max-height: 300px; object-fit: contain;">` : ''}
-        <div class="note-item-content">${escapeHTML(note.content)}</div>
-        <div class="note-item-actions">
-          <button type="button" class="note-action-btn delete" data-id="${note.id}">刪除</button>
-        </div>
-      `;
-
-      list.appendChild(el);
-    });
-
-    // 綁定刪除事件
-    document.querySelectorAll('.note-action-btn.delete').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = e.currentTarget.dataset.id;
-        // 先從 state 移除，保存備份
-        const deletedNote = state.notes.find(n => n.id === id);
-        const deletedIndex = state.notes.findIndex(n => n.id === id);
-        if (!deletedNote) return;
-        state.notes = state.notes.filter(n => n.id !== id);
-        renderNotes(); // 立即更新畫面
-
-        // 顯示 Undo Toast
-        showUndoToast(
-          deletedNote.title || '無標題備忘',
-          () => { saveNotes(); }, // 60秒後正式儲存
-          () => { // 按復原
-            state.notes.splice(deletedIndex, 0, deletedNote);
-            saveNotes();
-            renderNotes();
-          }
-        );
-      });
-    });
-  }
-
-  function saveNotes() {
-    localStorage.setItem('franceTripNotes', JSON.stringify(state.notes));
-  }
-
-  // ===== 待辦總表系統 =====
-  function renderMasterTodoList() {
-    const container = document.getElementById('todoMasterContainer');
-    if (!container) return;
-    
-    container.innerHTML = '';
-
-    if (state.todos.length === 0) {
-      container.innerHTML = `
-        <div style="text-align:center; padding: 40px; background: rgba(255,255,255,0.05); border-radius: var(--radius-lg);">
-          <h3 style="color: var(--c-text-muted); margin-bottom: 10px;">目前沒有任何待辦事項</h3>
-          <p style="color: var(--c-text-muted); font-size: 0.95rem;">點擊上方「行事曆」的日期卡片，即可為每一天新增專屬待辦事項！</p>
-        </div>
-      `;
-      return;
-    }
-
-    // 將 todo 依照日期分組
-    const groupedTodos = {};
-    state.todos.forEach(todo => {
-      if (!groupedTodos[todo.date]) {
-        groupedTodos[todo.date] = [];
-      }
-      groupedTodos[todo.date].push(todo);
-    });
-
-    // 取得所有有待辦的日期並排序 (依照字串簡易排序 9/15 -> 10/1 可能有問題，但此行程剛好 9 月在前 10 月在後，簡易補零排序)
-    const sortedDates = Object.keys(groupedTodos).sort((a, b) => {
-      const [m1, d1] = a.split('/').map(Number);
-      const [m2, d2] = b.split('/').map(Number);
-      if (m1 !== m2) return m1 - m2;
-      return d1 - d2;
-    });
-
-    sortedDates.forEach(dateStr => {
-      const todosForDate = groupedTodos[dateStr];
-      // 未完成排前面
-      todosForDate.sort((a, b) => a.completed - b.completed);
-      
-      const itemData = itineraryData.find(i => i.date === dateStr);
-      const locationBadge = itemData ? `<span class="todo-date-location">${itemData.location}</span>` : '';
-
-      const groupEl = document.createElement('div');
-      groupEl.className = 'todo-date-group';
-      
-      let html = `
-        <div class="todo-date-header">
-          <span>📅 ${dateStr}</span>
-          ${locationBadge}
-        </div>
-        <div class="todo-list-container">
-      `;
-
-      todosForDate.forEach(todo => {
-        html += `
-          <div class="todo-item ${todo.completed ? 'completed' : ''}">
-            <input type="checkbox" class="todo-checkbox master-checkbox" data-id="${todo.id}" ${todo.completed ? 'checked' : ''}>
-            <span class="todo-text">${escapeHTML(todo.text)}</span>
-            <button type="button" class="todo-delete-btn master-delete-btn" data-id="${todo.id}">🗑️</button>
-          </div>
-        `;
-      });
-
-      html += `</div>`;
-      groupEl.innerHTML = html;
-      container.appendChild(groupEl);
-    });
-
-    // 綁定事件
-    document.querySelectorAll('.master-checkbox').forEach(cb => {
-      cb.addEventListener('change', (e) => {
-        const todo = state.todos.find(t => t.id === e.target.dataset.id);
-        if (todo) {
-          todo.completed = e.target.checked;
-          saveTodos();
-          renderMasterTodoList(); // 重新渲染總表以重排
-          renderCalendar(); // 更新紅點
-        }
-      });
-    });
-
-    document.querySelectorAll('.master-delete-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = e.currentTarget.dataset.id;
-        if (!id) return;
-        // 先從 state 移除，保存備份
-        const deletedTodo = state.todos.find(t => t.id === id);
-        const deletedIndex = state.todos.findIndex(t => t.id === id);
-        if (!deletedTodo) return;
-        state.todos = state.todos.filter(t => t.id !== id);
-        renderMasterTodoList();
-        renderCalendar();
-
-        // 顯示 Undo Toast
-        showUndoToast(
-          deletedTodo.text,
-          () => { saveTodos(); }, // 60秒後正式儲存
-          () => { // 按復原
-            state.todos.splice(deletedIndex, 0, deletedTodo);
-            saveTodos();
-            renderMasterTodoList();
-            renderCalendar();
-          }
-        );
-      });
-    });
-  }
-
-  // ===== Modal 互動 =====
-  function openModal(itemData) {
-    const overlay = document.getElementById('modalOverlay');
-    const content = document.getElementById('modalContent');
-    
-    const timeStr = itemData.time ? ` · ${itemData.time}` : '';
-
-    let wikiHtml = '';
-    const matchedKey = Object.keys(attractionWiki).find(key => 
-      (itemData.location && itemData.location.includes(key)) || 
-      (itemData.desc && itemData.desc.includes(key)) || 
-      (itemData.detail && itemData.detail.includes(key))
-    );
-    
-    if (matchedKey) {
-      const wiki = attractionWiki[matchedKey];
-      const mapsLink = `https://www.google.com/maps/search/?api=1&query=${wiki.mapQuery}`;
-      wikiHtml = `
-        <!-- 景點百科與地圖導航 (方案 B + D) -->
-        <div class="modal-wiki-box">
-          <div class="wiki-box-header">
-            <span class="wiki-box-icon">🗼</span>
-            <span class="wiki-box-title">${wiki.title}</span>
-          </div>
-          <div class="wiki-box-body">${wiki.wiki}</div>
-          <div class="wiki-box-footer">
-            <a href="${mapsLink}" target="_blank" class="wiki-nav-btn">
-              <span class="nav-btn-icon">🗺️</span>
-              <span class="nav-btn-text">導航至 ${matchedKey}</span>
-            </a>
-          </div>
-        </div>
-      `;
-    }
-    
-    const sourceTag = dataFromSheet
-      ? `<div class="modal-source-tag sheet">📊 資料來源：Google 試算表（${sheetSyncTime} 同步）</div>`
-      : `<div class="modal-source-tag fallback">📁 資料來源：預設行程（等待網路恢復後會自動同步）</div>`;
-
-    content.innerHTML = `
-      <div class="modal-header">
-        <div class="modal-date">📅 ${itemData.date} ${timeStr}</div>
-        <h2 class="modal-title">${itemData.location}</h2>
-        ${sourceTag}
+        ` : ''}
       </div>
-      <div class="modal-body">
-        <p style="font-size: 1.2rem; color: var(--c-text); margin-bottom: 20px;"><strong>📍 計畫：</strong>${itemData.desc}</p>
-        <p><strong>💡 詳細資訊：</strong><br>${itemData.detail}</p>
-        
-        ${wikiHtml}
-        
-        <!-- 單日待辦事項區塊 -->
-        <div style="margin-top: 30px; padding: 15px; background: rgba(0,0,0,0.04); border: 1px solid var(--c-border); border-radius: var(--radius-md);">
-          <h4 style="margin-bottom: 15px; color: var(--c-accent); display: flex; align-items: center; gap: 8px;">
-            ☑️ 本日專屬待辦
-          </h4>
-          <div id="modalTodoList" class="todo-list-container">
-            <!-- 動態渲染待辦 -->
-          </div>
-          <div class="todo-input-wrapper">
-            <input type="text" id="modalTodoInput" class="todo-input" placeholder="新增待辦事項 (如：預約餐廳、買票)...">
-            <button id="addModalTodoBtn" class="todo-add-btn">新增</button>
-          </div>
-        </div>
+    </div>
+  `).join('');
+}
 
-        <!-- 快速筆記區塊 -->
-        <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.03); border: 1px solid var(--c-border); border-radius: var(--radius-md);">
-          <h4 style="margin-bottom: 10px; color: var(--c-text);">快速筆記區</h4>
-          <textarea id="quickNote" placeholder="點此輸入針對此行程的特定筆記，或直接按 Cmd+V 貼上圖片..." style="width:100%; min-height:80px; background: #fff; border:1px solid var(--c-border); color: var(--c-text); padding:10px; border-radius:4px; margin-bottom:10px;"></textarea>
-          
-          <div class="file-upload-wrapper" style="margin-bottom: 12px;">
-            <label for="quickNoteImage" class="upload-btn" style="padding: 4px 10px; font-size: 0.85rem;">📷 附加圖片 (可直接貼上)</label>
-            <input type="file" id="quickNoteImage" accept="image/*" style="display: none;">
-            <div id="quickNotePreviewContainer" style="display: none; margin-top: 10px; position: relative;">
-              <img id="quickNotePreview" src="" style="width: 100%; border-radius: 4px; max-height: 200px; object-fit: contain; border: 1px solid var(--c-border);">
-              <button type="button" id="removeQuickNoteImage" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold;">✕</button>
-            </div>
-          </div>
+// (6) 渲染票券與憑證金庫
+function renderTicketVault() {
+  const container = document.getElementById('ticketVaultGrid');
+  if (!container) return;
 
-          <button id="saveQuickNoteBtn" style="padding:6px 12px; background:var(--c-primary-light); color:white; border:none; border-radius:4px; font-size:0.9rem; cursor: pointer;">儲存筆記</button>
+  container.innerHTML = ticketsData.map(ticket => `
+    <div class="vault-ticket-card highlight">
+      <div class="vault-card-header">
+        <div>
+          <h3 class="vault-hotel-name">${ticket.name}</h3>
+          <span style="font-size: 0.78rem; color: var(--purple-monet);">${ticket.type}</span>
         </div>
+        <span class="badge-pill status-ok">${ticket.price}</span>
       </div>
-    `;
-    
-    overlay.classList.add('active');
 
-    // --- 待辦事項邏輯 ---
-    function renderModalTodos() {
-      const listContainer = document.getElementById('modalTodoList');
-      listContainer.innerHTML = '';
-      
-      const dayTodos = state.todos.filter(t => t.date === itemData.date);
-      
-      // 未完成排前面，已完成排後面
-      dayTodos.sort((a, b) => a.completed - b.completed);
+      <div class="vault-info-row">
+        <span>適用日期：</span>
+        <strong>${ticket.date}</strong>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin: 6px 0;">${ticket.desc}</p>
 
-      if (dayTodos.length === 0) {
-        listContainer.innerHTML = '<p style="color: var(--c-text-muted); font-size: 0.9rem; text-align: center;">目前沒有待辦事項</p>';
-      } else {
-        dayTodos.forEach(todo => {
-          const el = document.createElement('div');
-          el.className = `todo-item ${todo.completed ? 'completed' : ''}`;
-          el.innerHTML = `
-            <input type="checkbox" class="todo-checkbox" data-id="${todo.id}" ${todo.completed ? 'checked' : ''}>
-            <span class="todo-text">${escapeHTML(todo.text)}</span>
-            <button type="button" class="todo-delete-btn" data-id="${todo.id}">🗑️</button>
-          `;
-          listContainer.appendChild(el);
-        });
-      }
+      ${ticket.code ? `
+        <div class="vault-code-box">
+          <span class="code-title">憑證編號 / 專屬代碼</span>
+          <span class="code-text" style="font-size: 0.95rem;">${ticket.code}</span>
+          ${ticket.isCopyable ? `
+            <button class="btn-copy-mini" onclick="copyToClipboard('${ticket.copyValue}', '憑證代碼')">複製</button>
+          ` : ''}
+        </div>
+      ` : ''}
 
-      // 綁定事件
-      document.querySelectorAll('#modalTodoList .todo-checkbox').forEach(cb => {
-        cb.addEventListener('change', (e) => {
-          const todo = state.todos.find(t => t.id === e.target.dataset.id);
-          if (todo) {
-            todo.completed = e.target.checked;
-            saveTodos();
-            renderModalTodos();
-            renderCalendar(); // 更新日曆紅點
-            renderMasterTodoList(); // 更新總表
-          }
-        });
-      });
+      <div style="margin-top: 10px;">
+        <a href="${ticket.actionUrl}" target="_blank" class="btn-action-primary" style="padding: 8px 14px; font-size: 0.82rem; width: 100%;">
+          <span>${ticket.actionText}</span>
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
 
-      document.querySelectorAll('#modalTodoList .todo-delete-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const id = e.currentTarget.dataset.id;
-          if (!id) return;
-          state.todos = state.todos.filter(t => t.id !== id);
-          saveTodos();
-          renderModalTodos();
-          renderCalendar();
-          renderMasterTodoList();
-        });
-      });
-    }
+// (7) 渲染私房口袋名單
+function renderPocketPlaces(filterCategory = 'all') {
+  const container = document.getElementById('pocketCardGrid');
+  if (!container) return;
 
-    renderModalTodos();
+  const filtered = filterCategory === 'all' 
+    ? pocketPlacesData 
+    : pocketPlacesData.filter(p => p.category === filterCategory);
 
-    document.getElementById('addModalTodoBtn').addEventListener('click', () => {
-      const input = document.getElementById('modalTodoInput');
-      const text = input.value.trim();
-      if (!text) return;
+  container.innerHTML = filtered.map(place => `
+    <div class="pocket-card">
+      <div class="pocket-card-top">
+        <div>
+          <h3 class="pocket-name">${place.name}</h3>
+          <span style="font-size: 0.75rem; color: var(--text-dim);">${place.city}</span>
+        </div>
+        <span class="pocket-category">${place.catLabel}</span>
+      </div>
 
-      state.todos.push({
-        id: Date.now().toString(),
-        date: itemData.date,
-        text: text,
-        completed: false
-      });
+      <p class="pocket-specialty">⭐ 招牌必點：${place.specialty}</p>
+      <div class="pocket-address">📍 ${place.address}</div>
+      <div class="pocket-hours">🕒 營業：${place.hours}</div>
 
-      saveTodos();
-      input.value = '';
-      renderModalTodos();
-      renderCalendar();
-      renderMasterTodoList();
-    });
+      <div class="pocket-footer">
+        <span class="pocket-note">${place.note}</span>
+        <a href="${place.mapUrl}" target="_blank" class="btn-action-primary" style="padding: 6px 12px; font-size: 0.78rem;">
+          <span>📍 Google 導航</span>
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
 
-    document.getElementById('modalTodoInput').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        document.getElementById('addModalTodoBtn').click();
-      }
-    });
+// (8) 底部導覽切換
+function switchTab(tabId) {
+  currentTab = tabId;
 
-    // --- 快速筆記區的互動邏輯 ---
-    const imageInput = document.getElementById('quickNoteImage');
-    const previewContainer = document.getElementById('quickNotePreviewContainer');
-    const previewImg = document.getElementById('quickNotePreview');
-    const removeBtn = document.getElementById('removeQuickNoteImage');
-    const quickNoteTextarea = document.getElementById('quickNote');
-    let quickBase64Image = null;
-
-    function processQuickImageFile(file) {
-      if (!file || !file.type.startsWith('image/')) return;
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 800;
-          let width = img.width;
-          let height = img.height;
-          if (width > MAX_WIDTH) {
-            height = Math.round((height * MAX_WIDTH) / width);
-            width = MAX_WIDTH;
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          quickBase64Image = canvas.toDataURL('image/jpeg', 0.6);
-          previewImg.src = quickBase64Image;
-          previewContainer.style.display = 'block';
-        };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // 點擊上傳
-    imageInput.addEventListener('change', function(e) {
-      processQuickImageFile(e.target.files[0]);
-    });
-
-    // 貼上圖片 (Cmd+V)
-    quickNoteTextarea.addEventListener('paste', function(e) {
-      const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-      for (let index in items) {
-        const item = items[index];
-        if (item.kind === 'file' && item.type.startsWith('image/')) {
-          const file = item.getAsFile();
-          processQuickImageFile(file);
-        }
-      }
-    });
-
-    removeBtn.addEventListener('click', () => {
-      quickBase64Image = null;
-      imageInput.value = '';
-      previewContainer.style.display = 'none';
-    });
-
-    if (quickNoteTextarea) {
-      quickNoteTextarea.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-          e.preventDefault();
-          const saveBtn = document.getElementById('saveQuickNoteBtn');
-          if (saveBtn) saveBtn.click();
-        }
-      });
-    }
-
-    document.getElementById('saveQuickNoteBtn').addEventListener('click', () => {
-      const content = document.getElementById('quickNote').value.trim();
-      if (!content && !quickBase64Image) {
-        alert('請輸入內容或上傳圖片！');
-        return;
-      }
-
-      const newNote = {
-        id: Date.now().toString(),
-        title: `${itemData.location} (${itemData.date})`,
-        content: content,
-        categoryVal: 'general',
-        categoryText: '📌 快速筆記',
-        date: new Date().toLocaleDateString('zh-TW', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
-        image: quickBase64Image
-      };
-
-      state.notes.unshift(newNote);
-      saveNotes();
-      
-      // 如果 renderNotes 存在 (即在有備忘錄列表的頁面)
-      if (typeof renderNotes === 'function') {
-        renderNotes();
-      }
-      
-      alert('已成功儲存至底部的「旅行備忘錄」中！');
-      document.getElementById('modalOverlay').classList.remove('active');
-    });
-  }
-
-  document.getElementById('modalClose').addEventListener('click', () => {
-    document.getElementById('modalOverlay').classList.remove('active');
-  });
-
-  document.getElementById('modalOverlay').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) {
-      e.currentTarget.classList.remove('active');
+  // 更新導覽列狀態
+  document.querySelectorAll('.nav-tab-item').forEach(item => {
+    if (item.getAttribute('data-tab') === tabId) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
     }
   });
 
-  // ===== 回到頂部 =====
-  function initBackToTop() {
-    const btn = document.getElementById('backToTop');
-    
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 500) {
-        btn.classList.add('visible');
+  // 切換視圖容器
+  document.querySelectorAll('.tab-view').forEach(view => {
+    if (view.id === `view-${tabId}`) {
+      view.classList.add('active');
+    } else {
+      view.classList.remove('active');
+    }
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// (9) 一鍵複製並彈出 Toast
+function copyToClipboard(text, name = '內容') {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast(`✅ 已複製【${text}】(${name})`);
+  }).catch(() => {
+    showToast(`✅ 已複製【${text}】`);
+  });
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toastNotice');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2200);
+}
+
+// (10) 深淺色主題切換
+function toggleTheme() {
+  const html = document.documentElement;
+  const currentTheme = html.getAttribute('data-theme') || 'dark';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', newTheme);
+  
+  const btn = document.getElementById('btnToggleTheme');
+  if (btn) btn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+  
+  localStorage.setItem('france_theme', newTheme);
+}
+
+// ==========================================
+// 7. 初始化與事件監聽
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  // 讀取主題紀錄
+  const savedTheme = localStorage.getItem('france_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const themeBtn = document.getElementById('btnToggleTheme');
+  if (themeBtn) themeBtn.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+  // 渲染各模組
+  renderDateCarousel();
+  renderKeynoteCard(currentSelectedDate);
+  renderTimeline(currentSelectedDate);
+  renderHotelVault();
+  renderTicketVault();
+  renderPocketPlaces('all');
+
+  // 綁定底部導覽點擊
+  document.querySelectorAll('.nav-tab-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const targetTab = item.getAttribute('data-tab');
+      switchTab(targetTab);
+    });
+  });
+
+  // 綁定主題切換按鈕
+  if (themeBtn) {
+    themeBtn.addEventListener('click', toggleTheme);
+  }
+
+  // 綁定搜尋切換與即時輸入
+  const searchToggleBtn = document.getElementById('btnToggleSearch');
+  const searchDrawer = document.getElementById('searchDrawer');
+  const searchInput = document.getElementById('searchInput');
+
+  if (searchToggleBtn && searchDrawer) {
+    searchToggleBtn.addEventListener('click', () => {
+      searchDrawer.classList.toggle('active');
+      if (searchDrawer.classList.contains('active')) {
+        searchInput.focus();
       } else {
-        btn.classList.remove('visible');
+        searchInput.value = '';
+        renderTimeline(currentSelectedDate);
       }
     });
+  }
 
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const keyword = e.target.value;
+      switchTab('timeline');
+      renderTimeline(currentSelectedDate, keyword);
+    });
+  }
+
+  // 綁定私房口袋名單 Filter Chip
+  const pocketFilterBtns = document.querySelectorAll('.filter-chip');
+  pocketFilterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+      pocketFilterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.getAttribute('data-category');
+      renderPocketPlaces(cat);
     });
-  }
-
-  // 工具函式：防止 XSS
-  function escapeHTML(str) {
-    return str.replace(/[&<>'"]/g, 
-      tag => ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          "'": '&#39;',
-          '"': '&quot;'
-        }[tag])
-    );
-  }
-
-  // ===== Google 試算表動態串接與離線快照保護系統 =====
-
-  // 輕量級 CSV 解析器，支援引號與欄位內換行 (\n)
-  function parseCSV(text) {
-    const lines = [];
-    let row = [""];
-    let inQuotes = false;
-
-    for (let i = 0; i < text.length; i++) {
-      const c = text[i];
-      const next = text[i+1];
-      if (c === '"') {
-        if (inQuotes && next === '"') {
-          row[row.length - 1] += '"';
-          i++;
-        } else {
-          inQuotes = !inQuotes;
-        }
-      } else if (c === ',' && !inQuotes) {
-        row.push('');
-      } else if ((c === '\r' || c === '\n') && !inQuotes) {
-        if (c === '\r' && next === '\n') {
-          i++;
-        }
-        lines.push(row);
-        row = [''];
-      } else {
-        row[row.length - 1] += c;
-      }
-    }
-    if (row.length > 1 || row[0] !== '') {
-      lines.push(row);
-    }
-    return lines;
-  }
-
-  // 非同步抓取、解析 Google 試算表，支援斷網離線保護
-  async function fetchAndRenderItinerary() {
-    const statusBadge = document.getElementById('syncStatusBadge');
-    try {
-      // 加上時間戳記防快取參數，確保每次重整都向 Google 伺服器要求最新版
-      const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + Date.now());
-      if (!response.ok) throw new Error('雲端回應異常');
-      const csvText = await response.text();
-      
-      // 解析 CSV
-      const parsedRows = parseCSV(csvText);
-      
-      // 過濾並映射有效資料行 (日期符合 M/D 格式)
-      const dataRows = parsedRows.filter(row => {
-        if (row.length < 4) return false;
-        return /^\d{1,2}\/\d{1,2}$/.test(row[0].trim());
-      });
-
-      if (dataRows.length > 0) {
-        const mappedData = dataRows.map(row => {
-          const date = row[0].trim();
-          const weekday = row[1] ? row[1].trim() : '';
-          const time = row[2] ? row[2].trim() : '';
-          const location = row[3] ? row[3].trim() : '';
-          const transit = row[4] ? row[4].trim() : '';
-          const hotel = row[5] ? row[5].trim() : '';
-          const note = row[6] ? row[6].trim() : '';
-          
-          // 行程種類判定
-          let type = 'paris';
-          if (location.includes('桃園') || location.includes('戴高樂') || location.includes('機場') || transit.includes('機') || transit.includes('航')) {
-            type = 'transit';
-          } else if (location.includes('迪士尼') || hotel.includes('Zenitude') || note.includes('迪士尼')) {
-            type = 'disney';
-          } else if (location.includes('聖米歇爾') || hotel.includes('Relais') || location.includes('雷恩') || location.includes('聖馬洛')) {
-            type = 'michel';
-          } else if (location.includes('比利時') || location.includes('布魯日') || location.includes('根特')) {
-            type = 'belgium';
-          }
-
-          // 動態整合詳細描述 (包含交通、住宿與詳細備註)
-          let detailParts = [];
-          if (transit) detailParts.push(`<strong>🚇 交通與備忘：</strong><br>${transit.replace(/\n/g, '<br>')}`);
-          if (hotel) detailParts.push(`<strong>🏨 住宿預訂：</strong><br>${hotel.replace(/\n/g, '<br>')}`);
-          if (note) detailParts.push(`<strong>💡 行程與備忘：</strong><br>${note.replace(/\n/g, '<br>')}`);
-
-          let detail = detailParts.join('<br><br>');
-
-          // 特殊景點注入精美的手工 html 攻略 (維持原 index 亮點)
-          if (date === '9/25') {
-            detail = `🚄 <strong>SNCF 跨城火車 (Paris Montparnasse ➔ Rennes)</strong><br>• 班次：✅ <strong>已訂票 06:48</strong> (訂位代碼：<strong>4WCP2R</strong>，2 人共 68.00 €)<br>• 08:00 抵達雷恩後直接轉乘 TER 火車前往聖馬洛。<br><br><strong>🌊 今日潮汐資訊 (9/25)</strong><br>🔸 滿潮 (Pleine mer)：07:08、19:26 (大潮係數 77/82)<br>🔹 乾潮 (Basse mer)：01:34、13:54<br><br>` + detail;
-          } else if (date === '9/26') {
-            detail = `<strong>⛰️ 聖米歇爾山自駕與參觀攻略</strong><br>• 租車：09:30-10:15 於聖馬洛火車站 SIXT/Avis 櫃檯取車 (週六取車防週日公休)。<br>• 生蠔：10:30-13:00 康卡勒吃現開生蠔 (導航 Place de la République 或 Port de la Houle)。<br>• 停車：走「Hôtels / Residents」專用車道，輸入 6 位數 Code 停進 P3 專用停車場。<br>• 🛒 傍晚務必找超市買齊水與零食，明天週日超市下午 12:30 後大公休。<br><br><strong>🌊 今日潮汐資訊 (9/26)</strong><br>🔸 滿潮 (Pleine mer)：07:45、20:02 (大潮係數 87/92 - 注意漲退潮變化)<br>🔹 乾潮 (Basse mer)：02:15、14:35<br><br>` + detail;
-          } else if (date === '9/27') {
-            detail = `<strong>🏰 奧日地區伯夫龍 ➔ 翁夫勒 17世紀舊港</strong><br>• 伯夫龍：最美半木屋村莊。週日小店與餐廳多公休或只開中午，抵達立刻點餐！<br>• 停車：翁夫勒舊港單行道多，直接導航 Parking du Centre (Plage) 或 Parking de l'Est 大型露天停車場。<br><br><strong>🌊 今日潮汐資訊 (9/27)</strong><br>🔸 滿潮 (Pleine mer)：08:20、20:37 (大潮係數 95/97 - 超大潮，景觀壯麗)<br>🔹 乾潮 (Basse mer)：02:56、15:14<br><br>` + detail;
-          } else if (date === '9/28') {
-            detail = `<strong>🌊 埃特雷塔白堊斷崖 ➔ 歷史名城魯昂</strong><br>• 斷崖：欣賞象鼻山，停車首選 Parking de la Falaise d'Aval，若滿了改停 Parking du Grand Val 步15分鐘。<br>• 魯昂：直接導航 Parking Indigo Rouen Cathédrale。⚠️ 週一精品/甜點店多公休，以參觀魯昂聖母大教堂與大時鐘為主。部分餐廳週一週二雙休，請提前確認營業時間。<br><br>` + detail;
-          } else if (date === '9/29') {
-            detail = `<strong>🎨 吉維尼莫內花園 ➔ 巴黎還車</strong><br>• 花園：10:00-12:30 莫內之家與花園 (預先官網預約 10:00 入場，現場不售票)。<br>• 還車：還車至巴黎拉德芳斯，注意地下立體迷宮，認清合約停車場 (如 Parking Centre / Les 4 Temps) 隨著 Retour Location 指標開。<br>• ⚠️ <strong>國道繳費防呆 (Flux Libre新制)</strong>：開過 A13 高速公路後，務必於 72 小時內上網 (sanef.com) 繳費以免受罰。<br><br>` + detail;
-          }
-
-          // 取出第一行做為卡片顯示的精簡 desc，過濾掉 html 標籤
-          const rawDesc = (transit || note || hotel || `${location}探索`).split('\n')[0].replace(/<[^>]*>/g, '');
-          const desc = rawDesc.length > 18 ? rawDesc.substring(0, 18) + '...' : rawDesc;
-
-          return {
-            date,
-            time,
-            location,
-            type,
-            desc: desc || '探索美麗景致',
-            detail: detail || '今日暫無詳細計畫備忘。'
-          };
-        });
-
-        itineraryData = mappedData;
-        
-        // 儲存到本地快照，防斷網
-        localStorage.setItem('franceTripItinerarySnapshot', JSON.stringify(mappedData));
-        localStorage.setItem('franceTripItinerarySnapshotTime', new Date().toLocaleString());
-      }
-
-      sheetSyncTime = new Date().toLocaleTimeString();
-      if (statusBadge) {
-        statusBadge.className = 'sync-status-badge synced';
-        statusBadge.innerHTML = '🟢 試算表已同步';
-        statusBadge.title = `最後同步時間：${sheetSyncTime}`;
-      }
-      dataFromSheet = true;
-    } catch (error) {
-      console.warn('無法從 Google 試算表同步資料，載入離線緩存：', error);
-      
-      const snapshot = localStorage.getItem('franceTripItinerarySnapshot');
-      const snapshotTime = localStorage.getItem('franceTripItinerarySnapshotTime');
-      
-      if (snapshot) {
-        itineraryData = JSON.parse(snapshot);
-        dataFromSheet = false;
-        if (statusBadge) {
-          statusBadge.className = 'sync-status-badge offline';
-          statusBadge.innerHTML = '🟡 離線快照模式';
-          statusBadge.title = `載入離線緩存，快照時間：${snapshotTime} (錯誤原因: ${error.message})`;
-        }
-      } else {
-        dataFromSheet = false;
-        if (statusBadge) {
-          statusBadge.className = 'sync-status-badge fallback';
-          statusBadge.innerHTML = '🔴 斷網預設行程';
-          statusBadge.title = `無本地緩存，使用網頁出廠預設行程 (錯誤原因: ${error.message})`;
-        }
-      }
-    }
-
-    // 重新渲染行事曆與待辦事項
-    renderCalendar();
-    renderMasterTodoList();
-  }
+  });
 });
