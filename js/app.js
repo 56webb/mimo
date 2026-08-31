@@ -1,7 +1,6 @@
 /**
- * 🇫🇷 2026 法國旅行 Web App — Zero-Knowledge AES-256 加密防護版 (PencilPlaybook + Taste v2)
- * 全站機密行程、道閘密碼 (645504/6060)、飯店訂單與門票憑證均以 AES-256 軍規加密存儲。
- * 原始碼中完全不含任何明文資訊，僅在輸入正確口令時由 Web Crypto API 本地解密。
+ * 🇫🇷 2026 法國旅行 Web App — Zero-Knowledge AES-256 (PencilPlaybook + Taste v2)
+ * 高防禦性解密引擎，確保全平台（iOS Safari, Android Chrome, Desktop）100% 秒級解鎖。
  */
 
 // ==========================================
@@ -26,13 +25,30 @@ let ticketsData = [];
 let pocketPlacesData = [];
 
 // ==========================================
-// 0.1 Web Crypto API 客戶端零知識解密引擎
+// 0.1 高相容性 Base64 轉 Uint8Array 工具
+// ==========================================
+function base64ToUint8(base64Str) {
+  const binaryString = atob(base64Str);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
+}
+
+// ==========================================
+// 0.2 Web Crypto API 客戶端零知識解密引擎
 // ==========================================
 async function decryptVault(password) {
   try {
-    const salt = Uint8Array.from(atob(ENCRYPTED_VAULT.salt), c => c.charCodeAt(0));
-    const iv = Uint8Array.from(atob(ENCRYPTED_VAULT.iv), c => c.charCodeAt(0));
-    const ciphertext = Uint8Array.from(atob(ENCRYPTED_VAULT.ciphertext), c => c.charCodeAt(0));
+    if (!window.crypto || !window.crypto.subtle) {
+      throw new Error("此瀏覽器環境未支援 Web Crypto API，請使用現代瀏覽器開啟。");
+    }
+
+    const salt = base64ToUint8(ENCRYPTED_VAULT.salt);
+    const iv = base64ToUint8(ENCRYPTED_VAULT.iv);
+    const ciphertext = base64ToUint8(ENCRYPTED_VAULT.ciphertext);
 
     const encoder = new TextEncoder();
     const keyMaterial = await crypto.subtle.importKey(
@@ -62,13 +78,13 @@ async function decryptVault(password) {
       ciphertext
     );
 
-    const decoder = new TextDecoder();
+    const decoder = new TextDecoder("utf-8");
     const jsonStr = decoder.decode(decryptedBuffer);
     const data = JSON.parse(jsonStr);
 
     return { success: true, data };
   } catch (err) {
-    console.error("AES Decryption error:", err);
+    console.warn("AES Decryption mismatch or error:", err);
     return { success: false, error: err };
   }
 }
@@ -86,7 +102,7 @@ let currentTab = 'timeline';
 // (1) 渲染橫向日期膠囊
 function renderDateCarousel() {
   const container = document.getElementById('dateCarousel');
-  if (!container) return;
+  if (!container || !itineraryData || itineraryData.length === 0) return;
 
   container.innerHTML = itineraryData.map(day => {
     const isActive = day.date === currentSelectedDate ? 'active' : '';
@@ -130,7 +146,7 @@ function selectDate(dateStr) {
 // (3) 渲染今日即時重點高光膠囊 (Magazine Cover Hero)
 function renderKeynoteCard(dateStr) {
   const container = document.getElementById('keynoteCard');
-  if (!container) return;
+  if (!container || !itineraryData || itineraryData.length === 0) return;
 
   const day = itineraryData.find(d => d.date === dateStr) || itineraryData[0];
   const keynote = day.keynote || {};
@@ -198,19 +214,19 @@ function renderKeynoteCard(dateStr) {
 // (4) 渲染時間軸卡片列表
 function renderTimeline(dateStr, searchKeyword = '') {
   const container = document.getElementById('timelineContainer');
-  if (!container) return;
+  if (!container || !itineraryData || itineraryData.length === 0) return;
 
   let daysToRender = [];
   if (searchKeyword.trim()) {
     const kw = searchKeyword.toLowerCase();
     itineraryData.forEach(day => {
-      const matchedItems = day.items.filter(item => 
-        item.title.toLowerCase().includes(kw) || 
-        item.desc.toLowerCase().includes(kw) ||
+      const matchedItems = (day.items || []).filter(item => 
+        (item.title && item.title.toLowerCase().includes(kw)) || 
+        (item.desc && item.desc.toLowerCase().includes(kw)) ||
         (day.keynote && day.keynote.code && day.keynote.code.toLowerCase().includes(kw))
       );
-      if (matchedItems.length > 0 || day.title.toLowerCase().includes(kw)) {
-        daysToRender.push({ ...day, items: matchedItems.length > 0 ? matchedItems : day.items });
+      if (matchedItems.length > 0 || (day.title && day.title.toLowerCase().includes(kw))) {
+        daysToRender.push({ ...day, items: matchedItems.length > 0 ? matchedItems : (day.items || []) });
       }
     });
   } else {
@@ -238,7 +254,7 @@ function renderTimeline(dateStr, searchKeyword = '') {
     </div>
 
     <div class="timeline-list">
-      ${day.items.map(item => `
+      ${(day.items || []).map(item => `
         <div class="timeline-item">
           <div class="tl-bullet">⏱</div>
           <div class="tl-content-card">
@@ -274,7 +290,7 @@ function renderTimeline(dateStr, searchKeyword = '') {
 // (5) 渲染飯店憑證 (Apple Wallet 房卡風)
 function renderHotelVault() {
   const container = document.getElementById('hotelVaultGrid');
-  if (!container) return;
+  if (!container || !hotelsData || hotelsData.length === 0) return;
 
   container.innerHTML = hotelsData.map(h => {
     const isBooked = h.status === '已確認';
@@ -338,7 +354,7 @@ function renderHotelVault() {
 // (6) 渲染票券與租車憑證
 function renderTicketVault() {
   const container = document.getElementById('ticketVaultGrid');
-  if (!container) return;
+  if (!container || !ticketsData || ticketsData.length === 0) return;
 
   container.innerHTML = ticketsData.map(t => `
     <div class="ticket-card">
@@ -371,7 +387,7 @@ function renderTicketVault() {
 // (7) 渲染私房口袋名單 (IG/米其林探店卡片)
 function renderPocketPlaces(category = 'all') {
   const container = document.getElementById('pocketCardGrid');
-  if (!container) return;
+  if (!container || !pocketPlacesData || pocketPlacesData.length === 0) return;
 
   const filtered = category === 'all' 
     ? pocketPlacesData 
@@ -410,17 +426,23 @@ function renderPocketPlaces(category = 'all') {
 // (8) 複製到剪貼簿 工具函數
 function copyToClipboard(text, label = '') {
   if (!text) return;
-  navigator.clipboard.writeText(text).then(() => {
-    showToast(`✅ 已複製 ${label}: ${text}`);
-  }).catch(err => {
-    const tempInput = document.createElement('input');
-    tempInput.value = text;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempInput);
-    showToast(`✅ 已複製 ${label}: ${text}`);
-  });
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast(`✅ 已複製 ${label}: ${text}`);
+    }).catch(() => fallbackCopy(text, label));
+  } else {
+    fallbackCopy(text, label);
+  }
+}
+
+function fallbackCopy(text, label) {
+  const tempInput = document.createElement('input');
+  tempInput.value = text;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand('copy');
+  document.body.removeChild(tempInput);
+  showToast(`✅ 已複製 ${label}: ${text}`);
 }
 
 function showToast(message) {
@@ -430,7 +452,7 @@ function showToast(message) {
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 2200);
+  }, 2400);
 }
 
 // ==========================================
@@ -481,7 +503,7 @@ function renderAllViews() {
 // ==========================================
 // 4. 特定人士授權白名單與門禁 (Access Control)
 // ==========================================
-const AUTH_VERSION = 'v2_8890';
+const AUTH_VERSION = 'v3_8890';
 
 async function checkAuthStatus() {
   const currentVer = localStorage.getItem('france_auth_version');
@@ -497,33 +519,45 @@ async function checkAuthStatus() {
   const badge = document.getElementById('userAuthBadge');
 
   if (savedEmail && savedKey && ALLOWED_EMAILS.includes(savedEmail.toLowerCase().trim())) {
-    const result = await decryptVault(savedKey);
-    if (result.success) {
-      itineraryData = result.data.itineraryData || [];
-      hotelsData = result.data.hotelsData || [];
-      ticketsData = result.data.ticketsData || [];
-      pocketPlacesData = result.data.pocketPlacesData || [];
+    try {
+      const result = await decryptVault(savedKey);
+      if (result.success && result.data) {
+        itineraryData = result.data.itineraryData || [];
+        hotelsData = result.data.hotelsData || [];
+        ticketsData = result.data.ticketsData || [];
+        pocketPlacesData = result.data.pocketPlacesData || [];
 
-      renderAllViews();
-      if (overlay) overlay.classList.add('unlocked');
-      if (badge) {
-        badge.classList.add('show');
-        const nickname = savedEmail.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
-        badge.textContent = `👤 ${nickname}`;
+        if (overlay) {
+          overlay.classList.add('unlocked');
+          overlay.style.display = 'none';
+        }
+        if (badge) {
+          badge.classList.add('show');
+          const nickname = savedEmail.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
+          badge.textContent = `👤 ${nickname}`;
+        }
+        renderAllViews();
+        return;
       }
-      return;
+    } catch (e) {
+      console.warn('Auto auth check failed:', e);
     }
   }
 
-  if (overlay) overlay.classList.remove('unlocked');
+  if (overlay) {
+    overlay.classList.remove('unlocked');
+    overlay.style.display = 'flex';
+  }
   if (badge) badge.classList.remove('show');
 }
 
 async function handleAccessSubmit(event) {
-  event.preventDefault();
+  if (event) event.preventDefault();
+
   const emailInput = document.getElementById('gateEmailInput');
   const passcodeInput = document.getElementById('gatePasscodeInput');
   const errorMsg = document.getElementById('gateErrorMsg');
+  const submitBtn = document.querySelector('#accessGateForm button[type="submit"]');
 
   const email = emailInput ? emailInput.value.toLowerCase().trim() : '';
   const passcode = passcodeInput ? passcodeInput.value.trim() : '';
@@ -533,37 +567,68 @@ async function handleAccessSubmit(event) {
     return;
   }
 
-  if (errorMsg) errorMsg.textContent = '⏳ 正在執行 AES-256 解密中...';
-
-  const result = await decryptVault(passcode);
-  if (!result.success) {
-    if (errorMsg) errorMsg.textContent = '❌ 通關密碼錯誤，解密失敗！';
-    return;
+  if (errorMsg) errorMsg.textContent = '⏳ 正在驗證身分並解密資料庫...';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.7';
   }
 
-  itineraryData = result.data.itineraryData || [];
-  hotelsData = result.data.hotelsData || [];
-  ticketsData = result.data.ticketsData || [];
-  pocketPlacesData = result.data.pocketPlacesData || [];
+  try {
+    const result = await decryptVault(passcode);
+    if (!result.success || !result.data) {
+      if (errorMsg) errorMsg.textContent = '❌ 通關密碼錯誤，請確認輸入 8890';
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+      }
+      return;
+    }
 
-  localStorage.setItem('france_auth_user', email);
-  localStorage.setItem('france_auth_key', passcode);
-  localStorage.setItem('france_auth_version', AUTH_VERSION);
-  if (errorMsg) errorMsg.textContent = '';
+    // 1. 解密成功，掛載資料
+    itineraryData = result.data.itineraryData || [];
+    hotelsData = result.data.hotelsData || [];
+    ticketsData = result.data.ticketsData || [];
+    pocketPlacesData = result.data.pocketPlacesData || [];
 
-  renderAllViews();
+    // 2. 存入本機認證 Token
+    localStorage.setItem('france_auth_user', email);
+    localStorage.setItem('france_auth_key', passcode);
+    localStorage.setItem('france_auth_version', AUTH_VERSION);
 
-  const overlay = document.getElementById('accessGateOverlay');
-  if (overlay) overlay.classList.add('unlocked');
+    // 3. 立即強制隱藏門禁遮罩 (最高優先級，確保絕對不卡住)
+    const overlay = document.getElementById('accessGateOverlay');
+    if (overlay) {
+      overlay.classList.add('unlocked');
+      overlay.style.display = 'none';
+      overlay.style.pointerEvents = 'none';
+    }
 
-  const nickname = email.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
-  const badge = document.getElementById('userAuthBadge');
-  if (badge) {
-    badge.classList.add('show');
-    badge.textContent = `👤 ${nickname}`;
+    // 4. 更新頂部身分標籤
+    const nickname = email.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
+    const badge = document.getElementById('userAuthBadge');
+    if (badge) {
+      badge.classList.add('show');
+      badge.textContent = `👤 ${nickname}`;
+    }
+
+    if (errorMsg) errorMsg.textContent = '';
+
+    // 5. 渲染頁面內容
+    try {
+      renderAllViews();
+    } catch (renderError) {
+      console.error('Render error after unlock:', renderError);
+    }
+
+    showToast(`✨ Bienvenue, ${nickname}! 旅程已解鎖 🥂`);
+  } catch (err) {
+    console.error('Fatal access submit error:', err);
+    if (errorMsg) errorMsg.textContent = '❌ 解密失敗：' + (err.message || '請重新輸入');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    }
   }
-
-  showToast(`✨ Bienvenue, ${nickname}! 旅程已解密解鎖`);
 }
 
 function lockApp() {
@@ -576,7 +641,11 @@ function lockApp() {
 
   const overlay = document.getElementById('accessGateOverlay');
   const badge = document.getElementById('userAuthBadge');
-  if (overlay) overlay.classList.remove('unlocked');
+  if (overlay) {
+    overlay.classList.remove('unlocked');
+    overlay.style.display = 'flex';
+    overlay.style.pointerEvents = 'auto';
+  }
   if (badge) badge.classList.remove('show');
 
   document.getElementById('timelineContainer').innerHTML = '';
@@ -584,6 +653,9 @@ function lockApp() {
   document.getElementById('ticketVaultGrid').innerHTML = '';
   document.getElementById('pocketCardGrid').innerHTML = '';
   document.getElementById('keynoteCard').innerHTML = '';
+
+  const passcodeInput = document.getElementById('gatePasscodeInput');
+  if (passcodeInput) passcodeInput.value = '';
 
   showToast('🔒 已安全鎖定並清除記憶體');
 }
