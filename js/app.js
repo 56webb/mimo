@@ -469,7 +469,17 @@ function renderAllViews() {
 // ==========================================
 // 7. 特定人士授權白名單與門禁 (Access Control)
 // ==========================================
+const AUTH_VERSION = 'v2_8890';
+
 async function checkAuthStatus() {
+  const currentVer = localStorage.getItem('france_auth_version');
+  if (currentVer !== AUTH_VERSION) {
+    // 偵測到密碼升級為 8890，自動清除舊版快取
+    localStorage.removeItem('france_auth_user');
+    localStorage.removeItem('france_auth_key');
+    localStorage.setItem('france_auth_version', AUTH_VERSION);
+  }
+
   const savedEmail = localStorage.getItem('france_auth_user');
   const savedKey = localStorage.getItem('france_auth_key');
   const overlay = document.getElementById('accessGateOverlay');
