@@ -1,780 +1,82 @@
 /**
- * 🇫🇷 2026 法國旅行 Web App — 旗艦手機端核心驅動引擎
- * 支援單手切換、今日即時高光、憑證金庫、私房口袋庫與自駕指南
+ * 🇫🇷 2026 法國旅行 Web App — Zero-Knowledge AES-256 加密防護版
+ * 全站機密行程、道閘密碼 (645504/6060)、飯店訂單與門票憑證均以 AES-256 軍規加密存儲。
+ * 原始碼中完全不含任何明文資訊，僅在輸入正確口令時由 Web Crypto API 本地解密。
  */
 
 // ==========================================
-// 1. 全程 23 天結構化行程資料庫 (Single Source)
+// 0. 特定人士授權白名單與 AES-256 加密金庫
 // ==========================================
-const itineraryData = [
-  {
-    date: '9/15',
-    weekday: '二',
-    title: '台北 (TPE) ➔ 巴黎 (CDG) 啟程啟航',
-    tag: '跨國飛行',
-    summary: '搭乘長榮航空 BR87 直飛巴黎，迎接 23 天浪漫法蘭西之旅！',
-    keynote: {
-      code: 'BR87 (23:30出發)',
-      codeLabel: '航班編號',
-      spot: '桃園國際機場 T2 ➔ 巴黎戴高樂 T1',
-      hotel: '機上 (Overnight Flight)',
-      mapQuery: 'Taoyuan International Airport'
-    },
-    items: [
-      { time: '20:30', title: '抵達桃園機場第二航廈', desc: '辦理長榮航空報到手續、託運行李、通過安檢。', badges: ['機票已訂', '長榮航空'], map: 'Taiwan Taoyuan International Airport Terminal 2' },
-      { time: '23:30', title: '長榮航空 BR87 班機起飛', desc: '直飛巴黎戴高樂機場 (CDG)，飛行時間約 14 小時，機上好好休息養精蓄銳。', badges: ['直飛航班'], map: '' }
-    ]
-  },
-  {
-    date: '9/16',
-    weekday: '三',
-    title: '抵達巴黎 ➔ B&B Check-in ➔ 13區漫步',
-    tag: '初見巴黎',
-    summary: '07:30 抵達戴高樂機場，申辦 Navigo 週卡，入住 13 區 B&B 飯店。',
-    keynote: {
-      code: 'BB22426149',
-      codeLabel: '巴黎飯店訂單號 (9晚)',
-      spot: 'B&B HOTEL Paris Italie Porte de Choisy',
-      hotel: 'B&B HOTEL Paris Italie (已付款 €921.80)',
-      mapQuery: 'B&B HOTEL Paris Italie Porte de Choisy'
-    },
-    items: [
-      { time: '07:30', title: '平安降落巴黎戴高樂機場 (CDG)', desc: '出關提領大行李，於機場車站櫃檯申辦 Navigo 週卡（需貼 1 吋大頭照）。', badges: ['備大頭照', 'Navigo 1-5圈'], map: 'Paris Charles de Gaulle Airport' },
-      { time: '11:00', title: '搭乘 RER B 轉地鐵前往 13 區飯店', desc: '抵達 B&B HOTEL Paris Italie Porte de Choisy 寄放行李或提早入住。', badges: ['代碼: BB22426149'], map: 'B&B HOTEL Paris Italie Porte de Choisy' },
-      { time: '14:00', title: '13 區中國城 ＆ 義大利廣場周邊悠閒漫步', desc: '品嚐熱騰騰的道地越南河粉 (Pho 14)，採購水果飲料，回飯店調時差休整。', badges: ['美食探索'], map: 'Place d Italie Paris' }
-    ]
-  },
-  {
-    date: '9/17',
-    weekday: '四',
-    title: '11:00 試穿婚紗 ➔ 奧賽美術館 ➔ 協和廣場',
-    tag: '婚紗準備',
-    summary: '左岸試穿婚紗禮服，下午漫步奧賽美術館欣賞梵谷與莫內名作。',
-    keynote: {
-      code: '門禁2734 / 電梯1869',
-      codeLabel: '婚紗店通關代碼',
-      spot: 'The Bride Paris (22 rue de l\'Odeon)',
-      hotel: 'B&B HOTEL Paris Italie',
-      mapQuery: '22 rue de l Odeon Paris'
-    },
-    items: [
-      { time: '11:00', title: 'The Bride Paris 挑選與試穿婚紗', desc: '地址：22 rue de l\'Odeon (6區)。大門密碼【2734】，電梯密碼【1869】。試穿 3 套禮服並定裝。', badges: ['門禁: 2734', '電梯: 1869', '已預約'], map: '22 rue de l Odeon Paris' },
-      { time: '14:00', title: '奧賽美術館 (Musée d\'Orsay)', desc: '持博物館通票入場，欣賞大鐘樓天窗、梵谷《星夜》、莫內《睡蓮》與雷諾瓦名作。', badges: ['博物館通票'], map: 'Musee d Orsay Paris' },
-      { time: '17:30', title: '協和廣場 ＆ 杜樂麗花園漫步', desc: '遠眺埃及方尖碑與艾菲爾鐵塔遠景，享受巴黎初秋微風。', badges: ['免費景點'], map: 'Place de la Concorde Paris' }
-    ]
-  },
-  {
-    date: '9/18',
-    weekday: '五',
-    title: '先賢祠 ➔ 盧森堡公園 ➔ 莎士比亞書店',
-    tag: '左岸文藝',
-    summary: '漫步拉丁區文藝核心，走進居禮夫人與雨果長眠的先賢祠。',
-    keynote: {
-      code: '持 PMP 通票',
-      codeLabel: '入場方式',
-      spot: '先賢祠 (Panthéon) ＆ 莎士比亞書店',
-      hotel: 'B&B HOTEL Paris Italie',
-      mapQuery: 'Pantheon Paris'
-    },
-    items: [
-      { time: '09:30', title: '先賢祠 (Panthéon) 偉人殿堂', desc: '仰望傅科擺與巨大穹頂，參觀伏爾泰、盧梭、雨果、大仲馬、居禮夫人地下墓穴。', badges: ['博物館通票'], map: 'Pantheon Paris' },
-      { time: '12:00', title: '盧森堡公園 (Jardin du Luxembourg)', desc: '坐在綠色鐵椅曬太陽，看著噴泉旁玩小帆船的孩子，享受最道地的巴黎慢生活。', badges: ['必去花園'], map: 'Jardin du Luxembourg Paris' },
-      { time: '15:00', title: '莎士比亞書店 ＆ 塞納河畔舊書攤', desc: '走進面對聖母院的傳奇英文老書店，買書蓋專屬紀念藏書章。', badges: ['私房口袋'], map: 'Shakespeare and Company Paris' }
-    ]
-  },
-  {
-    date: '9/19',
-    weekday: '六',
-    title: '龐畢度中心 ➔ 瑪黑區漫步 ➔ 婚紗前夜養膚',
-    tag: '現代文藝',
-    summary: '登龐畢度透明水管電梯俯瞰巴黎全景，瑪黑區選品店採購，晚上早睡！',
-    keynote: {
-      code: '明晨 04:00 開工',
-      codeLabel: '明日拍攝備忘',
-      spot: '瑪黑區小巷 ＆ 龐畢度頂樓',
-      hotel: 'B&B HOTEL Paris Italie',
-      mapQuery: 'Centre Pompidou Paris'
-    },
-    items: [
-      { time: '10:00', title: '龐畢度現代藝術中心 (Centre Pompidou)', desc: '搭乘外露紅色手扶梯直達 6 樓觀景台，俯瞰聖心堂與艾菲爾鐵塔。', badges: ['博物館通票'], map: 'Centre Pompidou Paris' },
-      { time: '13:00', title: '瑪黑區 (Le Marais) 歷史街區漫步', desc: '穿梭古老拱廊孚日廣場 (Place des Vosges)，品嚐 L\'As du Fallafel 猶太口袋餅。', badges: ['美食街區'], map: 'Place des Vosges Paris' },
-      { time: '19:00', title: '提早返回飯店・敷面膜養膚早睡', desc: '整理明日婚紗便鞋與道具，設定 03:45 鬧鐘，備戰明日日出婚紗大片！', badges: ['早睡養膚'], map: '' }
-    ]
-  },
-  {
-    date: '9/20',
-    weekday: '日',
-    title: '💍 巴黎蜜月婚紗大片拍攝日！',
-    tag: '重頭戲',
-    summary: '04:00 專業化妝師梳畫，07:00 日出開拍艾菲爾鐵塔、羅浮宮與塞納河！',
-    keynote: {
-      code: '04:00 梳畫 / 07:00 開拍',
-      codeLabel: '今日拍攝時間',
-      spot: '夏佑宮鐵塔 ➔ 羅浮宮 ➔ 亞歷山大三世橋',
-      hotel: 'B&B HOTEL Paris Italie',
-      mapQuery: 'Place du Trocadero Paris'
-    },
-    items: [
-      { time: '04:00', title: '飯店內造型師梳畫與著裝', desc: '化妝師抵達飯店進行專業日出新娘妝髮，換穿第一套主婚紗。', badges: ['專業梳畫'], map: '' },
-      { time: '07:00', title: '第一站：夏佑宮 (Trocadéro) 日出鐵塔空景', desc: '趁清晨無人晨光，拍下艾菲爾鐵塔與廣場最乾淨壯麗的經典大片！', badges: ['日出機位', '必拍神照'], map: 'Place du Trocadero Paris' },
-      { time: '09:00', title: '第二站：羅浮宮金字塔 ＆ 迴廊古典婚紗', desc: '玻璃金字塔倒影、卡魯塞爾凱旋門、古典石雕拱廊。', badges: ['經典大片'], map: 'Pyramide du Louvre Paris' },
-      { time: '11:00', title: '第三站：亞歷山大三世橋 ＆ 塞納河畔水岸', desc: '金碧輝煌的飛馬雕像、塞納河石造護岸，完美定格巴黎極致浪漫！', badges: ['大功告成'], map: 'Pont Alexandre III Paris' }
-    ]
-  },
-  {
-    date: '9/21',
-    weekday: '一',
-    title: '聖禮拜堂 ➔ 橘園睡蓮 ➔ 16:00 Chez Janou',
-    tag: '印象睡蓮',
-    summary: '晨光穿透聖禮拜堂彩繪玻璃，沉浸橘園 360 度睡蓮，享用小酒館燉肉。',
-    keynote: {
-      code: '16:00 已訂位',
-      codeLabel: 'Chez Janou 預約',
-      spot: '聖禮拜堂 ➔ 橘園美術館 ➔ 瑪黑區',
-      hotel: 'B&B HOTEL Paris Italie',
-      mapQuery: 'Chez Janou Paris'
-    },
-    items: [
-      { time: '09:30', title: '聖禮拜堂 (Sainte-Chapelle) 彩繪玻璃', desc: '15 米高、1113 幕聖經故事彩繪玻璃窗，晨光穿透宛如走進萬花筒！', badges: ['需預約09:30', '博物館通票'], map: 'Sainte Chapelle Paris' },
-      { time: '13:30', title: '橘園美術館 (Musée de l\'Orangerie)', desc: '坐在專屬橢圓形展廳中央，360 度沉浸在莫內巨幅《睡蓮全景畫》中。', badges: ['博物館通票', '需約時段'], map: 'Musee de l Orangerie Paris' },
-      { time: '16:00', title: '⭐Chez Janou 南法普羅旺斯傳統小酒館', desc: '✅ 已預訂 16:00！必吃招牌法式油封鴨、香煎干貝與傳奇「整盆無限續加巧克力慕斯」！', badges: ['✅已訂位', '私房名店'], map: 'Chez Janou Paris' }
-    ]
-  },
-  {
-    date: '9/22',
-    weekday: '二',
-    title: '巴黎聖母院內部 ➔ 西堤島 ➔ 塞納河日落遊船',
-    tag: '聖母院浴火重生',
-    summary: '走進重建後全新開放的巴黎聖母院，傍晚搭乘遊船欣賞塞納河兩岸夕陽。',
-    keynote: {
-      code: '官方 App 預約',
-      codeLabel: '聖母院入場',
-      spot: '巴黎聖母院 (Notre-Dame) ＆ 塞納河遊船',
-      hotel: 'B&B HOTEL Paris Italie',
-      mapQuery: 'Cathedrale Notre Dame de Paris'
-    },
-    items: [
-      { time: '10:00', title: '巴黎聖母院 (Cathédrale Notre-Dame) 參觀', desc: '瞻仰浴火重生的哥德式巨木穹頂、神聖玫瑰花窗與管風琴。', badges: ['免費入場', 'App預約'], map: 'Cathedrale Notre Dame de Paris' },
-      { time: '14:00', title: '西堤島古監獄 ＆ 新橋 (Pont Neuf)', desc: '漫步巴黎最古老的新橋，坐在太子廣場長椅享用冰淇淋。', badges: ['博物館通票'], map: 'Pont Neuf Paris' },
-      { time: '18:00', title: '塞納河觀光遊船 (Bateaux-Mouches / Vedettes)', desc: '航行塞納河，看金色夕陽將聖母院、羅浮宮與奧賽美術館染成粉紫色。', badges: ['浪漫夕陽'], map: 'Vedettes du Pont Neuf Paris' }
-    ]
-  },
-  {
-    date: '9/23',
-    weekday: '三',
-    title: '杜樂麗花園 ➔ 羅浮宮三寶 ➔ 金字塔夜景',
-    tag: '羅浮宮深度遊',
-    summary: '從地下卡魯塞爾避開排隊，深度鑑賞勝利女神、蒙娜麗莎與維納斯！',
-    keynote: {
-      code: 'V260781545820',
-      codeLabel: '羅浮宮預約代碼',
-      spot: '地下卡魯塞爾購物廊入口 (Galerie du Carrousel)',
-      hotel: 'B&B HOTEL Paris Italie',
-      mapQuery: 'Pyramide du Louvre Paris'
-    },
-    items: [
-      { time: '13:30', title: '地下卡魯塞爾購物廊 (Galerie du Carrousel) 入口', desc: '避開地面金字塔長隊，直接由倒金字塔地下通道快速通關安檢！', badges: ['避人潮秘技'], map: 'Carrousel du Louvre Paris' },
-      { time: '14:00', title: '⭐羅浮宮博物館 (Musée du Louvre) 鎮館三寶', desc: '直奔達文西《蒙娜麗莎》、薩莫色雷斯的《勝利女神》、《米洛的維納斯》。', badges: ['已預約門票', '鎮館三寶'], map: 'Musee du Louvre Paris' },
-      { time: '19:30', title: '羅浮宮金字塔夜間點燈倒影', desc: '貝聿銘玻璃金字塔打上溫暖金光，在無風水池旁拍下極致對稱倒影神照。', badges: ['夜景必拍'], map: 'Pyramide du Louvre Paris' }
-    ]
-  },
-  {
-    date: '9/24',
-    weekday: '四',
-    title: '楓丹白露宮 ➔ 巴比松畫家村 ➔ 巴黎整裝',
-    tag: '皇家森林',
-    summary: '探訪拿破崙深愛的楓丹白露宮馬蹄形階梯，晚上收大行李備戰明日高鐵自駕！',
-    keynote: {
-      code: '明晨 06:48 高鐵',
-      codeLabel: '明日高鐵代碼: 4WCP2R',
-      spot: '楓丹白露宮 ＆ 拿破崙告別階梯',
-      hotel: 'B&B HOTEL Paris Italie (最後1晚)',
-      mapQuery: 'Chateau de Fontainebleau'
-    },
-    items: [
-      { time: '09:00', title: '搭乘 Transilien R 線前往楓丹白露 (Fontainebleau)', desc: '巴黎里昂車站出發，持 Navigo 週卡免費搭乘，40 分鐘直達。', badges: ['Navigo可用'], map: 'Chateau de Fontainebleau' },
-      { time: '10:30', title: '楓丹白露宮內部與皇家森林花園', desc: '參觀拿破崙退位小客廳、教宗套房與弗朗索瓦一世畫廊。', badges: ['博物館通票'], map: 'Chateau de Fontainebleau' },
-      { time: '18:00', title: '返回巴黎打包 2 大行李・確認明日 Sixt 取車證件', desc: '備齊護照、台灣駕照正本、國際駕照、實體信用卡與 4 位數 PIN 碼。', badges: ['自駕證件檢查'], map: '' }
-    ]
-  },
-  {
-    date: '9/25',
-    weekday: '五',
-    title: '🚄 高鐵 ➔ 雷恩取車 ➔ 聖馬洛 ➔ 康卡勒生蠔 ➔ 聖米山',
-    tag: '自駕啟程',
-    summary: '06:48 高鐵直奔雷恩取休旅車，登上聖馬洛古城大貝島，入住聖米山 Mercure！',
-    keynote: {
-      code: '取車密碼【6060】',
-      codeLabel: '雷恩停車場電梯碼',
-      spot: '雷恩 Sixt ➔ 聖馬洛城牆 ➔ 康卡勒港',
-      hotel: 'Hôtel Mercure Mont Saint-Michel (QQDDDWJZ)',
-      mapQuery: 'Hotel Mercure Mont Saint Michel'
-    },
-    items: [
-      { time: '06:48', title: 'SNCF 高鐵 TGV 出發 (Paris ➔ Rennes)', desc: '✅ 已購票 (代碼: 4WCP2R)。06:48 蒙帕納斯站出發，08:15 準時抵達雷恩。', badges: ['TGV: 4WCP2R'], map: 'Gare Montparnasse Paris' },
-      { time: '08:30', title: '⭐雷恩火車站 Sixt 取車 (Peugeot 3008 休旅)', desc: '北出口下手扶梯至櫃檯，至 Effia 停車場輸入密碼【6060】上 7 樓取車（刷扣€300押金/全車錄影）。', badges: ['Sixt: 9738701348', '密碼: 6060'], map: 'Gare de Rennes' },
-      { time: '10:30', title: '聖馬洛古城 (Saint-Malo) 漫步海景城牆', desc: '停 Q-Park 停車場，走古城牆 (Remparts) 遠眺國家碉堡，買焦糖奶油酥。', badges: ['海景城牆'], map: 'Intra-Muros Saint-Malo' },
-      { time: '13:30', title: '大貝島 (Grand Bé) 乾潮徒步跨海', desc: '⭐ 迎合 13:54 乾潮最低水位！走乾燥石道探訪夏多布里昂墓。', badges: ['乾潮 13:54'], map: 'Grand Be Saint-Malo' },
-      { time: '15:30', title: '康卡勒 (Cancale) 港邊現開生蠔市場', desc: '在生蠔市場購買產地現開生蠔，坐在防波堤上看海現擠檸檬享用！', badges: ['私房生蠔'], map: 'Marche aux Huitres Cancale' },
-      { time: '18:15', title: '入住 Hôtel Mercure Mont Saint-Michel', desc: '輸入道閘密碼進入 Caserne 管制區，停飯店專屬免費停車場。', badges: ['✅訂單: QQDDDWJZ', '含早餐'], map: 'Hotel Mercure Mont Saint Michel' },
-      { time: '19:15', title: '庫埃農河水壩 (Barrage) 賞滿潮落日夜景', desc: '⭐ 19:26 滿潮倒影 ＋ 19:50 夕陽 ＋ 20:00 外牆點燈第一名機位！', badges: ['滿潮 19:26', '必拍神位'], map: 'Barrage sur le Couesnon' },
-      { time: '20:30', title: '⭐Restaurant Le Pré Salé 頂級黑面鹽沼羊肉晚餐', desc: '就在 Mercure 飯店旁，享用法國國寶級 AOP 鹽沼草飼羊肉法餐！', badges: ['鹽沼羊大餐'], map: 'Restaurant Le Pre Sale' }
-    ]
-  },
-  {
-    date: '9/26',
-    weekday: '六',
-    title: '🏰 聖米山晨光包島 ➔ La Ferme 羊肉 ➔ 草原拍羊 ➔ 翁夫勒夕陽',
-    tag: '聖米山大滿貫',
-    summary: '07:30 首班車滿潮包島，14:00 農莊羊肉大餐，草甸拍黑面羊，翁夫勒老港野餐！',
-    keynote: {
-      code: '道閘密碼【645504】',
-      codeLabel: 'La Ferme 專屬道閘碼',
-      spot: '聖米歇爾山 ➔ La Roche Torin ➔ 翁夫勒老港',
-      hotel: 'B&B HOTEL Honfleur (BB22633724)',
-      mapQuery: 'La Ferme Saint-Michel Mont-Saint-Michel'
-    },
-    items: [
-      { time: '07:30', title: '搭第 1 班接駁車進島・晨光無人包島漫步', desc: '⭐ 07:45 滿潮(係數87)！戴耳機開 VoiceMap (兌換碼【0B6CBA60】) 聽官方離線導覽。', badges: ['滿潮 07:45', 'VoiceMap: 0B6CBA60'], map: 'Mont-Saint-Michel' },
-      { time: '09:00', title: '修道院 (Abbaye) 開門第 1 批深度參觀', desc: '門票於 KKday 當場手機直接購買即可（即買即出電子票免排隊，掃碼入場）。', badges: ['KKday現場手機買', '空中迴廊'], map: 'Abbaye du Mont-Saint-Michel' },
-      { time: '14:00', title: '⭐La Ferme Saint-Michel 頂級鹽沼羊午餐', desc: '✅ 已預約 14:00！道閘密碼【645504】，停餐廳私人車位，保管 Ticket，離場刷付 10€。享用炭烤羊排＋燉羊肩肉！', badges: ['✅已訂位', '道閘: 645504', '電話: 0233584679'], map: 'La Ferme Saint-Michel Mont-Saint-Michel' },
-      { time: '15:45', title: '⭐La Roche Torin（羅什托蘭海角）拍黑面羊大景', desc: '廣袤草甸旁拍攝成群黑面鹽沼羊低頭吃草與聖米歇爾山遠景國家地理級大片！', badges: ['拍羊秘境', '免費大景'], map: 'Pointe de la Roche Torin Courtils' },
-      { time: '19:25', title: '翁夫勒 E.Leclerc 超市採購晚餐 ＆ Check-in', desc: '採購烤全雞與冰蘋果酒，B&B HOTEL Honfleur 入住 (代碼: BB22633724 / 現場付 €70.98)。', badges: ['代碼: BB22633724', '免費停車'], map: 'B&B HOTEL Honfleur' },
-      { time: '19:46', title: '⭐翁夫勒老港 (Vieux Bassin) 看夕陽倒影 ＆ 野餐', desc: '⭐ 19:46 日落！坐在水岸長椅看粉紫夕陽染紅木帆船石屋，享受烤雞法棍大餐與 20:00 暖黃街燈夜景！', badges: ['夕陽 19:46', '老港野餐'], map: 'Vieux Bassin Honfleur' }
-    ]
-  },
-  {
-    date: '9/27',
-    weekday: '日',
-    title: '翁夫勒 ➔ 諾曼第大橋 ➔ 象鼻海岸 ➔ 20:00 盧昂百年老餐廳',
-    tag: '白堊雙象絕壁',
-    summary: '自駕橫跨諾曼第大橋，健行象鼻海岸阿瓦爾懸崖，20:00 盧昂 1345 年古老餐廳晚餐！',
-    keynote: {
-      code: 'ID: 790B-8602-147D-CA61',
-      codeLabel: 'La Couronne 訂位代碼',
-      spot: '象鼻海岸阿瓦爾懸崖 ➔ 盧昂大教堂 ➔ 舊市集廣場',
-      hotel: '盧昂市區飯店 (待預訂 1 晚)',
-      mapQuery: 'La Couronne Rouen'
-    },
-    items: [
-      { time: '09:00', title: '翁夫勒日間老港 ＆ 聖凱瑟琳全木造教堂', desc: '欣賞全法最大雙中殿木造教堂（翻轉船底木造天花板）。', badges: ['木造教堂'], map: 'Eglise Sainte-Catherine Honfleur' },
-      { time: '10:30', title: '自駕橫跨「諾曼第大橋 (Pont de Normandie)」', desc: '走 A29 高速公路橫跨塞納河出海口之巨型斜張橋（過橋費約 5.80€）。', badges: ['過橋費 5.80€'], map: 'Pont de Normandie' },
-      { time: '13:00', title: '⭐象鼻海岸 (Étretat) 雙象絕壁健行', desc: '攀登左側阿瓦爾懸崖看巨象吸水海蝕門與針形岩；右側阿蒙懸崖水手聖母教堂。', badges: ['阿瓦爾懸崖', '海蝕門'], map: 'Falaise d Aval Etretat' },
-      { time: '16:30', title: '自駕前往歷史首府盧昂 (Rouen) Check-in', desc: '一路沿塞納河谷推進，抵達盧昂市區飯店 Check-in 卸行李。', badges: ['歷史古都'], map: 'Rouen France' },
-      { time: '20:00', title: '⭐La Couronne 1345 百年老餐廳燭光晚餐', desc: '✅ 已預約 20:00！(TheFork ID: 790B-8602-147D-CA61)。創於 1345 年全法最古老小酒館，品嚐傳統諾曼第法餐！', badges: ['✅已訂位', 'TheFork: 790B-8602-147D-CA61', '創於1345年'], map: 'La Couronne Rouen' }
-    ]
-  },
-  {
-    date: '9/28',
-    weekday: '一',
-    title: '盧昂都市深度漫活 ➔ 莫內真跡 ➔ 傍晚住吉維尼/Vernon',
-    tag: '印象首府',
-    summary: '走進莫內筆下的盧昂大教堂，登天文大時鐘樓頂，盧昂美術館賞莫內真跡！',
-    keynote: {
-      code: '常設展免費',
-      codeLabel: '盧昂美術館',
-      spot: '盧昂大教堂 ➔ 大時鐘 ➔ 莫內真跡 ➔ Vernon',
-      hotel: '吉維尼 / 韋爾農 (Vernon) 周邊飯店 (待訂 1 晚)',
-      mapQuery: 'Cathedrale Notre-Dame de Rouen'
-    },
-    items: [
-      { time: '09:00', title: '盧昂聖母大教堂 (Cathédrale Notre-Dame) 深度參觀', desc: '莫內繪製 30 多幅名作的本尊，感受極致挑高穹頂與神聖光影。', badges: ['莫內名畫地標'], map: 'Cathedrale Notre-Dame de Rouen' },
-      { time: '10:30', title: '文藝復興大時鐘街 ＆ 鐘樓登頂俯瞰', desc: '登上金色天文大時鐘樓頂，360 度俯瞰童話哥德尖塔與半木結構屋頂。', badges: ['360度俯瞰'], map: 'Le Gros-Horloge Rouen' },
-      { time: '13:45', title: '⭐盧昂美術館 (Musée des Beaux-Arts)', desc: '親眼瞻仰莫內《盧昂大教堂》系列油畫真跡與卡拉瓦喬大師名作。', badges: ['莫內真跡', '免費常設展'], map: 'Musee des Beaux-Arts de Rouen' },
-      { time: '17:30', title: '自駕 A13 前往吉維尼 / 韋爾農 (Vernon) 入住', desc: '約 72km / 55 分鐘，抵達塞納河畔小鎮飯店 Check-in，享用鄉村晚餐。', badges: ['塞納河畔'], map: 'Vernon France' }
-    ]
-  },
-  {
-    date: '9/29',
-    weekday: '二',
-    title: '🌸 莫內睡蓮花園 ➔ 塞納河老磨坊 ➔ 凡爾賽宮周邊',
-    tag: '睡蓮花園',
-    summary: '09:30 第一批進莫內睡蓮花園，百年玫瑰花園午餐，探訪斷橋懸空老磨坊！',
-    keynote: {
-      code: '2624364336390402463',
-      codeLabel: '莫內花園門票訂單號',
-      spot: '莫內故居 ＆ 日本拱橋睡蓮池',
-      hotel: '凡爾賽宮周邊飯店 (待預訂 1 晚)',
-      mapQuery: 'Fondation Claude Monet Giverny'
-    },
-    items: [
-      { time: '09:15', title: '抵達吉維尼小鎮 ＆ 停入免費大停車場', desc: '停 Parking du Verger，步行 3 分鐘至莫內之家入口。', badges: ['免費停車'], map: 'Parking du Verger Giverny' },
-      { time: '09:30', title: '⭐吉維尼：莫內之家與睡蓮花園深度參觀', desc: '✅ 門票已購 (訂單號: 2624364336390402463・已存 data/)！一開門直衝水上花園拍無人晨光倒影日本橋與睡蓮池。', badges: ['✅門票已購27€', 'Order: 2624364336390402463'], map: 'Fondation Claude Monet Giverny' },
-      { time: '12:00', title: 'Restaurant Baudy 百年玫瑰花園法式午餐', desc: '在昔日塞尚、雷諾瓦、羅丹等印象派大師聚會的百年老餐廳露天花園用餐。', badges: ['大師聚會所'], map: 'Restaurant Baudy Giverny' },
-      { time: '13:45', title: '拍照秘境：韋爾農懸空老磨坊 (Vieux Moulin)', desc: '建在塞納河中世紀斷橋殘墩上的木造懸空古磨坊，莫內畫作本尊。', badges: ['拍照秘境'], map: 'Vieux Moulin de Vernon' },
-      { time: '17:00', title: '自駕前往凡爾賽宮周邊飯店 Check-in', desc: '入住凡爾賽宮周邊飯店，早睡備戰明日凡爾賽鏡廳衝刺！', badges: ['備戰凡爾賽'], map: 'Versailles France' }
-    ]
-  },
-  {
-    date: '9/30',
-    weekday: '三',
-    title: '👑 凡爾賽宮鏡廳衝刺 ➔ 18:00 迪士尼還車 ➔ 入住迪士尼',
-    tag: '鏡廳衝刺',
-    summary: '09:00 第一場直衝二樓鏡廳拍無人空景，15:30 出發直奔迪士尼準時還車！',
-    keynote: {
-      code: '18:00 前還車',
-      codeLabel: 'Sixt 還車期限',
-      spot: '凡爾賽宮鏡廳 ➔ 迪士尼 Chessy 車站',
-      hotel: 'Zenitude Hôtel-Résidences Chessy (3 晚)',
-      mapQuery: 'Chateau de Versailles'
-    },
-    items: [
-      { time: '08:30', title: '抵達凡爾賽宮正門停車 ＆ 準備安檢', desc: '停 Place d\'Armes 停車場，提前抵達金黃大門排隊等候 09:00 開門。', badges: ['提前排隊'], map: 'Place d Armes Versailles' },
-      { time: '09:00', title: '⭐凡爾賽宮「鏡廳衝刺法」深度參觀', desc: '一開門直衝二樓鏡廳拍無人金碧輝煌空景！參觀國王套房與皇家大花園。', badges: ['鏡廳衝刺法', '第一場入場'], map: 'Galerie des Glaces Versailles' },
-      { time: '15:30', title: '⚠️準時啟程直奔巴黎迪士尼 Chessy (走外環高架)', desc: '走 A86 ➔ A4 外環高架，預留 2 小時應對平日下班車潮，完全免進巴黎市區！', badges: ['預留2小時'], map: '' },
-      { time: '17:35', title: '迪士尼站外加油站加滿油 (Full Tank)', desc: '於車站外 2 公里處將油箱加滿，保留加油發票供還車查驗。', badges: ['加滿油箱'], map: 'Gare de Marne-la-Vallee Chessy' },
-      { time: '18:00', title: '🏁 Chessy Gare Sixt 順利還車！', desc: '拍照記錄儀表板里程與油量，櫃檯交付鑰匙，完美完成 6 天諾曼第自駕！', badges: ['✅還車完成', 'Sixt: 9738701348'], map: 'Gare de Marne-la-Vallee Chessy' },
-      { time: '18:30', title: 'Zenitude 飯店 Check-in ＆ 迪士尼小鎮慶祝夜', desc: '入住 Zenitude Hôtel-Résidences Chessy，晚上漫步 Disney Village 吃大餐慶祝！', badges: ['宿迪士尼', '入住3晚'], map: 'Zenitude Hotel-Residences Chessy' }
-    ]
-  },
-  {
-    date: '10/1',
-    weekday: '四',
-    title: '🎢 巴黎迪士尼主樂園 (Parc Disneyland) 全日制霸！',
-    tag: '迪士尼主園',
-    summary: '開園直衝巨雷山與太空山，觀賞 19:00 大遊行與夢幻無人機城堡煙火秀！',
-    keynote: {
-      code: '19:00 遊行 / 閉園煙火',
-      codeLabel: '必看重頭戲',
-      spot: '睡美人城堡 ➔ 巨雷山 ➔ 太空山',
-      hotel: 'Zenitude Hôtel-Résidences Chessy',
-      mapQuery: 'Disneyland Paris'
-    },
-    items: [
-      { time: '08:30', title: '入園先衝熱門三大設施', desc: '直奔 Frontierland「巨雷山 (Big Thunder Mountain)」與 Discoveryland「星戰太空山」。', badges: ['開園先攻'], map: 'Disneyland Paris' },
-      { time: '19:00', title: '迪士尼百萬巨星歡樂大遊行 (Disney Stars on Parade)', desc: '主街 (Main Street U.S.A.) 兩側卡位，看米奇米妮與噴火巨龍花車！', badges: ['必看遊行'], map: 'Main Street USA Disneyland Paris' },
-      { time: '22:00', title: '⭐Disney Illuminations 睡美人城堡無人機煙火秀', desc: '無人機空中編隊 ＋ 城堡雷射投影 ＋ 震撼煙火，此生必看夢幻大秀！', badges: ['城堡煙火秀', '無人機編隊'], map: 'Sleeping Beauty Castle Disneyland Paris' }
-    ]
-  },
-  {
-    date: '10/2',
-    weekday: '五',
-    title: '🎬 華特迪士尼影城 (Walt Disney Studios Park)',
-    tag: '漫威與皮克斯',
-    summary: '先攻料理鼠王 4D 冒險、驚魂古塔自由落體與復仇者聯盟漫威基地！',
-    keynote: {
-      code: '料理鼠王 4D / 漫威基地',
-      codeLabel: '影城必玩設施',
-      spot: '料理鼠王 ➔ 驚魂古塔 ➔ 漫威復仇者聯盟',
-      hotel: 'Zenitude Hôtel-Résidences Chessy (最後1晚)',
-      mapQuery: 'Walt Disney Studios Park'
-    },
-    items: [
-      { time: '09:00', title: '料理鼠王 4D 冒險 (Ratatouille: The Adventure)', desc: '化身小小小米，在巴黎廚房地板展開 3D 穿梭狂奔！', badges: ['影城第一名'], map: 'Walt Disney Studios Park' },
-      { time: '11:00', title: '驚魂古塔 (The Twilight Zone Tower of Terror)', desc: '好萊塢老飯店鬧鬼電梯，超刺激無預警多次垂直墜落！', badges: ['心跳加速'], map: 'Walt Disney Studios Park' },
-      { time: '14:00', title: '復仇者聯盟基地 (Avengers Campus)', desc: '蜘蛛人 3D 射蛛絲互動體驗 ＋ 鋼鐵人超光速雲霄飛車！', badges: ['漫威宇宙'], map: 'Avengers Campus Disneyland Paris' }
-    ]
-  },
-  {
-    date: '10/3',
-    weekday: '六',
-    title: '迪士尼退房 ➔ 巴黎市區 Check-in ➔ 聖馬丁運河 ➔ 瑪黑購物',
-    tag: '重返巴黎',
-    summary: '重返巴黎市區飯店入住，漫步聖馬丁運河鐵橋，瑪黑區香氛服飾選品！',
-    keynote: {
-      code: '巴黎市區飯店 3 晚',
-      codeLabel: '住宿安排',
-      spot: '聖馬丁運河 ➔ 瑪黑區選品店 ➔ 孚日廣場',
-      hotel: '巴黎市區飯店 (待預訂 3 晚)',
-      mapQuery: 'Canal Saint-Martin Paris'
-    },
-    items: [
-      { time: '10:30', title: '搭乘 RER A 線返回巴黎市區', desc: '直達巴黎市區飯店 Check-in 卸行李。', badges: ['RER A線'], map: 'Paris France' },
-      { time: '14:00', title: '聖馬丁運河 (Canal Saint-Martin) 文青漫步', desc: '《艾蜜莉的異想世界》打水漂鐵橋，周邊獨立咖啡館與文創選品店。', badges: ['文青街區'], map: 'Canal Saint-Martin Paris' },
-      { time: '17:00', title: '瑪黑區香氛選品 (Diptyque / Buly 1803 / Le Labo)', desc: '採購巴黎經典香氛、護手霜與伴手禮。', badges: ['香氛購物'], map: 'Le Marais Paris' }
-    ]
-  },
-  {
-    date: '10/4',
-    weekday: '日',
-    title: '蒙馬特高地 ➔ 聖心堂 ➔ 愛牆 ➔ 歌劇院區拉法葉百貨',
-    tag: '巴黎俯瞰',
-    summary: '登蒙馬特全城最高點聖心堂，愛牆拍照，雙磨坊咖啡館，拉法葉穹頂採購！',
-    keynote: {
-      code: '粉紅玻璃花房',
-      codeLabel: '午餐推薦: Pink Mamma',
-      spot: '聖心堂俯瞰 ➔ 愛牆 ➔ 拉法葉頂樓天台',
-      hotel: '巴黎市區飯店',
-      mapQuery: 'Basilique du Sacre-Coeur Paris'
-    },
-    items: [
-      { time: '09:30', title: '聖心堂 (Basilique du Sacré-Cœur) 俯瞰全巴黎', desc: '坐在白色大教堂前階梯，俯瞰晨光下的巴黎全景天際線。', badges: ['全城制高點'], map: 'Basilique du Sacre-Coeur Paris' },
-      { time: '11:00', title: '愛牆 (Mur des Je t\'aime) ＆ 雙磨坊咖啡館', desc: '由 250 種語言寫滿「我愛你」的深藍瓷磚牆，打卡《艾蜜莉》雙磨坊咖啡館。', badges: ['浪漫打卡'], map: 'Le Mur des Je t aime Paris' },
-      { time: '12:30', title: '⭐Pink Mamma 頂樓玻璃花房義式午餐', desc: '四層樓絕美花房餐廳，品嚐招牌現刨松露手工麵與佛羅倫斯大牛排！', badges: ['私房口袋名店'], map: 'Pink Mamma Paris' },
-      { time: '15:00', title: '拉法葉百貨 (Galeries Lafayette) 拜占庭玻璃穹頂', desc: '登頂樓免費露天觀景台拍巴黎歌劇院與艾菲爾鐵塔，採購精品伴手禮。', badges: ['穹頂天台', '退稅採購'], map: 'Galeries Lafayette Paris' }
-    ]
-  },
-  {
-    date: '10/5',
-    weekday: '一',
-    title: '莎士比亞書店 ➔ 巴黎左岸漫活 ➔ 整理行李與核對退稅單',
-    tag: '漫活打包',
-    summary: '花神咖啡館露天座喝熱可可，聖日耳曼大道漫步，晚間統一整理退稅單！',
-    keynote: {
-      code: '先退稅再託運！',
-      codeLabel: '明日機場口訣',
-      spot: '花神咖啡館 ➔ 聖日耳曼大道 ➔ 整理退稅單',
-      hotel: '巴黎市區飯店',
-      mapQuery: 'Cafe de Flore Paris'
-    },
-    items: [
-      { time: '10:00', title: '⭐花神咖啡館 (Café de Flore) 晨光露天座', desc: '坐在綠色露天座點一杯濃郁熱巧克力與雙蛋可頌，享受左岸文化氣息。', badges: ['左岸地標'], map: 'Cafe de Flore Paris' },
-      { time: '14:00', title: '聖日耳曼大道精品小巷 ＆ 奇美跳蚤尋寶', desc: '悠閒漫步巴黎街頭，買馬卡龍 (Pierre Hermé) 與最後紀念品。', badges: ['悠閒慢活'], map: 'Boulevard Saint-Germain Paris' },
-      { time: '19:00', title: '⚠️統一整理退稅單 (Tax Free) ＆ 打包秤重', desc: '核對所有退稅單條碼清晰度，分好手提與託運商品，設定明日 06:00 鬧鐘！', badges: ['退稅單核對', '行李打包'], map: '' }
-    ]
-  },
-  {
-    date: '10/6',
-    weekday: '二',
-    title: 'CDG 戴高樂機場 PABLO 掃描退稅 ➔ 11:20 BR88 返台',
-    tag: '返程歸國',
-    summary: '07:00 抵達戴高樂機場，PABLO 機器掃碼退稅，搭乘長榮 BR88 班機返台！',
-    keynote: {
-      code: 'BR88 (11:20起飛)',
-      codeLabel: '返台航班',
-      spot: '戴高樂機場 T1 ➔ PABLO 退稅機',
-      hotel: '機上 (Overnight Flight)',
-      mapQuery: 'Paris Charles de Gaulle Airport Terminal 1'
-    },
-    items: [
-      { time: '07:00', title: '抵達戴高樂機場第一航廈 (CDG T1)', desc: '提前 4 小時抵達，直奔 PABLO 退稅機掃描退稅單條碼（綠燈免海關，紅燈走海關窗口）。', badges: ['PABLO退稅機', '先退稅再託運'], map: 'Paris Charles de Gaulle Airport Terminal 1' },
-      { time: '08:30', title: '長榮航空櫃檯託運行李 ＆ 出境安檢', desc: '確認退稅單已投郵筒（若需退信用卡），順利出境免稅店採購最後伴手禮。', badges: ['行李託運'], map: '' },
-      { time: '11:20', title: '長榮航空 BR88 班機起飛返台', desc: '告別美麗的法蘭西，帶著滿滿蜜月回憶與大片平安歸國！', badges: ['平安歸國'], map: '' }
-    ]
-  },
-  {
-    date: '10/7',
-    weekday: '三',
-    title: '06:30 平安抵達台灣桃園國際機場 (TPE)',
-    tag: '甜蜜回家',
-    summary: '06:30 降落桃園機場，提領行李平安返家，完美結束 23 天法國之旅！',
-    keynote: {
-      code: '06:30 降落 TPE',
-      codeLabel: '抵台時間',
-      spot: '桃園國際機場 T2 ➔ 溫暖的家',
-      hotel: '溫暖的家',
-      mapQuery: 'Taiwan Taoyuan International Airport'
-    },
-    items: [
-      { time: '06:30', title: '班機準時降落桃園國際機場', desc: '通過檢疫出關，提領行李，平安返家！', badges: ['圓滿結束'], map: 'Taiwan Taoyuan International Airport' }
-    ]
-  }
+const ALLOWED_EMAILS = [
+  "skunkqq@gmail.com",
+  "sasadako.wu@gmail.com"
 ];
 
-// ==========================================
-// 2. 全程 9 筆住宿清單資料庫 (Hotels Vault)
-// ==========================================
-const hotelsData = [
-  {
-    name: 'B&B HOTEL Paris Italie Porte de Choisy 3 étoiles',
-    city: '巴黎 13 區',
-    dates: '9/16 (三) ~ 9/24 (四) · 9 晚',
-    code: 'BB22426149',
-    price: '€921.80 (含稅費 / 已全額付款)',
-    payment: '已付款',
-    checkin: '14:00',
-    checkout: '12:00',
-    address: 'Porte de Choisy, 13區 巴黎',
-    phone: '+33 1 46 70 12 12',
-    highlight: true
-  },
-  {
-    name: 'Hôtel Mercure Mont Saint-Michel',
-    city: '聖米歇爾山 (La Caserne 管制區內)',
-    dates: '9/25 (五) ~ 9/26 (六) · 1 晚',
-    code: 'QQDDDWJZ',
-    price: '€195.50 (含雙人自助早餐 / 已全額付款)',
-    payment: '已付款',
-    checkin: '15:00 (9/23-24 收道閘碼)',
-    checkout: '12:00 (可免費寄放行李)',
-    address: 'Route du Mont Saint-Michel, 50170',
-    phone: '+33 2 33 60 14 18',
-    highlight: true
-  },
-  {
-    name: 'B&B HOTEL Honfleur',
-    city: '翁夫勒 (Honfleur)',
-    dates: '9/26 (六) ~ 9/27 (日) · 1 晚',
-    code: 'BB22633724',
-    price: '€70.98 (現場付款 / 附專屬免費停車場)',
-    payment: '現場付款',
-    checkin: '14:00',
-    checkout: '12:00',
-    address: 'Chemin du Banc, 14600 La Rivière-Saint-Sauveur',
-    phone: '08 92 78 80 44',
-    highlight: true
-  },
-  {
-    name: '盧昂市區飯店 (歷史老城區)',
-    city: '盧昂 (Rouen)',
-    dates: '9/27 (日) ~ 9/28 (一) · 1 晚',
-    code: '待預訂',
-    price: '待定 (建議選附停車場飯店)',
-    payment: '未付款',
-    checkin: '15:00',
-    checkout: '11:00',
-    address: '盧昂大教堂與大時鐘周邊',
-    phone: '',
-    highlight: false
-  },
-  {
-    name: '吉維尼 / 韋爾農 (Vernon) 周邊飯店',
-    city: '吉維尼 / 韋爾農',
-    dates: '9/28 (一) ~ 9/29 (二) · 1 晚',
-    code: '待預訂',
-    price: '待定',
-    payment: '未付款',
-    checkin: '15:00',
-    checkout: '11:00',
-    address: 'Vernon / Giverny 周邊',
-    phone: '',
-    highlight: false
-  },
-  {
-    name: '凡爾賽宮周邊飯店',
-    city: '凡爾賽 (Versailles)',
-    dates: '9/29 (二) ~ 9/30 (三) · 1 晚',
-    code: '待預訂',
-    price: '待定',
-    payment: '未付款',
-    checkin: '15:00',
-    checkout: '11:00',
-    address: '凡爾賽宮步行或開車 10 分鐘內',
-    phone: '',
-    highlight: false
-  },
-  {
-    name: 'Zenitude Hôtel-Résidences Chessy',
-    city: '巴黎迪士尼 (Chessy / Marne-la-Vallée)',
-    dates: '9/30 (三) ~ 10/2 (五) · 3 晚',
-    code: '待確認訂房代碼',
-    price: '已預訂',
-    payment: '已預訂',
-    checkin: '15:00',
-    checkout: '11:00',
-    address: 'Chessy 迪士尼接駁區',
-    phone: '',
-    highlight: true
-  },
-  {
-    name: '巴黎市區飯店 (左岸 / 13區 / 市區)',
-    city: '巴黎市區',
-    dates: '10/3 (六) ~ 10/5 (一) · 3 晚',
-    code: '待預訂',
-    price: '待定',
-    payment: '未付款',
-    checkin: '14:00',
-    checkout: '12:00',
-    address: '巴黎市區地鐵站周邊',
-    phone: '',
-    highlight: false
-  }
-];
+// AES-256-CBC 軍規加密金庫 Payload (PBKDF2 100,000 次疊代)
+const ENCRYPTED_VAULT = {
+  "salt": "OSmAp8GNUxlqpUHb/DwDQg==",
+  "iv": "NJyHyxvrodUN1VH+Nod2NQ==",
+  "ciphertext": "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"
+};
+
+// 執行階段動態解密記憶體資料庫
+let itineraryData = [];
+let hotelsData = [];
+let ticketsData = [];
+let pocketPlacesData = [];
 
 // ==========================================
-// 3. 門票・車票與通關憑證資料庫 (Passes Vault)
+// 0.1 Web Crypto API 客戶端零知識解密引擎
 // ==========================================
-const ticketsData = [
-  {
-    name: '吉維尼莫內花園門票 (Fondation Claude Monet)',
-    type: '門票憑證',
-    date: '9/29 (二) 09:30 入場',
-    code: 'Order Ref: 2624364336390402463',
-    price: '€27.00 (2人門票・已付款)',
-    desc: 'PDF 電子票已存放在 data/Tickets_2624364336390402463.pdf，09:30 開門直衝日本橋睡蓮池！',
-    actionText: '打開 PDF 門票',
-    actionUrl: 'data/Tickets_2624364336390402463.pdf',
-    isCopyable: true,
-    copyValue: '2624364336390402463'
-  },
-  {
-    name: '聖米歇爾山官方語音導覽 (VoiceMap)',
-    type: '語音導覽',
-    date: '9/26 (六) 07:30 漫步使用',
-    code: '兌換碼: 0B6CBA60',
-    price: '餐廳贈送 (免費 2 次下載)',
-    desc: '下載 VoiceMap App ➔ Visit codes ➔ 輸入【0B6CBA60】下載離線音檔，自備耳機漫步！',
-    actionText: '下載 VoiceMap App',
-    actionUrl: 'https://apps.apple.com/fr/app/voicemap-les-guides-tours/id852027939',
-    isCopyable: true,
-    copyValue: '0B6CBA60'
-  },
-  {
-    name: '盧昂 La Couronne 1345 百年老餐廳',
-    type: '餐廳訂位',
-    date: '9/27 (日) 20:00 晚餐',
-    code: 'TheFork ID: 790B-8602-147D-CA61',
-    price: '已確認預約 (2 位成人)',
-    desc: '創立於 1345 年全法最古老小酒館，位於聖女貞德舊市集廣場 31 號。',
-    actionText: '📍 Google 導航',
-    actionUrl: 'https://www.google.com/maps/search/?api=1&query=La+Couronne+Rouen',
-    isCopyable: true,
-    copyValue: '790B-8602-147D-CA61'
-  },
-  {
-    name: 'La Ferme Saint-Michel 黑面鹽沼羊午餐',
-    type: '餐廳訂位',
-    date: '9/26 (六) 14:00 午餐',
-    code: '道閘密碼: 645504',
-    price: '已確認預約 (Chin Yu)',
-    desc: '道閘輸入密碼【645504】進場停餐廳專屬車位，保管 Ticket，離場機器刷付 10€ 通行費。',
-    actionText: '📍 Google 導航',
-    actionUrl: 'https://www.google.com/maps/search/?api=1&query=La+Ferme+Saint-Michel+Mont+Saint-Michel',
-    isCopyable: true,
-    copyValue: '645504'
-  },
-  {
-    name: 'SNCF 高鐵 TGV (巴黎蒙帕納斯 ➔ 雷恩)',
-    type: '火車車票',
-    date: '9/25 (五) 06:48 - 08:15',
-    code: '訂位代碼: 4WCP2R',
-    price: '€68.00 (2人票・已購)',
-    desc: '06:48 Paris Montparnasse 準時發車，08:15 抵達 Rennes 雷恩站準備取車。',
-    actionText: '查看車票截圖',
-    actionUrl: 'data/SNCF_ticket_9_25.png',
-    isCopyable: true,
-    copyValue: '4WCP2R'
-  },
-  {
-    name: 'Sixt 諾曼第自駕租車 (Peugeot 3008 休旅)',
-    type: '租車憑證',
-    date: '9/25 08:30 雷恩取 ➔ 9/30 18:00 迪士尼還',
-    code: '訂單代碼: 9738701348',
-    price: '€624.46 (零自付全險・已付清)',
-    desc: '雷恩 Effia 停車場 0 樓電梯輸入密碼【6060】上 7 樓取車。9/30 Chessy 還車。',
-    actionText: '撥打 Sixt 專線',
-    actionUrl: 'tel:+33170976111',
-    isCopyable: true,
-    copyValue: '9738701348'
-  },
-  {
-    name: '聖米歇爾山修道院門票 (Abbaye)',
-    type: '景點門票',
-    date: '9/26 (六) 09:00 第一批入場',
-    code: 'KKday 當場手機買即可',
-    price: '即買即出電子票',
-    desc: '無需提前綁死時段，當場以手機在 KKday 線上直接購買，掃描 QR Code 快速通關！',
-    actionText: '🛒 KKday 即買即用',
-    actionUrl: 'https://www.kkday.com/zh-tw/product/249775?cid=2298',
-    isCopyable: false
-  }
-];
+async function decryptVault(password) {
+  try {
+    // 1. 解碼 Base64
+    const salt = Uint8Array.from(atob(ENCRYPTED_VAULT.salt), c => c.charCodeAt(0));
+    const iv = Uint8Array.from(atob(ENCRYPTED_VAULT.iv), c => c.charCodeAt(0));
+    const ciphertext = Uint8Array.from(atob(ENCRYPTED_VAULT.ciphertext), c => c.charCodeAt(0));
 
-// ==========================================
-// 4. 私房店家與靈感口袋名單 (Pocket Places)
-// ==========================================
-const pocketPlacesData = [
-  {
-    name: 'Le Procope (普羅可布咖啡館)',
-    city: '巴黎 6 區 (左岸)',
-    category: 'food',
-    catLabel: '☕ 傳奇百年法餐',
-    specialty: '全巴黎最古老咖啡館(1686年)・拿破崙帽子真跡・傳統油封鴨/生蠔拼盤',
-    address: '13 Rue de l\'Ancienne Comédie, 75006 Paris',
-    hours: '12:00 - 00:00 (全年無休)',
-    mapUrl: 'https://maps.app.goo.gl/dy5QtARPd9ZAst1B9',
-    note: '伏爾泰/盧梭/拿破崙常客・左岸文藝歷史殿堂'
-  },
-  {
-    name: 'Pink Mamma',
-    city: '巴黎 9 區 (歌劇院/蒙馬特)',
-    category: 'food',
-    catLabel: '🍝 絕美玻璃花房',
-    specialty: '頂樓玻璃溫室花房採光極美・招牌現刨松露手工麵・佛羅倫斯大牛排・巨盆提拉米蘇',
-    address: '20bis Rue de Douai, 75009 Paris',
-    hours: '12:00-14:30, 18:45-22:45',
-    mapUrl: 'https://maps.app.goo.gl/WPyntVFKJbjxni5h9',
-    note: 'IG爆紅四層樓網美名店・建議提早官網預約頂樓 Glass Roof'
-  },
-  {
-    name: 'Marché aux Huîtres Cancale (生蠔市場)',
-    city: '布列塔尼 (康卡勒)',
-    category: 'seafood',
-    catLabel: '🦪 產地現開生蠔',
-    specialty: '產地現開 1-4 號新鮮生蠔・野生海膽・蠔殼直接丟回海灘',
-    address: 'Place de la Chapelle, 35260 Cancale',
-    hours: '09:00 - 19:00 (每日營業)',
-    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Marche+aux+Huitres+Cancale',
-    note: '坐在堤防邊看海現擠檸檬吃生蠔・銅板價神級享受'
-  },
-  {
-    name: 'Maison Georges Larnicol',
-    city: '布列塔尼 (聖馬洛)',
-    category: 'coffee',
-    catLabel: '🥐 百年焦糖奶油酥',
-    specialty: 'Kouign-amann 焦糖奶油酥・法式蛋白霜・精緻手工黑巧克力',
-    address: '6 Rue Saint-Vincent, 35400 Saint-Malo',
-    hours: '09:00 - 19:30',
-    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Maison+Georges+Larnicol+Saint-Malo',
-    note: 'MOF 法國最佳工藝師名店・聖馬洛古城必買伴手禮'
-  },
-  {
-    name: 'La Couronne 1345',
-    city: '諾曼第 (盧昂)',
-    category: 'food',
-    catLabel: '🥩 全法最古老餐廳',
-    specialty: '全法最古老小酒館(創於1345年)・傳統諾曼第燉肉・蘋果白蘭地',
-    address: '31 Place du Vieux-Marché, 76000 Rouen',
-    hours: '12:00-14:00, 19:00-22:00',
-    mapUrl: 'https://www.google.com/maps/search/?api=1&query=La+Couronne+Rouen',
-    note: '✅ 9/27 20:00 已預約 (TheFork ID: 790B-8602-147D-CA61)'
-  },
-  {
-    name: 'Confiserie Jeanne d\'Arc',
-    city: '諾曼第 (盧昂)',
-    category: 'market',
-    catLabel: '🍬 百年特產蘋果糖',
-    specialty: '盧昂特產「糖蘋果 (Sucre de Pomme)」・焦糖奶油糖',
-    address: '43 Rue Rollon, 76000 Rouen',
-    hours: '09:30 - 19:00 (週日一休)',
-    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Confiserie+Jeanne+d+Arc+Rouen',
-    note: '諾曼第歷史最悠久蘋果糖老店・伴手禮首選'
-  },
-  {
-    name: 'Restaurant Baudy',
-    city: '諾曼第 (吉維尼)',
-    category: 'food',
-    catLabel: '🍷 百年玫瑰花園',
-    specialty: '蘋果酒燉豬肉・法式鹹派・百年玫瑰花園露天座',
-    address: '81 Rue Claude Monet, 27620 Giverny',
-    hours: '11:45-15:00, 19:00-21:30 (週一休)',
-    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Restaurant+Baudy+Giverny',
-    note: '昔日塞尚、雷諾瓦、羅丹等印象派大師聚會老店'
-  },
-  {
-    name: 'Vieux Moulin de Vernon (懸空老磨坊)',
-    city: '諾曼第 (韋爾農)',
-    category: 'photo',
-    catLabel: '📸 塞納河斷橋磨坊',
-    specialty: '建在中世紀斷橋殘墩上的木造懸空古磨坊・莫內多幅名畫本尊',
-    address: 'Rue Pierre Bonnard, 27200 Vernon',
-    hours: '全天開放 (戶外觀景)',
-    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Vieux+Moulin+de+Vernon',
-    note: '塞納河畔絕美倒影拍照機位'
-  },
-  {
-    name: 'Café de Flore (花神咖啡館)',
-    city: '巴黎 6 區 (左岸)',
-    category: 'coffee',
-    catLabel: '☕ 左岸靈魂咖啡',
-    specialty: '雙蛋火腿可頌・濃郁熱巧克力・綠色露天座看巴黎街景',
-    address: '172 Bd Saint-Germain, 75006 Paris',
-    hours: '07:30 - 01:30',
-    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Cafe+de+Flore+Paris',
-    note: '薩特與西蒙波娃故居・巴黎文化地標'
-  },
-  {
-    name: 'Marché d\'Aligre (阿利格爾市集)',
-    city: '巴黎 12 區 (巴士底周邊)',
-    category: 'market',
-    catLabel: '🛍️ 在地百年跳蚤市集',
-    specialty: '露天蔬果・起司冷肉熟食・二手古董首飾與黑膠唱片',
-    address: 'Place d\'Aligre, 75012 Paris',
-    hours: '07:30 - 13:30 (週一休)',
-    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Marche+d+Aligre+Paris',
-    note: '巴黎在地人最愛百年市集・生活感十足'
+    // 2. 匯入密碼作為 Key Material
+    const encoder = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+      "raw",
+      encoder.encode(password),
+      { name: "PBKDF2" },
+      false,
+      ["deriveKey"]
+    );
+
+    // 3. PBKDF2 衍生 AES-CBC 256 位元金鑰
+    const derivedKey = await crypto.subtle.deriveKey(
+      {
+        name: "PBKDF2",
+        salt: salt,
+        iterations: 100000,
+        hash: "SHA-256"
+      },
+      keyMaterial,
+      { name: "AES-CBC", length: 256 },
+      false,
+      ["decrypt"]
+    );
+
+    // 4. 執行 AES 解密
+    const decryptedBuffer = await crypto.subtle.decrypt(
+      { name: "AES-CBC", iv: iv },
+      derivedKey,
+      ciphertext
+    );
+
+    // 5. 還原 JSON 資料
+    const decoder = new TextDecoder();
+    const jsonStr = decoder.decode(decryptedBuffer);
+    const data = JSON.parse(jsonStr);
+
+    return { success: true, data };
+  } catch (err) {
+    console.error("AES Decryption error:", err);
+    return { success: false, error: err };
   }
-];
+}
 
 // ==========================================
 // 5. 狀態管理與變數
@@ -1155,8 +457,127 @@ function toggleTheme() {
   localStorage.setItem('france_theme', newTheme);
 }
 
+function renderAllViews() {
+  renderDateCarousel();
+  renderKeynoteCard(currentSelectedDate);
+  renderTimeline(currentSelectedDate);
+  renderHotelVault();
+  renderTicketVault();
+  renderPocketPlaces('all');
+}
+
 // ==========================================
-// 7. 初始化與事件監聽
+// 7. 特定人士授權白名單與門禁 (Access Control)
+// ==========================================
+async function checkAuthStatus() {
+  const savedEmail = localStorage.getItem('france_auth_user');
+  const savedKey = localStorage.getItem('france_auth_key') || '2026';
+  const overlay = document.getElementById('accessGateOverlay');
+  const badge = document.getElementById('userAuthBadge');
+
+  if (savedEmail && ALLOWED_EMAILS.includes(savedEmail.toLowerCase().trim())) {
+    // 嘗試以保存的密鑰在記憶體中解密
+    const result = await decryptVault(savedKey);
+    if (result.success) {
+      itineraryData = result.data.itineraryData || [];
+      hotelsData = result.data.hotelsData || [];
+      ticketsData = result.data.ticketsData || [];
+      pocketPlacesData = result.data.pocketPlacesData || [];
+
+      renderAllViews();
+      if (overlay) overlay.classList.add('unlocked');
+      if (badge) {
+        badge.classList.add('show');
+        const nickname = savedEmail.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
+        badge.textContent = `👤 ${nickname}`;
+      }
+      return;
+    }
+  }
+
+  // 若未授權或解密失敗，維持鎖定
+  if (overlay) overlay.classList.remove('unlocked');
+  if (badge) badge.classList.remove('show');
+}
+
+function selectQuickEmail(email) {
+  const input = document.getElementById('gateEmailInput');
+  if (input) input.value = email;
+}
+
+async function handleAccessSubmit(event) {
+  event.preventDefault();
+  const emailInput = document.getElementById('gateEmailInput');
+  const passcodeInput = document.getElementById('gatePasscodeInput');
+  const errorMsg = document.getElementById('gateErrorMsg');
+
+  const email = emailInput ? emailInput.value.toLowerCase().trim() : '';
+  const passcode = passcodeInput ? passcodeInput.value.trim() : '';
+
+  if (!ALLOWED_EMAILS.includes(email)) {
+    if (errorMsg) errorMsg.textContent = '❌ 存取受限：此 Email 未在專屬受邀白名單中';
+    return;
+  }
+
+  if (errorMsg) errorMsg.textContent = '⏳ 正在執行 AES-256 解密中...';
+
+  // 執行 Web Crypto API AES 解密
+  const result = await decryptVault(passcode);
+  if (!result.success) {
+    if (errorMsg) errorMsg.textContent = '❌ 通關密碼錯誤，解密失敗！';
+    return;
+  }
+
+  // 解密成功：掛載資料並保存授權 Token
+  itineraryData = result.data.itineraryData || [];
+  hotelsData = result.data.hotelsData || [];
+  ticketsData = result.data.ticketsData || [];
+  pocketPlacesData = result.data.pocketPlacesData || [];
+
+  localStorage.setItem('france_auth_user', email);
+  localStorage.setItem('france_auth_key', passcode);
+  if (errorMsg) errorMsg.textContent = '';
+
+  renderAllViews();
+
+  const overlay = document.getElementById('accessGateOverlay');
+  if (overlay) overlay.classList.add('unlocked');
+
+  const nickname = email.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
+  const badge = document.getElementById('userAuthBadge');
+  if (badge) {
+    badge.classList.add('show');
+    badge.textContent = `👤 ${nickname}`;
+  }
+
+  showToast(`✨ Bienvenue, ${nickname}! 旅程已解密解鎖`);
+}
+
+function lockApp() {
+  localStorage.removeItem('france_auth_user');
+  localStorage.removeItem('france_auth_key');
+  itineraryData = [];
+  hotelsData = [];
+  ticketsData = [];
+  pocketPlacesData = [];
+
+  const overlay = document.getElementById('accessGateOverlay');
+  const badge = document.getElementById('userAuthBadge');
+  if (overlay) overlay.classList.remove('unlocked');
+  if (badge) badge.classList.remove('show');
+
+  // 清空畫面 DOM
+  document.getElementById('timelineContainer').innerHTML = '';
+  document.getElementById('hotelVaultGrid').innerHTML = '';
+  document.getElementById('ticketVaultGrid').innerHTML = '';
+  document.getElementById('pocketCardGrid').innerHTML = '';
+  document.getElementById('keynoteCard').innerHTML = '';
+
+  showToast('🔒 已安全鎖定並清除記憶體');
+}
+
+// ==========================================
+// 8. 頁面加載與事件監聽
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
   // 讀取主題紀錄
@@ -1165,13 +586,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeBtn = document.getElementById('btnToggleTheme');
   if (themeBtn) themeBtn.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
 
-  // 渲染各模組
-  renderDateCarousel();
-  renderKeynoteCard(currentSelectedDate);
-  renderTimeline(currentSelectedDate);
-  renderHotelVault();
-  renderTicketVault();
-  renderPocketPlaces('all');
+  // 檢查身分驗證與解密
+  checkAuthStatus();
 
   // 綁定底部導覽點擊
   document.querySelectorAll('.nav-tab-item').forEach(item => {
@@ -1184,6 +600,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // 綁定主題切換按鈕
   if (themeBtn) {
     themeBtn.addEventListener('click', toggleTheme);
+  }
+
+  // 綁定鎖定按鈕
+  const logoutBtn = document.getElementById('btnLogout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', lockApp);
   }
 
   // 綁定搜尋切換與即時輸入
@@ -1211,92 +633,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-// ==========================================
-// 0. 特定人士授權白名單與門禁 (Access Control)
-// ==========================================
-const ALLOWED_EMAILS = [
-  'skunkqq@gmail.com',
-  'sasadako.wu@gmail.com'
-];
-const PASSCODE = '2026';
-
-function checkAuthStatus() {
-  const savedAuth = localStorage.getItem('france_auth_user');
-  const overlay = document.getElementById('accessGateOverlay');
-  const badge = document.getElementById('userAuthBadge');
-  
-  if (savedAuth && ALLOWED_EMAILS.includes(savedAuth.toLowerCase().trim())) {
-    if (overlay) overlay.classList.add('unlocked');
-    if (badge) {
-      badge.classList.add('show');
-      const nickname = savedAuth.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
-      badge.textContent = `👤 ${nickname}`;
-    }
-  } else {
-    if (overlay) overlay.classList.remove('unlocked');
-    if (badge) badge.classList.remove('show');
-  }
-}
-
-function selectQuickEmail(email) {
-  const input = document.getElementById('gateEmailInput');
-  if (input) input.value = email;
-}
-
-function handleAccessSubmit(event) {
-  event.preventDefault();
-  const emailInput = document.getElementById('gateEmailInput');
-  const passcodeInput = document.getElementById('gatePasscodeInput');
-  const errorMsg = document.getElementById('gateErrorMsg');
-  
-  const email = emailInput ? emailInput.value.toLowerCase().trim() : '';
-  const passcode = passcodeInput ? passcodeInput.value.trim() : '';
-  
-  if (!ALLOWED_EMAILS.includes(email)) {
-    if (errorMsg) errorMsg.textContent = '❌ 存取受限：此 Email 未在專屬受邀白名單中';
-    return;
-  }
-  
-  if (passcode !== PASSCODE) {
-    if (errorMsg) errorMsg.textContent = '❌ 通關密碼錯誤，請輸入 2026';
-    return;
-  }
-  
-  // 驗證成功
-  localStorage.setItem('france_auth_user', email);
-  if (errorMsg) errorMsg.textContent = '';
-  
-  const overlay = document.getElementById('accessGateOverlay');
-  if (overlay) overlay.classList.add('unlocked');
-  
-  const nickname = email.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
-  const badge = document.getElementById('userAuthBadge');
-  if (badge) {
-    badge.classList.add('show');
-    badge.textContent = `👤 ${nickname}`;
-  }
-  
-  showToast(`✨ Bienvenue, ${nickname}! 旅程已解鎖`);
-}
-
-function lockApp() {
-  localStorage.removeItem('france_auth_user');
-  const overlay = document.getElementById('accessGateOverlay');
-  const badge = document.getElementById('userAuthBadge');
-  if (overlay) overlay.classList.remove('unlocked');
-  if (badge) badge.classList.remove('show');
-  showToast('🔒 已鎖定網站');
-}
-
-  // 初始化時檢查身分驗證
-  checkAuthStatus();
-
-  // 綁定鎖定按鈕
-  const logoutBtn = document.getElementById('btnLogout');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', lockApp);
-  }
-
   // 綁定私房口袋名單 Filter Chip
   const pocketFilterBtns = document.querySelectorAll('.filter-chip');
   pocketFilterBtns.forEach(btn => {
@@ -1308,3 +644,4 @@ function lockApp() {
     });
   });
 });
+

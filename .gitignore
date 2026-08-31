@@ -15,6 +15,11 @@ Icon*
 .vscode/
 .idea/
 
+# Documents & Tickets (Private)
+*.pdf
+data/*.pdf
+data/encrypted_vault.json
+
 # 如果未來有加入 npm / node_js
 node_modules/
 package-lock.json
