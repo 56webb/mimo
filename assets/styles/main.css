@@ -1030,3 +1030,158 @@ body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ===== 專屬特定人士存取門禁 (Access Gate Styles) ===== */
+.access-gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(8, 12, 20, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+}
+
+.access-gate-overlay.unlocked {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.access-gate-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-ochre);
+  border-radius: var(--radius-xl);
+  padding: 28px 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 1px rgba(255, 255, 255, 0.2);
+  text-align: center;
+  animation: gatePop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes gatePop {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.gate-icon-halo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent-ochre-surface);
+  border: 1px solid var(--border-ochre);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin: 0 auto 14px;
+}
+
+.gate-title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.gate-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.gate-alert {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-whisper);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  color: var(--accent-ochre);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.gate-input-group {
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+.gate-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.quick-email-chips {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.email-chip {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-whisper);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-spring);
+}
+
+.email-chip:active {
+  background: var(--accent-ochre);
+  color: #080c14;
+}
+
+.gate-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-whisper);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: var(--transition-spring);
+}
+
+.gate-input:focus {
+  border-color: var(--accent-ochre);
+}
+
+.gate-error-msg {
+  font-size: 0.78rem;
+  color: #fb7185;
+  margin-bottom: 10px;
+  min-height: 18px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.user-auth-badge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--accent-ochre-surface);
+  border: 1px solid var(--border-ochre);
+  color: var(--accent-ochre);
+  font-weight: 600;
+  display: none;
+}
+
+.user-auth-badge.show {
+  display: inline-block;
+}

@@ -1211,6 +1211,92 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+// ==========================================
+// 0. 特定人士授權白名單與門禁 (Access Control)
+// ==========================================
+const ALLOWED_EMAILS = [
+  'skunkqq@gmail.com',
+  'sasadako.wu@gmail.com'
+];
+const PASSCODE = '2026';
+
+function checkAuthStatus() {
+  const savedAuth = localStorage.getItem('france_auth_user');
+  const overlay = document.getElementById('accessGateOverlay');
+  const badge = document.getElementById('userAuthBadge');
+  
+  if (savedAuth && ALLOWED_EMAILS.includes(savedAuth.toLowerCase().trim())) {
+    if (overlay) overlay.classList.add('unlocked');
+    if (badge) {
+      badge.classList.add('show');
+      const nickname = savedAuth.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
+      badge.textContent = `👤 ${nickname}`;
+    }
+  } else {
+    if (overlay) overlay.classList.remove('unlocked');
+    if (badge) badge.classList.remove('show');
+  }
+}
+
+function selectQuickEmail(email) {
+  const input = document.getElementById('gateEmailInput');
+  if (input) input.value = email;
+}
+
+function handleAccessSubmit(event) {
+  event.preventDefault();
+  const emailInput = document.getElementById('gateEmailInput');
+  const passcodeInput = document.getElementById('gatePasscodeInput');
+  const errorMsg = document.getElementById('gateErrorMsg');
+  
+  const email = emailInput ? emailInput.value.toLowerCase().trim() : '';
+  const passcode = passcodeInput ? passcodeInput.value.trim() : '';
+  
+  if (!ALLOWED_EMAILS.includes(email)) {
+    if (errorMsg) errorMsg.textContent = '❌ 存取受限：此 Email 未在專屬受邀白名單中';
+    return;
+  }
+  
+  if (passcode !== PASSCODE) {
+    if (errorMsg) errorMsg.textContent = '❌ 通關密碼錯誤，請輸入 2026';
+    return;
+  }
+  
+  // 驗證成功
+  localStorage.setItem('france_auth_user', email);
+  if (errorMsg) errorMsg.textContent = '';
+  
+  const overlay = document.getElementById('accessGateOverlay');
+  if (overlay) overlay.classList.add('unlocked');
+  
+  const nickname = email.includes('skunkqq') ? 'Chin Yu' : 'Sadako';
+  const badge = document.getElementById('userAuthBadge');
+  if (badge) {
+    badge.classList.add('show');
+    badge.textContent = `👤 ${nickname}`;
+  }
+  
+  showToast(`✨ Bienvenue, ${nickname}! 旅程已解鎖`);
+}
+
+function lockApp() {
+  localStorage.removeItem('france_auth_user');
+  const overlay = document.getElementById('accessGateOverlay');
+  const badge = document.getElementById('userAuthBadge');
+  if (overlay) overlay.classList.remove('unlocked');
+  if (badge) badge.classList.remove('show');
+  showToast('🔒 已鎖定網站');
+}
+
+  // 初始化時檢查身分驗證
+  checkAuthStatus();
+
+  // 綁定鎖定按鈕
+  const logoutBtn = document.getElementById('btnLogout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', lockApp);
+  }
+
   // 綁定私房口袋名單 Filter Chip
   const pocketFilterBtns = document.querySelectorAll('.filter-chip');
   pocketFilterBtns.forEach(btn => {

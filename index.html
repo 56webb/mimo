@@ -28,10 +28,47 @@
       <h1 class="brand-title">法國之旅 2026</h1>
     </div>
     <div class="header-actions">
+      <span class="user-auth-badge" id="userAuthBadge" title="已授權旅伴">👤</span>
       <button class="btn-icon" id="btnToggleSearch" aria-label="搜尋行程與憑證">🔍</button>
       <button class="btn-icon" id="btnToggleTheme" aria-label="切換深淺模式">🌙</button>
+      <button class="btn-icon" id="btnLogout" aria-label="鎖定網站" title="鎖定網站">🔒</button>
     </div>
   </header>
+
+  <!-- ===== 專屬特定人士存取門禁 (Access Gate Overlay) ===== -->
+  <div class="access-gate-overlay" id="accessGateOverlay">
+    <div class="access-gate-card">
+      <div class="gate-icon-halo">💍</div>
+      <h2 class="gate-title">Voyage en France 2026</h2>
+      <p class="gate-subtitle">私人專屬蜜月自駕行程指南</p>
+      
+      <div class="gate-alert">
+        <span>🔒 本站僅限受邀授權旅伴存取</span>
+      </div>
+
+      <form id="accessGateForm" onsubmit="handleAccessSubmit(event)">
+        <div class="gate-input-group">
+          <label class="gate-label">請選擇或輸入您的受邀 Email：</label>
+          <div class="quick-email-chips">
+            <button type="button" class="email-chip" onclick="selectQuickEmail('skunkqq@gmail.com')">Chin Yu (skunkqq)</button>
+            <button type="button" class="email-chip" onclick="selectQuickEmail('sasadako.wu@gmail.com')">Sadako (sasadako)</button>
+          </div>
+          <input type="email" id="gateEmailInput" class="gate-input" placeholder="輸入您的 Google Email..." required>
+        </div>
+
+        <div class="gate-input-group">
+          <label class="gate-label">旅程通關密碼：</label>
+          <input type="password" id="gatePasscodeInput" class="gate-input" placeholder="請輸入 4 位數通關密碼 (預設: 2026)" value="2026" required>
+        </div>
+
+        <div id="gateErrorMsg" class="gate-error-msg"></div>
+
+        <button type="submit" class="btn-action-primary" style="width: 100%; padding: 12px; font-size: 0.95rem; margin-top: 6px;">
+          <span>✨ 驗證身分並解鎖旅程</span>
+        </button>
+      </form>
+    </div>
+  </div>
 
   <!-- ===== 2. 即時搜尋抽屜 ===== -->
   <div class="search-drawer" id="searchDrawer">
