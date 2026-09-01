@@ -1365,3 +1365,123 @@ body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ===== 🧳 行李打包檢核清單樣式 ===== */
+.packing-container {
+  margin-top: 32px;
+}
+
+.packing-category-group {
+  margin-bottom: 24px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 18px 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.packing-category-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.packing-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.packing-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.packing-item-row:hover {
+  background: #ffffff;
+  border-color: var(--primary-light);
+}
+
+.packing-item-row.checked {
+  background: rgba(46, 125, 50, 0.05);
+  border-color: rgba(46, 125, 50, 0.2);
+  opacity: 0.75;
+}
+
+.packing-item-row.checked .packing-item-name {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.packing-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  flex-shrink: 0;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.packing-item-row.checked .packing-checkbox {
+  background: var(--success);
+  border-color: var(--success);
+  color: #ffffff;
+}
+
+.packing-item-content {
+  flex: 1;
+}
+
+.packing-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.packing-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.packing-item-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.packing-item-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.packing-item-location {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #d97706;
+  font-weight: 600;
+}
