@@ -461,13 +461,17 @@ function showToast(message) {
 function switchTab(targetTab) {
   currentTab = targetTab;
 
+  // 切換 4 個主要分頁
   document.querySelectorAll('.tab-view').forEach(view => {
     view.classList.remove('active');
   });
 
-  const activeView = document.getElementById(`tab-${targetTab}`);
-  if (activeView) activeView.classList.add('active');
+  const activeView = document.getElementById(`view-${targetTab}`) || document.getElementById(`tab-${targetTab}`);
+  if (activeView) {
+    activeView.classList.add('active');
+  }
 
+  // 切換底部導覽列 active
   document.querySelectorAll('.nav-tab-item').forEach(item => {
     if (item.getAttribute('data-tab') === targetTab) {
       item.classList.add('active');
@@ -475,6 +479,16 @@ function switchTab(targetTab) {
       item.classList.remove('active');
     }
   });
+
+  // 頂部日期軸與今日焦點卡片：在 timeline 行程時顯示，其他分頁隱藏以保持介面乾淨
+  const keynoteSec = document.getElementById('heroKeynoteSection');
+  const datePickerSec = document.querySelector('.date-picker-section');
+  if (keynoteSec) {
+    keynoteSec.style.display = targetTab === 'timeline' ? 'block' : 'none';
+  }
+  if (datePickerSec) {
+    datePickerSec.style.display = targetTab === 'timeline' ? 'block' : 'none';
+  }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
