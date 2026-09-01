@@ -449,31 +449,46 @@ body {
 }
 
 /* ===== 4. 橫向日期滾動軸 (Date Carousel) ===== */
+.date-picker-section,
 .date-carousel-container {
-  padding: 6px 16px 12px;
+  padding: 6px 12px 14px;
   overflow: hidden;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+.date-carousel,
 .date-carousel-track {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
   gap: 8px;
-  overflow-x: auto;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding-bottom: 4px;
+  padding: 4px 4px 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+.date-carousel::-webkit-scrollbar,
 .date-carousel-track::-webkit-scrollbar {
   display: none;
+  width: 0;
+  height: 0;
 }
 
 .date-pill {
-  flex: 0 0 64px;
-  height: 64px;
-  border-radius: var(--radius-lg);
-  background: var(--surface-card);
-  border: 1px solid var(--border-whisper);
+  flex: 0 0 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+  height: 60px;
+  border-radius: 14px;
+  background: var(--surface-card, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--border-whisper, rgba(255, 255, 255, 0.1));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -481,48 +496,49 @@ body {
   scroll-snap-align: center;
   cursor: pointer;
   position: relative;
-  min-width: 44px;
-  min-height: 44px;
-  transition: var(--transition-spring);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
 }
 
 .date-pill:active {
-  transform: scale(0.95);
+  transform: scale(0.92);
 }
 
 .date-pill.active {
-  background: var(--accent-ochre);
-  border-color: var(--accent-ochre);
-  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
+  background: #d97706 !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.45);
+  transform: translateY(-2px);
 }
 
 .date-pill.active .pill-weekday,
 .date-pill.active .pill-day {
-  color: #080c14;
+  color: #ffffff !important;
   font-weight: 800;
 }
 
 .pill-weekday {
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-tertiary);
+  color: var(--text-tertiary, #94a3b8);
+  margin-bottom: 2px;
 }
 
 .pill-day {
   font-size: 0.95rem;
   font-weight: 700;
-  font-family: var(--font-mono);
-  color: var(--text-primary);
+  font-family: var(--font-mono, monospace);
+  color: var(--text-primary, #f8fafc);
 }
 
 .pill-badge-dot {
   display: none;
   position: absolute;
-  bottom: 6px;
-  width: 4px;
-  height: 4px;
+  bottom: 5px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background: var(--accent-ochre);
+  background: #f59e0b;
 }
 
 .date-pill.has-booking .pill-badge-dot {
@@ -530,7 +546,7 @@ body {
 }
 
 .date-pill.active.has-booking .pill-badge-dot {
-  background: #080c14;
+  background: #ffffff;
 }
 
 /* ===== 5. 分頁視圖與主內容 ===== */
