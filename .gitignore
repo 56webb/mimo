@@ -20,6 +20,8 @@ Icon*
 data/*.pdf
 data/encrypted_vault.json
 
-# 如果未來有加入 npm / node_js
-node_modules/
-package-lock.json
+# Other Projects / Large Dirs
+奇美博物館/
+日本APP/
+itinerary/
+
