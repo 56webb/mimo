@@ -324,15 +324,15 @@ function renderVaultView() {
       <button class="btn-toggle-all-vault" id="btnToggleAllVault" onclick="toggleAllVaultGroups()">⇕ 全部展開 / 收合</button>
     </div>
 
-    <!-- 1. 景點與樂園門票 (預設展開) -->
-    <div class="vault-accordion-group active" id="group-attractions">
-      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-attractions)">
+    <!-- 1. 景點門票 (預設收合) -->
+    <div class="vault-accordion-group" id="group-attractions">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup('group-attractions')">
         <div class="vault-header-left">
           <span class="vault-header-icon">🏰</span>
-          <h3 class="vault-header-title">重點景點與樂園門票</h3>
+          <h3 class="vault-header-title">景點門票</h3>
         </div>
         <div class="vault-header-right">
-          <span class="vault-badge-count">${groups.attractions.length} 筆已購</span>
+          <span class="vault-badge-count">${groups.attractions.length} 筆</span>
           <span class="vault-arrow-icon">▼</span>
         </div>
       </div>
@@ -345,7 +345,7 @@ function renderVaultView() {
 
     <!-- 2. 全程住宿預訂 (預設收合) -->
     <div class="vault-accordion-group" id="group-hotels">
-      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-hotels)">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup('group-hotels')">
         <div class="vault-header-left">
           <span class="vault-header-icon">🏨</span>
           <h3 class="vault-header-title">住宿飯店</h3>
@@ -364,7 +364,7 @@ function renderVaultView() {
 
     <!-- 3. 交通接駁與租車 (預設收合) -->
     <div class="vault-accordion-group" id="group-traffic">
-      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-traffic)">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup('group-traffic')">
         <div class="vault-header-left">
           <span class="vault-header-icon">🚗</span>
           <h3 class="vault-header-title">交通車票</h3>
@@ -383,7 +383,7 @@ function renderVaultView() {
 
     <!-- 4. 必吃餐廳預約 (預設收合) -->
     <div class="vault-accordion-group" id="group-food">
-      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-food)">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup('group-food')">
         <div class="vault-header-left">
           <span class="vault-header-icon">🍽️</span>
           <h3 class="vault-header-title">餐廳預約</h3>
@@ -402,7 +402,7 @@ function renderVaultView() {
 
     <!-- 5. 語音導覽與通關密碼 (預設收合) -->
     <div class="vault-accordion-group" id="group-codes">
-      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-codes)">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup('group-codes')">
         <div class="vault-header-left">
           <span class="vault-header-icon">🔑</span>
           <h3 class="vault-header-title">通關密碼</h3>
