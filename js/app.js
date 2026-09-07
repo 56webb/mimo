@@ -522,6 +522,31 @@ function toggleAllVaultGroups() {
 
 
 // (7) 渲染私房口袋名單 (IG/米其林探店卡片)
+// 輔助卡片渲染 HTML - 私房口袋卡片
+function renderPocketCardHtml(p) {
+  return `
+    <div class="pocket-story-card">
+      <div class="pocket-cat-badge-plain">${p.categoryLabel || '私房推薦'} · ${p.city || p.tag || '巴黎'}</div>
+      <div class="pocket-card-body">
+        <h3 class="pocket-name">${p.name}</h3>
+        <p class="pocket-desc">${p.desc}</p>
+        
+        <div class="pocket-must-order">
+          <span class="mo-label">⭐ 亮點/必點：</span>
+          <span class="mo-text">${p.mustOrder || p.highlight || '現場推薦'}</span>
+        </div>
+
+        <div class="pocket-footer-row">
+          <span class="pocket-hours">📍 ${p.address || p.hours || '巴黎市區'}</span>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.mapQuery || p.name)}" target="_blank" class="btn-pocket-nav">
+            <span>🧭 帶我去</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderPocketPlaces(category = 'all') {
   const container = document.getElementById('pocketCardGrid');
   if (!container || !pocketPlacesData || pocketPlacesData.length === 0) return;
@@ -550,30 +575,278 @@ function renderPocketPlaces(category = 'all') {
         return p.category === category;
       });
 
-  container.innerHTML = filtered.map(p => `
-    <div class="pocket-story-card">
-      <div class="pocket-cat-badge-plain">${p.categoryLabel || '私房推薦'} · ${p.city || p.tag || '巴黎'}</div>
-      <div class="pocket-card-body">
-        <h3 class="pocket-name">${p.name}</h3>
-        <p class="pocket-desc">${p.desc}</p>
-        
-        <div class="pocket-must-order">
-          <span class="mo-label">⭐ 亮點/必點：</span>
-          <span class="mo-text">${p.mustOrder || p.highlight || '現場推薦'}</span>
-        </div>
-
-        <div class="pocket-footer-row">
-          <span class="pocket-hours">📍 ${p.address || p.hours || '巴黎市區'}</span>
-          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.mapQuery || p.name)}" target="_blank" class="btn-pocket-nav">
-            <span>🧭 帶我去</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  `).join('');
+  container.innerHTML = filtered.map(p => renderPocketCardHtml(p)).join('');
 }
 
-// (8) 複製到剪貼簿 工具函數
+// (8) 全站即時跨模組搜尋 (Global Instant Search)
+function renderGlobalSearch(keyword = '') {
+  const container = document.getElementById('searchResultsContainer');
+  const searchResultsView = document.getElementById('view-search-results');
+  const clearBtn = document.getElementById('btnClearSearch');
+  const searchInput = document.getElementById('searchInput');
+
+  const kw = (keyword !== undefined && keyword !== null ? keyword : (searchInput ? searchInput.value : '')).trim();
+
+  if (clearBtn) {
+    clearBtn.style.display = kw ? 'flex' : 'none';
+  }
+
+  // 若搜尋字串為空，收起搜尋面板，恢復原本分頁
+  if (!kw) {
+    if (searchResultsView) {
+      searchResultsView.style.display = 'none';
+      searchResultsView.classList.remove('active');
+    }
+    document.querySelectorAll('.tab-view').forEach(view => {
+      if (view.id === `view-${currentTab}` || view.id === `tab-${currentTab}`) {
+        view.style.display = '';
+        view.classList.add('active');
+      } else if (view.id !== 'view-search-results') {
+        view.style.display = '';
+        view.classList.remove('active');
+      }
+    });
+
+    const keynoteSec = document.getElementById('heroKeynoteSection');
+    const datePickerSec = document.querySelector('.date-picker-section');
+    if (keynoteSec) keynoteSec.style.display = currentTab === 'timeline' ? 'block' : 'none';
+    if (datePickerSec) datePickerSec.style.display = currentTab === 'timeline' ? 'block' : 'none';
+    return;
+  }
+
+  // 隱藏一般分頁，顯示全域搜尋面板
+  document.querySelectorAll('.tab-view').forEach(view => {
+    if (view.id !== 'view-search-results') {
+      view.style.display = 'none';
+      view.classList.remove('active');
+    }
+  });
+
+  const keynoteSec = document.getElementById('heroKeynoteSection');
+  const datePickerSec = document.querySelector('.date-picker-section');
+  if (keynoteSec) keynoteSec.style.display = 'none';
+  if (datePickerSec) datePickerSec.style.display = 'none';
+
+  if (searchResultsView) {
+    searchResultsView.style.display = 'block';
+    searchResultsView.classList.add('active');
+  }
+
+  const query = kw.toLowerCase();
+
+  // 1. 搜尋私房口袋名單 (pocketPlacesData)
+  const matchedPocket = (pocketPlacesData || []).filter(p => {
+    return (p.name && p.name.toLowerCase().includes(query)) ||
+           (p.desc && p.desc.toLowerCase().includes(query)) ||
+           (p.tag && p.tag.toLowerCase().includes(query)) ||
+           (p.highlight && p.highlight.toLowerCase().includes(query)) ||
+           (p.address && p.address.toLowerCase().includes(query)) ||
+           (p.categoryLabel && p.categoryLabel.toLowerCase().includes(query)) ||
+           (p.mustOrder && p.mustOrder.toLowerCase().includes(query));
+  });
+
+  // 2. 搜尋每日行程時間軸 (itineraryData)
+  const matchedTimelineDays = [];
+  (itineraryData || []).forEach(day => {
+    const matchedItems = (day.items || []).filter(item => {
+      return (item.title && item.title.toLowerCase().includes(query)) ||
+             (item.desc && item.desc.toLowerCase().includes(query)) ||
+             (item.time && item.time.toLowerCase().includes(query)) ||
+             (item.nav && item.nav.toLowerCase().includes(query)) ||
+             (item.badges && item.badges.some(b => b.toLowerCase().includes(query)));
+    });
+    const dayMatches = (day.title && day.title.toLowerCase().includes(query)) ||
+                       (day.summary && day.summary.toLowerCase().includes(query)) ||
+                       (day.date && day.date.toLowerCase().includes(query)) ||
+                       (day.tag && day.tag.toLowerCase().includes(query));
+    if (matchedItems.length > 0 || dayMatches) {
+      matchedTimelineDays.push({
+        ...day,
+        matchedItems: matchedItems.length > 0 ? matchedItems : (day.items || [])
+      });
+    }
+  });
+
+  // 3. 搜尋門票憑證 (ticketsData)
+  const matchedTickets = (ticketsData || []).filter(t => {
+    return (t.title && t.title.toLowerCase().includes(query)) ||
+           (t.type && t.type.toLowerCase().includes(query)) ||
+           (t.code && t.code.toLowerCase().includes(query)) ||
+           (t.note && t.note.toLowerCase().includes(query)) ||
+           (t.datetime && t.datetime.toLowerCase().includes(query));
+  });
+
+  // 4. 搜尋住宿飯店 (hotelsData)
+  const matchedHotels = (hotelsData || []).filter(h => {
+    return (h.name && h.name.toLowerCase().includes(query)) ||
+           (h.code && h.code.toLowerCase().includes(query)) ||
+           (h.address && h.address.toLowerCase().includes(query)) ||
+           (h.note && h.note.toLowerCase().includes(query)) ||
+           (h.dates && h.dates.toLowerCase().includes(query));
+  });
+
+  const totalMatches = matchedPocket.length + 
+    matchedTimelineDays.reduce((acc, d) => acc + d.matchedItems.length, 0) + 
+    matchedTickets.length + 
+    matchedHotels.length;
+
+  if (!container) return;
+
+  if (totalMatches === 0) {
+    container.innerHTML = `
+      <div class="search-results-summary-bar">
+        <span class="search-results-count">🔍 關鍵字「<strong>${escapeHtml(kw)}</strong>」</span>
+        <button class="btn-exit-search" onclick="clearSearch()">✕ 清除關閉</button>
+      </div>
+      <div class="search-empty-box">
+        <p style="font-size: 2.2rem; margin-bottom: 8px;">🧭</p>
+        <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 6px;">找不到符合項目</h3>
+        <p style="font-size: 0.88rem; color: var(--text-tertiary); max-width: 360px; margin: 0 auto 16px;">
+          請嘗試其他關鍵字，或點擊以下熱門推薦標籤：
+        </p>
+        <div class="search-quick-tags">
+          <button class="search-tag-chip" onclick="quickSearch('奶油')">🧈 手工奶油</button>
+          <button class="search-tag-chip" onclick="quickSearch('迪士尼')">🏰 迪士尼</button>
+          <button class="search-tag-chip" onclick="quickSearch('凡爾賽')">👑 凡爾賽宮</button>
+          <button class="search-tag-chip" onclick="quickSearch('生蠔')">🦪 康卡勒生蠔</button>
+          <button class="search-tag-chip" onclick="quickSearch('Sixt')">🚗 Sixt 租車</button>
+          <button class="search-tag-chip" onclick="quickSearch('645504')">🔑 聖米歇爾山代碼</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  let html = `
+    <div class="search-results-summary-bar">
+      <span class="search-results-count">🔍 搜尋「<strong>${escapeHtml(kw)}</strong>」：找到 <strong>${totalMatches}</strong> 筆結果</span>
+      <button class="btn-exit-search" onclick="clearSearch()">✕ 清除關閉</button>
+    </div>
+  `;
+
+  // 1. 私房名單展示
+  if (matchedPocket.length > 0) {
+    html += `
+      <div class="search-group-section">
+        <div class="search-group-title">
+          <span>🛍️ 私房探店與伴手名單</span>
+          <span class="search-group-badge">${matchedPocket.length} 筆</span>
+        </div>
+        <div class="pocket-card-grid">
+          ${matchedPocket.map(p => renderPocketCardHtml(p)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // 2. 門票憑證展示
+  if (matchedTickets.length > 0) {
+    html += `
+      <div class="search-group-section">
+        <div class="search-group-title">
+          <span>🏰 景點與交通憑證</span>
+          <span class="search-group-badge">${matchedTickets.length} 筆</span>
+        </div>
+        <div class="vault-card-grid">
+          ${matchedTickets.map(t => renderTicketCardHtml(t)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // 3. 飯店住宿展示
+  if (matchedHotels.length > 0) {
+    html += `
+      <div class="search-group-section">
+        <div class="search-group-title">
+          <span>🏨 住宿飯店預約</span>
+          <span class="search-group-badge">${matchedHotels.length} 間</span>
+        </div>
+        <div class="vault-card-grid">
+          ${matchedHotels.map(h => renderHotelCardHtml(h)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // 4. 行程活動展示
+  if (matchedTimelineDays.length > 0) {
+    html += `
+      <div class="search-group-section">
+        <div class="search-group-title">
+          <span>📅 每日行程時間軸活動</span>
+          <span class="search-group-badge">${matchedTimelineDays.reduce((a, b) => a + b.matchedItems.length, 0)} 個行程</span>
+        </div>
+        ${matchedTimelineDays.map(day => `
+          <div class="timeline-header-card" style="margin-top: 12px;">
+            <div class="th-date-row">
+              <span class="th-date-title">${day.date} (${day.weekday}) · ${day.title}</span>
+              <span class="th-tag">${day.tag}</span>
+            </div>
+            <p class="th-summary">${day.summary}</p>
+          </div>
+          <div class="timeline-list">
+            ${day.matchedItems.map(item => `
+              <div class="timeline-item">
+                <div class="tl-bullet">⏱</div>
+                <div class="tl-content-card">
+                  ${item.time ? `<span class="tl-time-badge">${item.time}</span>` : ''}
+                  <h3 class="tl-title">${item.title}</h3>
+                  <p class="tl-desc">${item.desc}</p>
+                  ${item.badges && item.badges.length > 0 ? `
+                    <div class="tl-badges-row">
+                      ${item.badges.map(b => `<span class="tl-badge status-info">${b}</span>`).join('')}
+                    </div>
+                  ` : ''}
+                  ${item.nav ? `
+                    <div class="tl-nav-wrapper">
+                      <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.nav)}" target="_blank" class="btn-tl-nav">
+                        <span>🧭 導航至此處</span>
+                      </a>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+function clearSearch() {
+  const searchInput = document.getElementById('searchInput');
+  const searchDrawer = document.getElementById('searchDrawer');
+  if (searchInput) searchInput.value = '';
+  if (searchDrawer) searchDrawer.classList.remove('active');
+  renderGlobalSearch('');
+}
+
+function quickSearch(kw) {
+  const searchInput = document.getElementById('searchInput');
+  const searchDrawer = document.getElementById('searchDrawer');
+  if (searchDrawer) searchDrawer.classList.add('active');
+  if (searchInput) {
+    searchInput.value = kw;
+    renderGlobalSearch(kw);
+    searchInput.focus();
+  }
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// (9) 複製到剪貼簿 工具函數
 function copyToClipboard(text, label = '') {
   if (!text) return;
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -611,9 +884,29 @@ function showToast(message) {
 function switchTab(targetTab) {
   currentTab = targetTab;
 
+  // 若使用者點擊底部選單，自動關閉搜尋狀態
+  const searchResultsView = document.getElementById('view-search-results');
+  if (searchResultsView) {
+    searchResultsView.style.display = 'none';
+    searchResultsView.classList.remove('active');
+  }
+  const searchInput = document.getElementById('searchInput');
+  const searchDrawer = document.getElementById('searchDrawer');
+  if (searchInput && searchInput.value) {
+    searchInput.value = '';
+    const clearBtn = document.getElementById('btnClearSearch');
+    if (clearBtn) clearBtn.style.display = 'none';
+  }
+  if (searchDrawer) {
+    searchDrawer.classList.remove('active');
+  }
+
   // 切換 4 個主要分頁
   document.querySelectorAll('.tab-view').forEach(view => {
-    view.classList.remove('active');
+    if (view.id !== 'view-search-results') {
+      view.style.display = '';
+      view.classList.remove('active');
+    }
   });
 
   const activeView = document.getElementById(`view-${targetTab}`) || document.getElementById(`tab-${targetTab}`);

@@ -70,7 +70,8 @@
   <div class="search-drawer" id="searchDrawer">
     <div class="search-input-wrapper">
       <span class="search-icon-inside">🔍</span>
-      <input type="text" id="searchInput" class="search-input" placeholder="搜尋密碼、景點、餐廳、飯店或代碼 (如: 645504, 羊肉)...">
+      <input type="text" id="searchInput" class="search-input" placeholder="搜尋密碼、景點、餐廳、飯店或代碼 (如: 奶油, 645504, 迪士尼)..." autocomplete="off">
+      <button type="button" class="btn-clear-search" id="btnClearSearch" onclick="clearSearch()" style="display:none;" title="清除搜尋" aria-label="清除搜尋">✕</button>
     </div>
   </div>
 
@@ -90,6 +91,13 @@
 
   <!-- ===== 5. 核心分頁內容容器 ===== -->
   <main class="tab-content-area">
+
+    <!-- ── 全站即時跨模組搜尋結果面板 ── -->
+    <section class="tab-view search-results-view" id="view-search-results" style="display: none;">
+      <div id="searchResultsContainer">
+        <!-- 由 JS 動態注入全域搜尋結果 -->
+      </div>
+    </section>
 
     <!-- ── 分頁 1：每日行程時間軸 (Timeline) ── -->
     <section class="tab-view active" id="view-timeline">
@@ -203,7 +211,7 @@
   <div class="toast-notice" id="toastNotice">✅ 已複製到剪貼簿</div>
 
   <!-- 核心 JavaScript 腳本 -->
-  <script src="js/app.js?v=20260908_vault_compact_closed_v30"></script>
+  <script src="js/app.js?v=20260908_global_search_v31"></script>
 </body>
 
 </html>
