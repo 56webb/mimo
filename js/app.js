@@ -714,27 +714,34 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.addEventListener('click', lockApp);
   }
 
-  const searchToggleBtn = document.getElementById('btnToggleSearch');
-  const searchDrawer = document.getElementById('searchDrawer');
-  const searchInput = document.getElementById('searchInput');
+    const searchToggleBtn = document.getElementById("btnToggleSearch");
+  const searchDrawer = document.getElementById("searchDrawer");
+  const searchInput = document.getElementById("searchInput");
 
   if (searchToggleBtn && searchDrawer) {
-    searchToggleBtn.addEventListener('click', () => {
-      searchDrawer.classList.toggle('active');
-      if (searchDrawer.classList.contains('active')) {
+    searchToggleBtn.addEventListener("click", () => {
+      searchDrawer.classList.toggle("active");
+      if (searchDrawer.classList.contains("active")) {
         searchInput.focus();
       } else {
-        searchInput.value = '';
-        renderTimeline(currentSelectedDate);
+        clearSearch();
       }
     });
   }
 
   if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      const keyword = e.target.value;
-      switchTab('timeline');
-      renderTimeline(currentSelectedDate, keyword);
+    let searchDebounceTimer;
+    searchInput.addEventListener("input", (e) => {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        renderGlobalSearch(e.target.value);
+      }, 150);
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        clearSearch();
+      }
     });
   }
 
