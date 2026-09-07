@@ -348,10 +348,10 @@ function renderVaultView() {
       <div class="vault-accordion-header" onclick="toggleVaultGroup(group-hotels)">
         <div class="vault-header-left">
           <span class="vault-header-icon">🏨</span>
-          <h3 class="vault-header-title">全程 7 筆住宿預訂清單</h3>
+          <h3 class="vault-header-title">住宿飯店</h3>
         </div>
         <div class="vault-header-right">
-          <span class="vault-badge-count">${hotelsCount} 家飯店</span>
+          <span class="vault-badge-count">${hotelsCount} 間</span>
           <span class="vault-arrow-icon">▼</span>
         </div>
       </div>
@@ -367,10 +367,10 @@ function renderVaultView() {
       <div class="vault-accordion-header" onclick="toggleVaultGroup(group-traffic)">
         <div class="vault-header-left">
           <span class="vault-header-icon">🚗</span>
-          <h3 class="vault-header-title">自駕租車與高鐵車票</h3>
+          <h3 class="vault-header-title">交通車票</h3>
         </div>
         <div class="vault-header-right">
-          <span class="vault-badge-count">${groups.traffic.length} 筆已付</span>
+          <span class="vault-badge-count">${groups.traffic.length} 筆</span>
           <span class="vault-arrow-icon">▼</span>
         </div>
       </div>
@@ -386,10 +386,10 @@ function renderVaultView() {
       <div class="vault-accordion-header" onclick="toggleVaultGroup(group-food)">
         <div class="vault-header-left">
           <span class="vault-header-icon">🍽️</span>
-          <h3 class="vault-header-title">預約餐廳與古蹟午餐</h3>
+          <h3 class="vault-header-title">餐廳預約</h3>
         </div>
         <div class="vault-header-right">
-          <span class="vault-badge-count">${groups.food.length} 筆訂位</span>
+          <span class="vault-badge-count">${groups.food.length} 筆</span>
           <span class="vault-arrow-icon">▼</span>
         </div>
       </div>
@@ -405,10 +405,10 @@ function renderVaultView() {
       <div class="vault-accordion-header" onclick="toggleVaultGroup(group-codes)">
         <div class="vault-header-left">
           <span class="vault-header-icon">🔑</span>
-          <h3 class="vault-header-title">語音導覽碼與道閘密碼</h3>
+          <h3 class="vault-header-title">通關密碼</h3>
         </div>
         <div class="vault-header-right">
-          <span class="vault-badge-count">${groups.codes.length} 筆憑證</span>
+          <span class="vault-badge-count">${groups.codes.length} 筆</span>
           <span class="vault-arrow-icon">▼</span>
         </div>
       </div>
