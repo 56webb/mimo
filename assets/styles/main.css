@@ -1450,3 +1450,132 @@ body {
   margin: 0 auto;
   line-height: 1.6;
 }
+
+/* ===== 15. 憑證金庫收合 UI (Vault Accordion) ===== */
+.vault-container {
+  padding: 8px 16px 80px;
+}
+
+.vault-accordion-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding: 4px 2px;
+}
+
+.vault-summary-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.vault-summary-text strong {
+  color: var(--accent-ochre);
+}
+
+.btn-toggle-all-vault {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 6px 13px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-spring);
+}
+
+.btn-toggle-all-vault:hover {
+  border-color: var(--accent-ochre);
+  color: var(--accent-ochre);
+}
+
+.vault-accordion-group {
+  margin-bottom: 12px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vault-accordion-group.active {
+  border-color: var(--border-ochre);
+  box-shadow: var(--shadow-card);
+}
+
+.vault-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 16px;
+  cursor: pointer;
+  user-select: none;
+  background: var(--surface-subtle);
+  transition: background 0.2s ease;
+}
+
+.vault-accordion-header:hover {
+  background: var(--surface-card-elevated);
+}
+
+.vault-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vault-header-icon {
+  font-size: 1.35rem;
+}
+
+.vault-header-title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.vault-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vault-badge-count {
+  font-size: 0.76rem;
+  padding: 3px 9px;
+  border-radius: 12px;
+  background: rgba(217, 119, 6, 0.15);
+  color: var(--accent-ochre);
+  font-weight: 600;
+}
+
+.vault-arrow-icon {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+}
+
+.vault-accordion-group.active .vault-arrow-icon {
+  transform: rotate(180deg);
+  color: var(--accent-ochre);
+}
+
+.vault-accordion-body {
+  display: none;
+  padding: 14px 14px 18px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface-card);
+}
+
+.vault-accordion-group.active .vault-accordion-body {
+  display: block;
+  animation: vaultAccordionOpen 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes vaultAccordionOpen {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- 核心樣式 -->
-  <link rel="stylesheet" href="assets/styles/main.css?v=20260908_globalsearch_v26">
+  <link rel="stylesheet" href="assets/styles/main.css?v=20260908_vault_accordion_v27">
 </head>
 
 <body>
@@ -100,14 +100,8 @@
 
     <!-- ── 分頁 2：住宿與憑證金庫 (Vault) ── -->
     <section class="tab-view" id="view-vault">
-      <h2 class="vault-section-title">🏨 9 筆全程住宿預訂清單</h2>
-      <div class="vault-card-grid" id="hotelVaultGrid">
-        <!-- 由 JS 渲染 9 家飯店預約卡片 -->
-      </div>
-
-      <h2 class="vault-section-title" style="margin-top: 32px;">🎟️ 門票・車票與通關憑證</h2>
-      <div class="vault-card-grid" id="ticketVaultGrid">
-        <!-- 由 JS 渲染 莫內門票、修道院門票、高鐵票、語音導覽碼 -->
+      <div class="vault-container" id="vaultContainer">
+        <!-- 由 JS 渲染分類收合手風琴 (Accordion) -->
       </div>
     </section>
 
@@ -209,7 +203,7 @@
   <div class="toast-notice" id="toastNotice">✅ 已複製到剪貼簿</div>
 
   <!-- 核心 JavaScript 腳本 -->
-  <script src="js/app.js?v=20260908_globalsearch_v26"></script>
+  <script src="js/app.js?v=20260908_vault_accordion_v27"></script>
 </body>
 
 </html>

@@ -287,80 +287,147 @@ function renderTimeline(dateStr, searchKeyword = '') {
   `).join('');
 }
 
-// (5) 渲染飯店憑證 (Apple Wallet 房卡風)
-function renderHotelVault() {
-  const container = document.getElementById('hotelVaultGrid');
-  if (!container || !hotelsData || hotelsData.length === 0) return;
+// (5) 渲染憑證金庫（分類收合手風琴 UI - Accordion）
+function renderVaultView() {
+  const container = document.getElementById("vaultContainer");
+  if (!container) return;
 
-  container.innerHTML = hotelsData.map(h => {
-    const isBooked = h.status === '已確認';
-    return `
-      <div class="hotel-wallet-pass ${isBooked ? 'pass-confirmed' : 'pass-pending'}">
-        <div class="pass-header">
-          <div class="pass-hotel-type">HÔTEL · 住宿房卡</div>
-          <span class="pass-status-badge">${h.status}</span>
+  // 1. 分類門票與各類憑證
+  const groups = {
+    attractions: [],
+    traffic: [],
+    food: [],
+    codes: []
+  };
+
+  (ticketsData || []).forEach(t => {
+    const type = t.type || "";
+    const title = t.title || "";
+    if (type.includes("迪士尼") || type.includes("景點") || type.includes("皇宮") || type.includes("歌劇院") || title.includes("迪士尼") || title.includes("莫內") || title.includes("凡爾賽") || title.includes("歌劇院")) {
+      groups.attractions.push(t);
+    } else if (type.includes("租車") || type.includes("高鐵") || title.includes("Sixt") || title.includes("SNCF") || title.includes("TGV")) {
+      groups.traffic.push(t);
+    } else if (type.includes("餐廳") || type.includes("老店") || type.includes("午餐") || title.includes("La Couronne") || title.includes("La Ferme") || title.includes("Venise")) {
+      groups.food.push(t);
+    } else {
+      groups.codes.push(t);
+    }
+  });
+
+  const hotelsCount = (hotelsData || []).length;
+  const ticketsCount = (ticketsData || []).length;
+  const totalItems = hotelsCount + ticketsCount;
+
+  container.innerHTML = `
+    <div class="vault-accordion-toolbar">
+      <span class="vault-summary-text">已歸檔 <strong>${totalItems}</strong> 筆預約憑證</span>
+      <button class="btn-toggle-all-vault" id="btnToggleAllVault" onclick="toggleAllVaultGroups()">⇕ 全部展開 / 收合</button>
+    </div>
+
+    <!-- 1. 景點與樂園門票 (預設展開) -->
+    <div class="vault-accordion-group active" id="group-attractions">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-attractions)">
+        <div class="vault-header-left">
+          <span class="vault-header-icon">🏰</span>
+          <h3 class="vault-header-title">重點景點與樂園門票</h3>
         </div>
-        
-        <div class="pass-main-title">${h.name}</div>
-        <div class="pass-meta-subtitle">${h.dates} · ${h.city} (${h.nights} 晚)</div>
-
-        <div class="pass-perforated-line">
-          <span class="notch notch-left"></span>
-          <span class="dashed-line"></span>
-          <span class="notch notch-right"></span>
-        </div>
-
-        <div class="pass-details-grid">
-          <div class="pass-cell">
-            <span class="cell-label">訂單編號 CODE</span>
-            <span class="cell-val code-font">${h.code}</span>
-          </div>
-          <div class="pass-cell">
-            <span class="cell-label">平台 PLATFORM</span>
-            <span class="cell-val">${h.platform}</span>
-          </div>
-          <div class="pass-cell">
-            <span class="cell-label">入住退房 CHECK-IN</span>
-            <span class="cell-val">${h.checkIn} ~ ${h.checkOut}</span>
-          </div>
-          <div class="pass-cell">
-            <span class="cell-label">總金額 TOTAL</span>
-            <span class="cell-val price-val">${h.price}</span>
-          </div>
-        </div>
-
-        <div class="pass-features-bar">
-          <span class="feature-chip">🅿️ ${h.parking}</span>
-          <span class="feature-chip">🥐 ${h.breakfast}</span>
-          ${h.payNote ? `<span class="feature-chip chip-ochre">💳 ${h.payNote}</span>` : ''}
-        </div>
-
-        <div class="pass-actions">
-          ${h.code && h.code !== '現場付款' && h.code !== '未定' ? `
-            <button class="btn-pass-copy" onclick="copyToClipboard('${h.code}', '訂單編號')">📋 複製代碼</button>
-          ` : ''}
-          ${h.mapQuery ? `
-            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.mapQuery)}" target="_blank" class="btn-pass-nav">🧭 導航</a>
-          ` : ''}
-          ${h.phone ? `
-            <a href="tel:${h.phone.replace(/\s+/g, '')}" class="btn-pass-phone">📞 撥號</a>
-          ` : ''}
+        <div class="vault-header-right">
+          <span class="vault-badge-count">${groups.attractions.length} 筆已購</span>
+          <span class="vault-arrow-icon">▼</span>
         </div>
       </div>
-    `;
-  }).join('');
+      <div class="vault-accordion-body">
+        <div class="vault-card-grid">
+          ${groups.attractions.map(t => renderTicketCardHtml(t)).join("")}
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 全程住宿預訂 (預設收合) -->
+    <div class="vault-accordion-group" id="group-hotels">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-hotels)">
+        <div class="vault-header-left">
+          <span class="vault-header-icon">🏨</span>
+          <h3 class="vault-header-title">全程 7 筆住宿預訂清單</h3>
+        </div>
+        <div class="vault-header-right">
+          <span class="vault-badge-count">${hotelsCount} 家飯店</span>
+          <span class="vault-arrow-icon">▼</span>
+        </div>
+      </div>
+      <div class="vault-accordion-body">
+        <div class="vault-card-grid">
+          ${(hotelsData || []).map(h => renderHotelCardHtml(h)).join("")}
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 交通接駁與租車 (預設收合) -->
+    <div class="vault-accordion-group" id="group-traffic">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-traffic)">
+        <div class="vault-header-left">
+          <span class="vault-header-icon">🚗</span>
+          <h3 class="vault-header-title">自駕租車與高鐵車票</h3>
+        </div>
+        <div class="vault-header-right">
+          <span class="vault-badge-count">${groups.traffic.length} 筆已付</span>
+          <span class="vault-arrow-icon">▼</span>
+        </div>
+      </div>
+      <div class="vault-accordion-body">
+        <div class="vault-card-grid">
+          ${groups.traffic.map(t => renderTicketCardHtml(t)).join("")}
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 必吃餐廳預約 (預設收合) -->
+    <div class="vault-accordion-group" id="group-food">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-food)">
+        <div class="vault-header-left">
+          <span class="vault-header-icon">🍽️</span>
+          <h3 class="vault-header-title">預約餐廳與古蹟午餐</h3>
+        </div>
+        <div class="vault-header-right">
+          <span class="vault-badge-count">${groups.food.length} 筆訂位</span>
+          <span class="vault-arrow-icon">▼</span>
+        </div>
+      </div>
+      <div class="vault-accordion-body">
+        <div class="vault-card-grid">
+          ${groups.food.map(t => renderTicketCardHtml(t)).join("")}
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 語音導覽與通關密碼 (預設收合) -->
+    <div class="vault-accordion-group" id="group-codes">
+      <div class="vault-accordion-header" onclick="toggleVaultGroup(group-codes)">
+        <div class="vault-header-left">
+          <span class="vault-header-icon">🔑</span>
+          <h3 class="vault-header-title">語音導覽碼與道閘密碼</h3>
+        </div>
+        <div class="vault-header-right">
+          <span class="vault-badge-count">${groups.codes.length} 筆憑證</span>
+          <span class="vault-arrow-icon">▼</span>
+        </div>
+      </div>
+      <div class="vault-accordion-body">
+        <div class="vault-card-grid">
+          ${groups.codes.map(t => renderTicketCardHtml(t)).join("")}
+        </div>
+      </div>
+    </div>
+  `;
 }
 
-// (6) 渲染票券與租車憑證
-function renderTicketVault() {
-  const container = document.getElementById('ticketVaultGrid');
-  if (!container || !ticketsData || ticketsData.length === 0) return;
-
-  container.innerHTML = ticketsData.map(t => `
+// 輔助卡片渲染 HTML
+function renderTicketCardHtml(t) {
+  return `
     <div class="ticket-card">
       <div class="tc-header">
         <span class="tc-type-tag">${t.type}</span>
-        <span class="tc-status ${t.status.includes('已') ? 'status-ok' : 'status-warn'}">${t.status}</span>
+        <span class="tc-status ${t.status.includes("已") ? "status-ok" : "status-warn"}">${t.status}</span>
       </div>
       <h3 class="tc-title">${t.title}</h3>
       <div class="tc-datetime">📅 ${t.datetime}</div>
@@ -369,20 +436,90 @@ function renderTicketVault() {
       ${t.code ? `
         <div class="tc-code-row">
           <span class="code-font">${t.code}</span>
-          <button class="btn-copy-mini" onclick="copyToClipboard('${t.code}', '${t.title}')">複製</button>
+          <button class="btn-copy-mini" onclick="copyToClipboard('${t.code}', '${t.title}')">複製代碼</button>
         </div>
-      ` : ''}
+      ` : ""}
 
       <div class="tc-actions">
         ${t.mapQuery ? `
           <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t.mapQuery)}" target="_blank" class="btn-action-primary" style="padding: 9px 14px; font-size: 0.82rem;">
             <span>🧭 導航前往</span>
           </a>
-        ` : ''}
+        ` : ""}
       </div>
     </div>
-  `).join('');
+  `;
 }
+
+function renderHotelCardHtml(h) {
+  return `
+    <div class="hotel-pass-card">
+      <div class="pass-header">
+        <div>
+          <span class="pass-city">${h.dates}</span>
+          <h3 class="pass-hotel-name">${h.name}</h3>
+        </div>
+        <span class="pass-status ${h.code && h.code.includes("已") ? "status-ok" : "status-warn"}">
+          ${h.code && h.code.includes("已") ? "已確認" : "待預訂"}
+        </span>
+      </div>
+
+      <div class="pass-body">
+        <div class="pass-row">
+          <span class="p-label">訂房代號</span>
+          <span class="p-val code-font">${h.code}</span>
+        </div>
+        <div class="pass-row">
+          <span class="p-label">入住/退房</span>
+          <span class="p-val">Check-in ${h.checkIn} ｜ Check-out ${h.checkOut}</span>
+        </div>
+        <div class="pass-row">
+          <span class="p-label">預估/已付</span>
+          <span class="p-val" style="color: var(--accent-ochre); font-weight:700;">${h.price}</span>
+        </div>
+        <div class="pass-row">
+          <span class="p-label">詳細地址</span>
+          <span class="p-val">${h.address}</span>
+        </div>
+        <p class="pass-note">${h.note}</p>
+      </div>
+
+      <div class="pass-footer">
+        ${h.code && !h.code.includes("待") ? `
+          <button class="btn-pass-copy" onclick="copyToClipboard('${h.code}', '訂單編號')">📋 複製代碼</button>
+        ` : ""}
+        ${h.mapQuery ? `
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.mapQuery)}" target="_blank" class="btn-pass-nav">🧭 導航</a>
+        ` : ""}
+        ${h.phone ? `
+          <a href="tel:${h.phone.replace(/\s+/g, "")}" class="btn-pass-phone">📞 撥號</a>
+        ` : ""}
+      </div>
+    </div>
+  `;
+}
+
+// 切換單一手風琴分類
+function toggleVaultGroup(groupId) {
+  const group = document.getElementById(groupId);
+  if (group) {
+    group.classList.toggle("active");
+  }
+}
+
+// 一鍵展開/收合所有手風琴
+function toggleAllVaultGroups() {
+  const groups = document.querySelectorAll(".vault-accordion-group");
+  const anyClosed = Array.from(groups).some(g => !g.classList.contains("active"));
+  groups.forEach(g => {
+    if (anyClosed) {
+      g.classList.add("active");
+    } else {
+      g.classList.remove("active");
+    }
+  });
+}
+
 
 // (7) 渲染私房口袋名單 (IG/米其林探店卡片)
 function renderPocketPlaces(category = 'all') {
@@ -522,8 +659,7 @@ function renderAllViews() {
   renderDateCarousel();
   renderKeynoteCard(currentSelectedDate);
   renderTimeline(currentSelectedDate);
-  renderHotelVault();
-  renderTicketVault();
+  renderVaultView();
   renderPocketPlaces('all');
 }
 
