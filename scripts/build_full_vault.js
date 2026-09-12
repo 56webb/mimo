@@ -154,8 +154,8 @@ const itineraryData = [
       {
         time: "09:00",
         title: "⭐【聖禮拜堂 Sainte-Chapelle】早晨第一批！極致晨光彩繪玻璃",
-        desc: "訂單【2618864216850403140】(票號 759304466060400 等)。早晨第 1 批晨光穿透 15 面高達 15 米的 13 世紀彩繪玻璃窗，色彩燦爛奪目！避開午後排隊人潮。憑證存 data/0917_聖禮拜堂_預約入場時段憑證_4人.pdf。",
-        badges: ["✅已預約09:00", "第一批晨光彩窗", "西堤島必看", "訂單2618864216850403140"],
+        desc: "訂單【2618864216850403140】(票號 759304466060400 等)。早晨第 1 批晨光穿透 15 面高達 15 米的 13 世紀彩繪玻璃窗，色彩燦爛奪目！避開午後排隊人潮。憑證存 data/0917_聖禮拜堂_預約入場時段憑證_4人.pdf。\n\n【💡CMN 官方 FAQ 購票實證依據】：\n出處來自聖禮拜堂官方網站（法國國家古蹟中心 CMN）常見問答頁面（https://www.sainte-chapelle.fr/visiter/faq）「Billetterie（票務）」分類：\n問（原文）：« Je bénéficie d'un tarif partenaire mais je ne le trouve pas sur le e-billetterie ? »（享有合作夥伴優惠票價但在線上找不到選項？）\n答（原文）：« La réduction est appliquée uniquement en caisse sur place. Dans ce cas précis nous vous invitons à réserver un créneau horaire de visite avec la mention « J'ai déjà un billet ». Vous réglerez votre billet le jour de votre visite. »（此折扣僅限現場人工櫃檯辦理。建議在線上預約註明「我已有門票（J'ai déjà un billet）」的時段，參觀當天至現場櫃檯結帳購票即可）。",
+        badges: ["✅已預約09:00", "第一批晨光彩窗", "官方FAQ實證", "訂單2618864216850403140"],
         map: "8 boulevard du Palais 75001 Paris"
       },
       {
@@ -1415,7 +1415,7 @@ const ticketsData = [
     status: "✅ 已確認預約 (0€ 預約時段)",
     code: "759304466060400 (訂單: 2618864216850403140)",
     file: "0917_聖禮拜堂_預約入場時段憑證_4人.pdf",
-    note: "4 人預約入場時段。地址：8 boulevard du Palais, 75001 Paris (地鐵 Cité 站)。票號：759304466060400 / 60511 / 60690 / 60781。檔案存於 data/0917_聖禮拜堂_預約入場時段憑證_4人.pdf（購買證明存 data/0917_聖禮拜堂_預約購票證明收據.pdf）。",
+    note: "4 人預約入場時段。地址：8 boulevard du Palais, 75001 Paris (地鐵 Cité 站)。票號：759304466060400 / 60511 / 60690 / 60781。檔案存於 data/0917_聖禮拜堂_預約入場時段憑證_4人.pdf（購買證明存 data/0917_聖禮拜堂_預約購票證明收據.pdf）。\n\n【💡CMN 官方 FAQ 購票依據（https://www.sainte-chapelle.fr/visiter/faq）】：\n官方 FAQ「Billetterie（票務）」明文規定：若享有合作夥伴優惠或需現場購票，請在線上預約 0 元「J'ai déjà un billet（我已有門票）」時段，參觀當天至現場人工收銀櫃檯（en caisse sur place）出示時段並付款購票即可（« Vous réglerez votre billet le jour de votre visite. »）。",
     mapQuery: "8 boulevard du Palais 75001 Paris"
   },
   {
