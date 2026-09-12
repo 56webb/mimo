@@ -988,7 +988,7 @@ async function handleAiSend() {
         },
         generationConfig: {
           temperature: 0.4,
-          maxOutputTokens: 1600
+          maxOutputTokens: 8192
         }
       })
     });
