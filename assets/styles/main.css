@@ -219,7 +219,7 @@ body {
 
 /* ===== 3. 今日即時焦點大片卡 (Magazine Cover Hero) ===== */
 .hero-keynote-container {
-  padding: 14px 16px 8px;
+  padding: 6px 16px 12px;
 }
 
 .keynote-card {
@@ -451,7 +451,7 @@ body {
 /* ===== 4. 橫向日期滾動軸 (Date Carousel) ===== */
 .date-picker-section,
 .date-carousel-container {
-  padding: 6px 12px 14px;
+  padding: 10px 12px 6px;
   overflow: hidden;
   position: relative;
   width: 100%;
