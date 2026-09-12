@@ -133,13 +133,13 @@ const itineraryData = [
   {
     date: "9/17",
     weekday: "四",
-    title: "⛪ 09:00 聖禮拜堂晨光彩窗 ➔ 11:00 The Bride 試婚紗 ➔ 左岸雙叟午餐",
-    tag: "晨光彩窗＋試婚紗",
-    summary: "09:00 第一批參觀聖禮拜堂欣賞晨光彩繪玻璃（已預約），步行 15 分鐘接續 11:00 The Bride 試婚紗，午後漫步聖日耳曼左岸與雙叟咖啡館！",
+    title: "⛪ 09:00 聖禮拜堂 ➔ 11:00 試婚紗 ➔ 雙叟午餐 ➔ 藝術橋 ➔ 莎瑪麗丹百貨 ➔ 18:30 取婚紗",
+    tag: "晨光彩窗＋試婚紗＋雙橋環線",
+    summary: "09:00 第一批參觀聖禮拜堂晨光彩繪玻璃（已預約），11:00 The Bride 試婚紗（量身修改約定 18:30 取件）。午後一身輕裝享受雙叟露台午餐、漫步波拿巴街與藝術橋，深度探訪莎瑪麗丹百貨，傍晚漫步新橋與西堤島塞納河水岸秘境，18:30 準時取回修改好的白紗回飯店！",
     keynote: {
-      code: "09:00聖禮拜堂 / 11:00試婚紗",
-      codeLabel: "預約憑證與門禁",
-      spot: "西堤島聖禮拜堂 ➔ The Bride 婚紗店 ➔ 雙叟咖啡館",
+      code: "09:00聖禮拜堂 / 18:30取婚紗",
+      codeLabel: "預約憑證與取件",
+      spot: "聖禮拜堂 ➔ The Bride ➔ 雙叟 ➔ 藝術橋 ➔ 莎瑪麗丹 ➔ 新橋 ➔ 綠色小堂",
       hotel: "B&B HOTEL Paris Italie Porte de Choisy (第2晚)",
       mapQuery: "8 boulevard du Palais 75001 Paris"
     },
@@ -166,25 +166,67 @@ const itineraryData = [
         map: "22 rue de l Odeon 75006 Paris"
       },
       {
+        time: "10:45",
+        title: "抵達 22 Rue de l'Odéon 婚紗工作室・準備試穿",
+        desc: "地點：22 rue de l'Odeon, 75006 Paris。門禁 Code: 2734 / 電梯 Code: 1869 (電梯搭至 1/2 樓右側門)。在接待區稍作休息準備試穿。",
+        badges: ["門禁: 2734", "電梯: 1869", "提早15分到達"],
+        map: "22 rue de l Odeon 75006 Paris"
+      },
+      {
         time: "11:00",
-        title: "⭐The Bride Paris 試穿婚紗（準時 11:00 抵達）",
-        desc: "地點：22 rue de l'Odeon, 75006 Paris。門禁 Code: 2734 / 電梯 Code: 1869 (電梯搭至 1/2 樓右側門)。穿著無痕膚色內衣並攜帶 NuBra，化淡妝試穿。試穿選定修改後當天即可帶走，9/20 拍攝完當天歸還。",
-        badges: ["11:00試穿", "門禁: 2734", "電梯: 1869", "免費修改帶走"],
+        title: "⭐The Bride Paris 試穿白紗與現場量身修改確認",
+        desc: "穿著無痕膚色內衣並攜帶 NuBra，化淡妝試穿。專業婚紗顧問量身細修，向店家約定【18:30 取件】。下午一身輕裝享受塞納河雙橋漫步！",
+        badges: ["11:00試穿", "量身細修", "約定18:30取件", "無行李輕裝逛街"],
         map: "22 rue de l Odeon 75006 Paris"
       },
       {
         time: "12:45",
-        title: "⭐雙叟咖啡館 (Les Deux Magots) 露台午餐 ＆ 花神合影",
-        desc: "自工作室步行 7 分鐘直達！1885 年傳奇咖啡館，坐二樓露台俯瞰教堂廣場，品嚐熱火腿起司三明治與烤蘋果塔，對門花神咖啡館合影拍照。",
-        badges: ["雙叟二樓露台", "烤火腿三明治", "對門花神拍照"],
-        map: "Les Deux Magots Paris"
+        title: "⭐雙叟咖啡館 (Les Deux Magots) 露台午餐 ＆ 左岸咖啡時光",
+        desc: "自工作室步行 6 分鐘直達！1885 年傳奇名店，坐在二樓露台俯瞰聖日耳曼德佩教堂廣場，品嚐招牌法式火腿起司熱三明治、經典烤蘋果塔與熱巧克力，對門花神拍照合影。",
+        badges: ["雙叟二樓露台", "烤火腿三明治", "烤蘋果塔", "花神合影"],
+        map: "6 Place Saint-Germain des Pres 75006 Paris"
       },
       {
-        time: "14:30",
-        title: "聖日耳曼德佩區漫步 ＆ 盧森堡公園綠椅日光浴",
-        desc: "漫步左岸林蔭大道，在盧森堡公園梅第奇噴泉旁經典綠色鐵椅坐下，享受法式優雅陽光。下午將修改好的白紗帶回飯店高處懸掛防皺。",
-        badges: ["聖日耳曼左岸", "盧森堡公園", "婚紗回房懸掛"],
-        map: "Jardin du Luxembourg Paris"
+        time: "14:15",
+        title: "漫步波拿巴街 (Rue Bonaparte) ＆ 登上藝術橋 (Passerelle des Arts)",
+        desc: "沿最美藝廊街波拿巴街北行，可外帶 Ladurée 馬卡龍，欣賞河畔世界文化遺產綠色舊書攤。登上藝術橋感受塞納河微風，遠眺羅浮宮與西堤島絕景，抓拍背影大片！",
+        badges: ["波拿巴藝廊街", "Ladurée馬卡龍", "塞納河舊書攤", "藝術橋絕景"],
+        map: "Passerelle des Arts Paris"
+      },
+      {
+        time: "15:00",
+        title: "⭐莎瑪麗丹百貨 (La Samaritaine) 探索世紀大樓梯與金色孔雀壁畫",
+        desc: "LVMH 斥資 7.5 億歐元修復！周杰倫《最偉大的作品》MV 取景地！全鑄鐵鑲嵌 16,000 片金箔橡樹葉大樓梯、5 樓 115 米挑高金色孔雀壁畫中庭，B1 探索全歐最大頂級小眾香氛專區與 Loulou 概念選品店。",
+        badges: ["周杰倫MV大階梯", "金色孔雀壁畫", "小眾香氛殿堂", "Loulou選品店"],
+        map: "9 Rue de la Monnaie 75001 Paris"
+      },
+      {
+        time: "16:45",
+        title: "漫步巴黎最古老「新橋 (Pont Neuf)」➔ 西堤島水岸綠色小堂花園",
+        desc: "回程走東側完全不同路線！跨過 1607 年古老新橋，沿石階下行至西堤島尖端的綠色小堂公園 (Square du Vert-Galant)，坐在垂柳下欣賞塞納河遊船穿梭橋拱，享受巴黎最浪漫水岸秘境。",
+        badges: ["巴黎最老新橋", "綠色小堂尖角花園", "塞納河水岸秘境", "不同路線回程"],
+        map: "Square du Vert-Galant Paris"
+      },
+      {
+        time: "17:30",
+        title: "走入太子廣場 (Place Dauphine) ➔ 穿越 1776 年聖安德烈歷史石板拱廊街",
+        desc: "探訪文藝電影最愛取景的紅磚沙地太子廣場，穿過新橋跨回左岸多芬街，走入 1776 年鵝卵石 Cour du Commerce Saint-André 歷史拱廊街，途經全巴黎最古老餐廳 Le Procope 門口，漫步回工作室。",
+        badges: ["電影感太子廣場", "多芬街畫廊", "1776年歷史拱廊街", "全巴黎最老餐廳門口"],
+        map: "Cour du Commerce-Saint-Andre 75006 Paris"
+      },
+      {
+        time: "18:30",
+        title: "⭐回到 The Bride Paris 驗收試穿 ＆ 提取婚紗禮服",
+        desc: "地點：22 rue de l'Odeon。準時回到工作室，驗收修改成果，點交白紗、長防塵袋、專用衣架與頭紗配飾，確認平整防皺裝袋完成。",
+        badges: ["18:30準時取件", "驗收修改白紗", "專用防塵袋裝妥"],
+        map: "22 rue de l Odeon 75006 Paris"
+      },
+      {
+        time: "18:45",
+        title: "提著婚紗禮服搭乘地鐵直達 13 區 B&B 飯店細心懸掛",
+        desc: "自 Odéon 站搭乘地鐵 10 號至 Jussieu 轉 7 號直達 Porte de Choisy 站，回房後立即將白紗高處懸掛防皺，洗熱水澡放鬆，迎接明日楓丹白露宮行程！",
+        badges: ["地鐵直達", "Navigo全包", "白紗高處懸掛", "放鬆休息"],
+        map: "B&B HOTEL Paris Italie Porte de Choisy"
       }
     ],
     coverImage: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800&auto=format&fit=crop&q=80"
