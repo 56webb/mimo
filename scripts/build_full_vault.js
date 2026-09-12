@@ -1559,6 +1559,45 @@ flagshipMalls.forEach(m => {
   if (key) pocketPlacesMap.set(key, m);
 });
 
+// 蒙馬特聖心堂周邊頂級甜點烘焙名店
+const montmartreBakeries = [
+  {
+    category: "bakery",
+    categoryLabel: "🥐 甜點烘焙",
+    name: "Pain Pain (蒙馬特現代精緻法式甜點沙龍)",
+    tag: "bakery",
+    desc: "聖心堂山腳下深藍高雅裝潢的頂級烘焙甜點沙龍！被評為蒙馬特第一甜點。必吃：開心果閃電泡芙 (Éclair Pistache)、藍莓塔、白桃可頌、焦脆可麗露。",
+    address: "88 Rue des Martyrs, 75018 Paris (聖心堂步行約 7 分鐘)",
+    highlight: "⏰ 週二至週六 07:30–20:00，週日 07:30–19:30 (週一公休) ｜ 必吃：開心果閃電泡芙、藍莓水果塔、現烤可麗露",
+    mapQuery: "Pain Pain 88 Rue des Martyrs Paris"
+  },
+  {
+    category: "bakery",
+    categoryLabel: "🥐 甜點烘焙",
+    name: "Le Grenier à Pain - Abbesses (兩屆巴黎最佳長棍/可頌冠軍)",
+    tag: "bakery",
+    desc: "位在愛牆與地鐵 Abbesses 站旁，榮獲兩屆巴黎最佳長棍冠軍！甜點水準極高，必吃：法式草莓千層酥 (Millefeuille Fraise)、杏仁可頌、傳統巧克力閃電泡芙。",
+    address: "38 Rue des Abbesses, 75018 Paris (聖心堂步行約 6 分鐘)",
+    highlight: "⏰ 週四至週一 07:00–19:30 (週二、週三公休) ｜ 必吃：法式草莓千層酥、金黃酥脆杏仁可頌、傳統閃電泡芙",
+    mapQuery: "Le Grenier a Pain Abbesses Paris"
+  },
+  {
+    category: "bakery",
+    categoryLabel: "🥐 甜點烘焙",
+    name: "Les Petits Mitrons (蒙馬特傳奇手工焦糖酥皮水果塔)",
+    tag: "bakery",
+    desc: "蒙馬特在地老饕私藏手工水果塔神店！櫃內擺滿現烤焦糖酥皮水果塔，必吃：焦糖無花果塔 (Tarte aux Figues)、金黃杏桃塔、焦糖蘋果塔。",
+    address: "26 Rue Lepic, 75018 Paris (聖心堂步行約 9 分鐘)",
+    highlight: "⏰ 週四至週二 08:30–19:00 (週三公休) ｜ 必吃：現烤焦糖無花果塔、金黃杏桃塔、焦糖蘋果塔",
+    mapQuery: "Les Petits Mitrons Paris"
+  }
+];
+
+montmartreBakeries.forEach(b => {
+  const key = (b.name || '').trim().replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+  if (key) pocketPlacesMap.set(key, b);
+});
+
 const pocketPlacesData = Array.from(pocketPlacesMap.values());
 
 console.log(`📊 資料整理彙整結果：`);
