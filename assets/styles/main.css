@@ -2156,4 +2156,8 @@ body {
   transform: scale(1.08);
 }
 
+.btn-ai-send:active {
+  transform: scale(0.92);
+}
+
 

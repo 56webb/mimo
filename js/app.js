@@ -870,15 +870,15 @@ function initAiAssistant() {
     if (e.target === modal) closeModal();
   });
 
-  // 發送訊息監聽
+  // 發送訊息監聽：嚴格依使用者要求，取消 Enter 鍵自動送出（防止注音選字/打字誤觸），僅點擊「送出鈕」才發送
   if (btnSend) {
     btnSend.addEventListener('click', () => handleAiSend());
   }
   if (input) {
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
+        // 防止換行或預設行為誤送出，依指示保持必須點擊送出鈕
         e.preventDefault();
-        handleAiSend();
       }
     });
   }
