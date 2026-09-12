@@ -508,8 +508,8 @@ const itineraryData = [
     tag: "巴黎經典",
     summary: "聖心堂俯瞰全城，12:00 Pink Mamma午餐，17:00 歌劇院夜導，外帶晚餐早睡迎明日高鐵！",
     keynote: {
-      code: "op07092026-932770962",
-      codeLabel: "歌劇院導覽憑證號",
+      code: "Pink Mamma: #8L5ME23WMRFA / 歌劇院: op07092026-932770962",
+      codeLabel: "當日預約憑證號",
       spot: "聖心堂 ➔ 12:00 Pink Mamma ➔ 17:00 歌劇院夜導 ➔ 外帶晚餐",
       hotel: "B&B HOTEL Paris Italie (市區最後1晚)",
       mapQuery: "Palais Garnier"
@@ -524,10 +524,10 @@ const itineraryData = [
       },
       {
         time: "11:45",
-        title: "⭐皮加勒超人氣餐廳：Pink Mamma 享用 12:00 午餐",
-        desc: "自愛牆沿石階緩下坡步行 10 分鐘即達皮加勒區。四層樓復古玻璃花房餐廳，品嚐人氣招牌現刨黑松露手工寬麵與柴燒窯烤披薩！",
-        badges: ["12:00人氣午餐", "招牌松露義大利麵", "四層樓玻璃花房"],
-        map: "Pink Mamma Paris"
+        title: "⭐皮加勒超人氣餐廳：Pink Mamma 享用 12:00 午餐（已預約 2人席）",
+        desc: "自愛牆沿石階緩下坡步行 10 分鐘即達皮加勒區。已成功預約 12:00（訂單【#8L5ME23WMRFA】雙人席，桌位保留 15 分鐘）。四層樓復古玻璃花房餐廳，品嚐人氣招牌現刨黑松露手工寬麵與柴燒窯烤披薩！憑證已存 data/0924_Pink_Mamma_訂位確認憑證.png。",
+        badges: ["✅ 12:00已訂位", "訂單#8L5ME23WMRFA", "招牌松露麵", "玻璃花房"],
+        map: "20bis Rue de Douai 75009 Paris"
       },
       {
         time: "13:45",
@@ -1388,6 +1388,16 @@ const ticketsData = [
     file: "",
     note: "瑪黑區超人氣南法小酒館！招牌必點：普羅旺斯焗烤蝸牛、香煎干貝牛肝菌燉飯、油封鴨肉，以及整盆無限挖的「招牌巨盆巧克力慕斯」！",
     mapQuery: "Chez Janou Paris"
+  },
+  {
+    type: "🍽️ 人氣名店訂位",
+    title: "Pink Mamma 蒙馬特皮加勒花房餐廳 (已預約 12:00 雙人席)",
+    datetime: "2026/09/24 (四) 12:00 準時入座",
+    status: "✅ 已確認預約 (雙人席)",
+    code: "#8L5ME23WMRFA",
+    file: "0924_Pink_Mamma_訂位確認憑證.png",
+    note: "訂位人：chin yu chang（Party of 2）。預約代號【#8L5ME23WMRFA】。地址：20 bis, Rue de Douai, 75009 Paris。規範：桌位保留 15 分鐘，需提前 48 小時取消，No-show 罰款 15€/人。招牌必點：現刨松露手工義大利麵、窯烤披薩與巨盆提拉米蘇！憑證已存 data/0924_Pink_Mamma_訂位確認憑證.png。",
+    mapQuery: "20bis Rue de Douai 75009 Paris"
   },
   {
     type: "🖼️ 羅浮宮門票",
