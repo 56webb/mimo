@@ -19,6 +19,7 @@ Icon*
 *.pdf
 data/*.pdf
 data/encrypted_vault.json
+vault_secret.json
 
 # Other Projects / Large Dirs
 奇美博物館/

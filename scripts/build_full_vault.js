@@ -1570,11 +1570,21 @@ console.log(`- 私房口袋庫 (pocketPlacesData): ${pocketPlacesData.length} �
 // ==========================================
 // 5. 進行 AES-256-CBC 加密
 // ==========================================
+let geminiApiKey = process.env.GEMINI_API_KEY || "";
+const secretPath = path.join(ROOT_DIR, 'vault_secret.json');
+if (fs.existsSync(secretPath)) {
+  try {
+    const sJson = JSON.parse(fs.readFileSync(secretPath, 'utf8'));
+    geminiApiKey = sJson.geminiApiKey || geminiApiKey;
+  } catch (e) {}
+}
+
 const finalData = {
   itineraryData,
   hotelsData,
   ticketsData,
-  pocketPlacesData
+  pocketPlacesData,
+  geminiApiKey
 };
 
 function sanitizeTaiwanTerms(text) {

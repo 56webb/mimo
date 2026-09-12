@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- 核心樣式 -->
-  <link rel="stylesheet" href="assets/styles/main.css?v=20260912_marais_eats">
+  <link rel="stylesheet" href="assets/styles/main.css?v=20260912_ask_ai">
 </head>
 
 <body>
@@ -514,11 +514,58 @@
     </svg>
   </button>
 
+  <!-- ===== 隨行秘書 AI 問答浮動按鈕 ("我有問題") ===== -->
+  <button class="btn-ask-ai" id="btnAskAi" aria-label="我有問題" title="我有問題・問問隨行秘書">
+    <span class="ask-ai-icon">💬</span>
+    <span class="ask-ai-text">我有問題</span>
+  </button>
+
+  <!-- ===== 隨行秘書 AI 對話視窗 (Ask AI Modal) ===== -->
+  <div class="ai-modal-overlay" id="aiModalOverlay">
+    <div class="ai-modal-container">
+      <div class="ai-modal-header">
+        <div class="ai-header-left">
+          <span class="ai-header-avatar">🥐</span>
+          <div>
+            <div class="ai-header-title">隨行秘書・AI 智能問答</div>
+            <div class="ai-header-subtitle">已掌握 23 天完整行程 ＆ 90 處口袋好店</div>
+          </div>
+        </div>
+        <button class="btn-close-ai" id="btnCloseAi" aria-label="關閉">✕</button>
+      </div>
+
+      <!-- 快捷問題標籤 (Quick Prompts) -->
+      <div class="ai-quick-tags">
+        <button class="ai-tag-chip" onclick="askQuickQuestion('📍 今日住宿與入住須知')">📍 今日住宿</button>
+        <button class="ai-tag-chip" onclick="askQuickQuestion('🅿️ 諾曼第自駕取車地點與停車場密碼')">🅿️ 停車密碼</button>
+        <button class="ai-tag-chip" onclick="askQuickQuestion('🚨 法國緊急救助電話與報警專線')">🚨 緊急電話</button>
+        <button class="ai-tag-chip" onclick="askQuickQuestion('🚇 9/16 CDG機場到巴黎市區交通與Navigo週卡建議')">🚇 機場交通</button>
+        <button class="ai-tag-chip" onclick="askQuickQuestion('🧁 推薦巴黎免排隊的傳奇外帶甜點與千層酥')">🧁 推薦甜點</button>
+      </div>
+
+      <!-- 對話訊息主體區 -->
+      <div class="ai-chat-messages" id="aiChatMessages">
+        <!-- 由 JS 動態插入訊息泡泡 -->
+      </div>
+
+      <!-- 底部輸入列 -->
+      <div class="ai-input-bar">
+        <input type="text" id="aiUserInput" class="ai-input-field" placeholder="問問秘書...例如：9/23 橘園出來買 Goyard 怎麼走？" />
+        <button id="btnSendAi" class="btn-ai-send" aria-label="發送訊息">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== 7. 浮動複製成功提示 (Toast) ===== -->
   <div class="toast-notice" id="toastNotice">✅ 已複製到剪貼簿</div>
 
   <!-- 核心 JavaScript 腳本 -->
-  <script src="js/app.js?v=20260912_marais_eats"></script>
+  <script src="js/app.js?v=20260912_ask_ai"></script>
 </body>
 
 </html>
