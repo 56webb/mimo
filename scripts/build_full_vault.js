@@ -1598,6 +1598,35 @@ montmartreBakeries.forEach(b => {
   if (key) pocketPlacesMap.set(key, b);
 });
 
+// 巴黎傳奇名店 (雙叟咖啡館 & 藍色列車古蹟餐廳)
+const iconicDining = [
+  {
+    category: "coffee",
+    categoryLabel: "☕ 傳奇咖啡",
+    name: "Les Deux Magots (雙叟咖啡館・左岸傳奇文學咖啡)",
+    tag: "coffee",
+    desc: "1885年創立，巴黎左岸雙雄之一，雙叟文學獎發源地！海明威、沙特、畢卡索常客。二樓露台看聖日耳曼德佩教堂廣場最美。必點：Croque-Monsieur 火腿起司三明治、烤蘋果塔、熱巧克力。",
+    address: "6 Place Saint-Germain des Prés, 75006 Paris (花神咖啡館對門)",
+    highlight: "⏰ 每天 07:30–01:00 (無休・夜間營業至凌晨1點) ｜ 必吃：法式火腿起司三明治、經典烤蘋果塔、熱巧克力 ｜ 9/17 試婚紗或 9/21 還婚紗順遊",
+    mapQuery: "Les Deux Magots 6 Place Saint-Germain des Pres Paris"
+  },
+  {
+    category: "food",
+    categoryLabel: "🥩 古蹟法餐",
+    name: "Le Train Bleu (藍色列車・火車站裡的凡爾賽宮)",
+    tag: "food",
+    desc: "1900年萬國博覽會創立國家歷史古蹟！里昂車站1樓大廳，挑高11公尺、41幅壯麗壁畫、水晶吊燈紅絲絨椅宛如凡爾賽宮。必吃：法式魚湯、烤羊腿、橙酒現烤舒芙蕾。平日午間套餐 €48 超划算。",
+    address: "Gare de Lyon, Place Louis Armand Hall 1, 75012 Paris (里昂車站 1 樓大廳)",
+    highlight: "⏰ 午餐 11:30–14:15，晚餐 19:00–22:30 (無休) ｜ 必吃：法式魚湯、烤羊腿、橙皮酒舒芙蕾 ｜ 9/18 楓丹白露宮去回順遊 ｜ 需 Smart casual",
+    mapQuery: "Le Train Bleu Gare de Lyon Paris"
+  }
+];
+
+iconicDining.forEach(d => {
+  const key = (d.name || '').trim().replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+  if (key) pocketPlacesMap.set(key, d);
+});
+
 const pocketPlacesData = Array.from(pocketPlacesMap.values());
 
 console.log(`📊 資料整理彙整結果：`);
