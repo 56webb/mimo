@@ -1333,7 +1333,162 @@ body {
   margin-bottom: 8px;
 }
 
-/* ===== 12. 自駕指南卡片 (Driving SOP Cards) ===== */
+/* ===== 12. 交通指南（巴黎地鐵 Navigo 週卡 ＆ 諾曼第自駕） ===== */
+.navigo-summary-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.navigo-intro-banner {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
+  border: 1px solid rgba(2, 132, 199, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.navigo-intro-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navigo-intro-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.navigo-week-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-whisper);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-spring);
+}
+
+.navigo-week-card.recommend-yes {
+  border-color: rgba(16, 185, 129, 0.45);
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.06) 0%, rgba(17, 24, 39, 0.94) 100%);
+}
+
+.navigo-week-card.recommend-warn {
+  border-color: rgba(225, 29, 72, 0.4);
+  background: linear-gradient(180deg, rgba(225, 29, 72, 0.05) 0%, rgba(17, 24, 39, 0.94) 100%);
+}
+
+.navigo-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.navigo-card-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.navigo-week-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+}
+
+.navigo-week-dates {
+  font-size: 0.82rem;
+  font-family: var(--font-mono);
+  color: var(--accent-ochre);
+}
+
+.navigo-status-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.navigo-status-badge.badge-buy {
+  background: var(--status-emerald-surface);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  color: #34d399;
+}
+
+.navigo-status-badge.badge-suggest {
+  background: var(--accent-ochre-surface);
+  border: 1px solid var(--border-ochre);
+  color: #fbbf24;
+}
+
+.navigo-status-badge.badge-skip {
+  background: var(--status-rose-surface);
+  border: 1px solid rgba(225, 29, 72, 0.4);
+  color: #f87171;
+}
+
+.navigo-section-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.navigo-section-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.navigo-itinerary-desc {
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.6;
+}
+
+.navigo-benefit-box {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  border: 1px solid var(--border-whisper);
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+  line-height: 1.6;
+}
+
+.navigo-timing-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  border-left: 3px solid var(--accent-ochre);
+  line-height: 1.5;
+}
+
+/* ===== 自駕指南卡片 (Driving SOP Cards) ===== */
 .driving-guide-list {
   display: flex;
   flex-direction: column;
