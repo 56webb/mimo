@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- 核心樣式 -->
-  <link rel="stylesheet" href="assets/styles/main.css?v=20260908_compact_vault_v28">
+  <link rel="stylesheet" href="assets/styles/main.css?v=20260911_departure_ready">
 </head>
 
 <body>
@@ -70,8 +70,7 @@
   <div class="search-drawer" id="searchDrawer">
     <div class="search-input-wrapper">
       <span class="search-icon-inside">🔍</span>
-      <input type="text" id="searchInput" class="search-input" placeholder="搜尋密碼、景點、餐廳、飯店或代碼 (如: 奶油, 645504, 迪士尼)..." autocomplete="off">
-      <button type="button" class="btn-clear-search" id="btnClearSearch" onclick="clearSearch()" style="display:none;" title="清除搜尋" aria-label="清除搜尋">✕</button>
+      <input type="text" id="searchInput" class="search-input" placeholder="搜尋密碼、景點、餐廳、飯店或代碼 (如: 645504, 羊肉)...">
     </div>
   </div>
 
@@ -92,13 +91,6 @@
   <!-- ===== 5. 核心分頁內容容器 ===== -->
   <main class="tab-content-area">
 
-    <!-- ── 全站即時跨模組搜尋結果面板 ── -->
-    <section class="tab-view search-results-view" id="view-search-results" style="display: none;">
-      <div id="searchResultsContainer">
-        <!-- 由 JS 動態注入全域搜尋結果 -->
-      </div>
-    </section>
-
     <!-- ── 分頁 1：每日行程時間軸 (Timeline) ── -->
     <section class="tab-view active" id="view-timeline">
       <div id="timelineContainer">
@@ -108,8 +100,14 @@
 
     <!-- ── 分頁 2：住宿與憑證金庫 (Vault) ── -->
     <section class="tab-view" id="view-vault">
-      <div class="vault-container" id="vaultContainer">
-        <!-- 由 JS 渲染分類收合手風琴 (Accordion) -->
+      <h2 class="vault-section-title">🏨 全程 8 大住宿預訂清單</h2>
+      <div class="vault-card-grid" id="hotelVaultGrid">
+        <!-- 由 JS 渲染飯店預約卡片 -->
+      </div>
+
+      <h2 class="vault-section-title" style="margin-top: 32px;">🎟️ 門票・車票與通關憑證</h2>
+      <div class="vault-card-grid" id="ticketVaultGrid">
+        <!-- 由 JS 渲染 莫內門票、凡爾賽宮、羅浮宮、歌劇院、修道院門票、高鐵票等 -->
       </div>
     </section>
 
@@ -117,6 +115,7 @@
     <section class="tab-view" id="view-pocket">
       <div class="pocket-filters" id="pocketFilters">
         <button class="filter-chip active" data-category="all">全部私房</button>
+        <button class="filter-chip" data-category="mall">🏬 百貨購物</button>
         <button class="filter-chip" data-category="kitchen">🍳 廚具烘焙</button>
         <button class="filter-chip" data-category="coffee">☕ 咖啡甜點</button>
         <button class="filter-chip" data-category="food">🥩 必吃法餐</button>
@@ -211,7 +210,7 @@
   <div class="toast-notice" id="toastNotice">✅ 已複製到剪貼簿</div>
 
   <!-- 核心 JavaScript 腳本 -->
-  <script src="js/app.js?v=20260908_global_search_v31"></script>
+  <script src="js/app.js?v=20260911_departure_ready"></script>
 </body>
 
 </html>
