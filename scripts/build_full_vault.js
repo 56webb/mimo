@@ -217,35 +217,35 @@ const itineraryData = [
     date: "9/19",
     weekday: "六",
     title: "法國興業銀行總行 ➔ 巴黎市政廳 ➔ 提早休息準備隔日婚紗",
-    tag: "市區漫步",
-    summary: "欣賞奧斯曼建築穹頂與市政廳，自助洗衣整理，21:30 早睡養膚迎接婚紗日！",
+    tag: "歐洲遺產日",
+    summary: "歐洲遺產日限定開放！探訪興業銀行地下百年傳奇巨型旋轉保險庫與彩繪穹頂、參觀巴黎市政廳金碧輝煌節慶大廳，下午自助洗衣，21:30 早睡養膚迎接婚紗日！",
     keynote: {
-      code: "BB22425273",
-      codeLabel: "B&B 連住第2段代碼",
-      spot: "興業銀行總行 ➔ 巴黎市政廳 ➔ 13區洗衣",
+      code: "歐洲遺產日限定",
+      codeLabel: "年度盛事",
+      spot: "興業銀行百年金庫 ➔ 巴黎市政廳 ➔ 13區洗衣",
       hotel: "B&B HOTEL Paris Italie Porte de Choisy (第4晚)",
       mapQuery: "Societe Generale 29 Boulevard Haussmann Paris"
     },
     items: [
       {
         time: "10:00",
-        title: "參觀法國興業銀行總行（巨大彩繪玻璃大圓頂）",
-        desc: "地址：29 Boulevard Haussmann。走進百年銀行大廳，免費仰望極致華麗的裝飾藝術與鋼構彩繪玻璃巨大穹頂，拍照超壯觀！",
-        badges: ["百年玻璃穹頂", "免費參觀", "奧斯曼大道"],
+        title: "⭐法國興業銀行總行（歐洲遺產日限定地下百年金庫開放！）",
+        desc: "地址：29 Boulevard Haussmann。走進百年銀行大廳，免費仰望極致華麗的 1912 年新藝術鋼構彩繪玻璃穹頂；遺產日特別開放進入地下百年傳奇巨型重裝圓形保險庫 (Le Coffre-fort historique)！",
+        badges: ["歐洲遺產日限定", "百年彩繪玻璃穹頂", "地下神秘金庫"],
         map: "Societe Generale 29 Boulevard Haussmann Paris"
       },
       {
         time: "12:00",
-        title: "巴黎市政廳 (Hôtel de Ville) ＆ 塞納河畔漫步",
-        desc: "欣賞新文藝復興風格的宏偉市政廳大樓，沿著塞納河畔舊書攤 (Bouquinistes) 漫步散心。",
-        badges: ["巴黎市政廳", "塞納河岸", "舊書攤巡禮"],
+        title: "⭐巴黎市政廳 (Hôtel de Ville) 金碧輝煌節慶大廳",
+        desc: "平時嚴禁散客進入的市政廳，遺產日破例免費公開！走進極致奢華的「節慶大廳 (Salle des Fêtes)」，水晶巨燈與金箔浮雕壁畫媲美凡爾賽鏡廳！",
+        badges: ["遺產日限定開放", "節慶大廳", "媲美凡爾賽鏡廳"],
         map: "Hotel de Ville Paris"
       },
       {
         time: "15:00",
         title: "13 區自助洗衣店洗曬衣物 ＆ 備齊明日婚紗用品",
-        desc: "回飯店旁洗衣店洗烘衣物，備妥明日婚紗配件（平底便鞋、保暖披肩、隱形胸罩 NuBra、吸管防脫妝）。",
-        badges: ["自助洗衣", "檢查拍攝備品", "準備便鞋"],
+        desc: "回飯店旁洗衣店洗烘衣物，備妥明日婚紗配件（平底便鞋、保暖披肩、隱形胸罩 NuBra、吸管防脫妝、€2,500 歐元現鈔尾款）。",
+        badges: ["自助洗衣", "檢查拍攝備品", "準備便鞋與尾款"],
         map: ""
       },
       {
@@ -372,15 +372,15 @@ const itineraryData = [
   {
     date: "9/22",
     weekday: "二",
-    title: "奧塞美術館 ➔ 巴黎聖母院內部 ➔ 先賢祠 ➔ 塞納河遊船",
+    title: "奧塞美術館 ➔ 聖母院內部 ➔ 先賢祠 ➔ 17:30 Polène樂蓬馬歇專櫃 ➔ 油封鴨晚餐",
     tag: "印象派殿堂",
-    summary: "欣賞奧塞美術館莫內與梵谷名畫，走進聖母院內部，登上先賢祠遠眺！",
+    summary: "欣賞奧塞美術館莫內與梵谷名畫，走進聖母院內部，登上先賢祠遠眺，傍晚前往樂蓬馬歇專櫃免排長隊買 Polène 包包並合併退稅！",
     keynote: {
       code: "博物館通票第2日",
       codeLabel: "票券使用",
-      spot: "奧塞美術館 ➔ 聖母院 ➔ 先賢祠 ➔ 塞納河",
+      spot: "奧塞美術館 ➔ 聖母院 ➔ 先賢祠 ➔ Polène樂蓬馬歇",
       hotel: "B&B HOTEL Paris Italie Porte de Choisy (第7晚)",
-      mapQuery: "Musee d Orsay Paris"
+      mapQuery: "Le Bon Marche Paris"
     },
     items: [
       {
@@ -393,7 +393,7 @@ const itineraryData = [
       {
         time: "13:30",
         title: "巴黎聖母院 (Cathédrale Notre-Dame de Paris) 內部參觀",
-        desc: "浴火重生後全新開放！仰望玫瑰花窗與莊嚴宏偉的中世紀石造中殿，感受奇蹟般的修復成果。",
+        desc: "浴火重生後全新開放！仰望玫瑰花窗與莊嚴宏偉的中世紀石造中殿，感受奇蹟般的修復成果。（手機 Notre-Dame App 預約 14:35 場次）",
         badges: ["2024全新開放", "玫瑰花窗", "哥德經典"],
         map: "Notre-Dame de Paris"
       },
@@ -405,11 +405,18 @@ const itineraryData = [
         map: "Pantheon Paris"
       },
       {
-        time: "18:00",
-        title: "塞納河觀光遊船欣賞金色巴黎晚霞",
-        desc: "搭乘觀光遊船滑過塞納河，穿過一座座古老石橋，遠眺沿岸古蹟與落日餘暉染紅巴黎天際線。",
-        badges: ["塞納河遊船", "落日金色晚霞", "浪漫水岸"],
-        map: "Bateaux Mouches Paris"
+        time: "17:30",
+        title: "⭐Polène 左岸樂蓬馬歇專櫃（Le Bon Marché 0樓）",
+        desc: "全巴黎排隊時間最短的門市（通常 5-10 分鐘即可進櫃看包）！購買後可順道逛百年貴婦超市 (La Grande Épicerie)，並在百貨退稅服務台合併累計退稅（營業至 19:45）。",
+        badges: ["免大排長隊", "全系列包款", "百貨合併退稅"],
+        map: "Le Bon Marche Paris"
+      },
+      {
+        time: "19:30",
+        title: "拉丁區巷弄小酒館享用高性價比傳統法式油封鴨晚餐",
+        desc: "外皮酥脆金黃、肉質軟嫩多汁的傳統油封鴨腿佐香煎馬鈴薯，漫步塞納河畔欣賞初秋巴黎夜景。",
+        badges: ["傳統油封鴨", "高性價比", "塞納河夜景"],
+        map: "Quartier Latin Paris"
       }
     ],
     coverImage: "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800&auto=format&fit=crop&q=80"
@@ -1318,13 +1325,84 @@ const hotelsData = [
 // ==========================================
 const ticketsData = [
   {
+    type: "🍽️ 人氣名店訂位",
+    title: "Chez Janou 瑪黑區南法小酒館 (已預約 16:00 專屬席)",
+    datetime: "2026/09/21 (一) 16:00 準時入座",
+    status: "✅ 已確認預約 (專屬席)",
+    code: "Chez Janou 16:00",
+    file: "",
+    note: "瑪黑區超人氣南法小酒館！招牌必點：普羅旺斯焗烤蝸牛、香煎干貝牛肝菌燉飯、油封鴨肉，以及整盆無限挖的「招牌巨盆巧克力慕斯」！",
+    mapQuery: "Chez Janou Paris"
+  },
+  {
+    type: "🖼️ 羅浮宮門票",
+    title: "羅浮宮博物館全日深度參觀門票 (Musée du Louvre · 雙人)",
+    datetime: "2026/09/23 (三) 12:30 入場（週三夜間開放至 21:00）",
+    status: "✅ 已預訂確認",
+    code: "V260782031751 (訂單: C262540015444)",
+    file: "0923_羅浮宮_雙人門票預約憑證.pdf",
+    note: "已存 data/0923_羅浮宮_雙人門票預約憑證.pdf。建議走卡魯塞爾地下通道 (Carrousel du Louvre) 進館避開地面排隊人潮！週三夜間開放至 21:00，出館欣賞科幻金字塔夜景。",
+    mapQuery: "Carrousel du Louvre Paris"
+  },
+  {
     type: "🎭 歌劇院夜導",
     title: "加尼葉歌劇院閉館夜間導覽 (The Mysteries of the Palais Garnier · 雙人)",
     datetime: "2026/09/24 (四) 16:30 集合 ➔ 17:00 英文導覽",
     status: "✅ 已全額付清 (84€)",
     code: "op07092026-932770962",
+    file: "",
     note: "免列印紙本。16:30 提早 30 分抵達，位於 rue Scribe 與 rue Auber 轉角之「夏爾·加尼葉雕像」後方專屬入口進場，出示 Email 電子憑證換票。現場嚴禁大行李。",
     mapQuery: "Palais Garnier"
+  },
+  {
+    type: "🚅 高鐵車票",
+    title: "SNCF TGV 高鐵 (巴黎蒙帕納斯 ➔ 雷恩)",
+    datetime: "2026/09/25 (五) 06:48 - 08:15",
+    status: "✅ 已購票 (68€ 雙人)",
+    code: "4WCP2R",
+    file: "0925_SNCF高鐵_巴黎至雷恩雙人車票.png",
+    note: "06:48 Paris Montparnasse 準時發車，08:15 抵達 Rennes 雷恩站準備取車。截圖存於 data/0925_SNCF高鐵_巴黎至雷恩雙人車票.png。",
+    mapQuery: "Gare Montparnasse"
+  },
+  {
+    type: "🚗 租車憑證",
+    title: "Sixt 諾曼第自駕租車 (Peugeot 3008 休旅)",
+    datetime: "2026/09/25 08:30 雷恩取 ➔ 09/30 18:30 迪士尼還",
+    status: "✅ 已付清 (624.46€ 零自付全險)",
+    code: "9738701348",
+    file: "",
+    note: "雷恩北站 Effia 車庫 0 樓電梯密碼【6060】上 7 樓取車。9/30 迪士尼 Chessy 站 Sixt 櫃檯滿油還車。",
+    mapQuery: "Gare de Rennes"
+  },
+  {
+    type: "🎧 語音導覽",
+    title: "聖米歇爾山官方語音導覽 (VoiceMap)",
+    datetime: "2026/09/26 (六) 07:30 漫步使用",
+    status: "✅ 免費兌換",
+    code: "0B6CBA60",
+    file: "",
+    note: "下載 VoiceMap App ➔ Visit codes ➔ 輸入【0B6CBA60】下載離線音檔，自備耳機漫步修道院岩山！",
+    mapQuery: "Mont Saint-Michel France"
+  },
+  {
+    type: "🍽️ 景觀餐廳訂位",
+    title: "La Ferme Saint-Michel 黑面鹽沼羊午餐",
+    datetime: "2026/09/26 (六) 14:00 午餐",
+    status: "✅ 已確認預約 (Chin Yu)",
+    code: "645504",
+    file: "",
+    note: "道閘螢幕輸入密碼【645504】進場停餐廳專屬車位，保管 Ticket，離場機器刷付 10€ 通行費。",
+    mapQuery: "La Ferme Saint-Michel"
+  },
+  {
+    type: "🍽️ 百年老店訂位",
+    title: "盧昂 La Couronne 1345 百年老餐廳 (法式晚餐)",
+    datetime: "2026/09/27 (日) 20:00 晚餐",
+    status: "✅ 已確認預約 (2 位成人)",
+    code: "790B-8602-147D-CA61",
+    file: "",
+    note: "創立於 1345 年全法最古老小酒館，位於聖女貞德舊市集廣場 31 號。享用傳統諾曼第法餐配蘋果白蘭地。",
+    mapQuery: "La Couronne Rouen"
   },
   {
     type: "🌸 景點門票",
@@ -1332,6 +1410,7 @@ const ticketsData = [
     datetime: "2026/09/29 (二) 10:00 入場",
     status: "✅ 已購票 (27€)",
     code: "2624364336390402463",
+    file: "0929_吉維尼莫內花園_雙人電子門票.pdf",
     note: "已存放 data/0929_吉維尼莫內花園_雙人電子門票.pdf。10:00 時段由 Door n°1 bis 快速通關掃描進園，直奔水上花園拍倒影日本橋與睡蓮池。",
     mapQuery: "Fondation Claude Monet Giverny"
   },
@@ -1341,6 +1420,7 @@ const ticketsData = [
     datetime: "2026/09/30 (三) 09:00 第一場入場",
     status: "✅ 已購票 (70€)",
     code: "200517457",
+    file: "0930_凡爾賽宮_全通票與大運河午餐憑證.pdf",
     note: "已存放 data/0930_凡爾賽宮_全通票與大運河午餐憑證.pdf。由 Entrée A (Pavillon Dufour) 掃描入場，一開門直衝 2 樓拍無人鏡廳！包含特里亞農宮與大花園 (票號: 1988144322, 1747818662)。",
     mapQuery: "Chateau de Versailles"
   },
@@ -1350,62 +1430,9 @@ const ticketsData = [
     datetime: "2026/09/30 (三) 12:00 專屬預約席",
     status: "✅ 已預約已付款 (70€)",
     code: "200517457",
+    file: "0930_凡爾賽宮_全通票與大運河午餐憑證.pdf",
     note: "集合地點：大運河畔租船處對面 (point de location de la Petite Venise, au bord du Grand Canal)。雙人點法：一人前菜+主菜、一人主菜+甜點+咖啡！推：紅酒燉牛頰肉寬麵、松露披薩、提拉米蘇 (票號: 1315255964, 1641052700)。",
     mapQuery: "La Petite Venise Versailles France"
-  },
-  {
-    type: "🖼️ 羅浮宮門票",
-    title: "羅浮宮博物館全日深度參觀門票 (Musée du Louvre · 雙人)",
-    datetime: "2026/09/23 (三) 12:30 入場（週三夜間開放至 21:00）",
-    status: "✅ 已預訂確認",
-    code: "V260782031751 (訂單: C262540015444)",
-    note: "已存 data/0923_羅浮宮_雙人門票預約憑證.pdf。建議走卡魯塞爾地下通道 (Carrousel du Louvre) 進館避開地面排隊人潮！週三夜間開放至 21:00，出館欣賞科幻金字塔夜景。",
-    mapQuery: "Carrousel du Louvre Paris"
-  },
-  {
-    type: "🚗 租車憑證",
-    title: "Sixt 諾曼第自駕租車 (Peugeot 3008 休旅)",
-    datetime: "2026/09/25 08:30 雷恩取 ➔ 09/30 18:30 迪士尼還",
-    status: "✅ 已付清 (624.46€ 零自付全險)",
-    code: "9738701348",
-    note: "雷恩北站 Effia 車庫 0 樓電梯密碼【6060】上 7 樓取車。9/30 迪士尼 Chessy 站 Sixt 櫃檯滿油還車。",
-    mapQuery: "Gare de Rennes"
-  },
-  {
-    type: "🚅 高鐵車票",
-    title: "SNCF TGV 高鐵 (巴黎蒙帕納斯 ➔ 雷恩)",
-    datetime: "2026/09/25 (五) 06:48 - 08:15",
-    status: "✅ 已購票 (68€ 雙人)",
-    code: "4WCP2R",
-    note: "06:48 Paris Montparnasse 準時發車，08:15 抵達 Rennes 雷恩站準備取車。截圖存於 data/0925_SNCF高鐵_巴黎至雷恩雙人車票.png。",
-    mapQuery: "Gare Montparnasse"
-  },
-  {
-    type: "🎧 語音導覽",
-    title: "聖米歇爾山官方語音導覽 (VoiceMap)",
-    datetime: "2026/09/26 (六) 07:30 漫步使用",
-    status: "✅ 免費兌換",
-    code: "0B6CBA60",
-    note: "下載 VoiceMap App ➔ Visit codes ➔ 輸入【0B6CBA60】下載離線音檔，自備耳機漫步修道院岩山！",
-    mapQuery: "Mont Saint-Michel France"
-  },
-  {
-    type: "🍽️ 百年老店訂位",
-    title: "盧昂 La Couronne 1345 百年老餐廳 (法式晚餐)",
-    datetime: "2026/09/27 (日) 20:00 晚餐",
-    status: "✅ 已確認預約 (2 位成人)",
-    code: "790B-8602-147D-CA61",
-    note: "創立於 1345 年全法最古老小酒館，位於聖女貞德舊市集廣場 31 號。享用傳統諾曼第法餐配蘋果白蘭地。",
-    mapQuery: "La Couronne Rouen"
-  },
-  {
-    type: "🍽️ 景觀餐廳訂位",
-    title: "La Ferme Saint-Michel 黑面鹽沼羊午餐",
-    datetime: "2026/09/26 (六) 14:00 午餐",
-    status: "✅ 已確認預約 (Chin Yu)",
-    code: "645504",
-    note: "道閘螢幕輸入密碼【645504】進場停餐廳專屬車位，保管 Ticket，離場機器刷付 10€ 通行費。",
-    mapQuery: "La Ferme Saint-Michel"
   }
 ];
 
