@@ -786,4 +786,30 @@ document.addEventListener('DOMContentLoaded', () => {
       renderPocketPlaces(cat);
     });
   });
+
+  // 回到最上面 (Back to Top) 浮動按鈕邏輯
+  const btnBackToTop = document.getElementById('btnBackToTop');
+  if (btnBackToTop) {
+    let isScrollingTicking = false;
+    window.addEventListener('scroll', () => {
+      if (!isScrollingTicking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 260) {
+            btnBackToTop.classList.add('show');
+          } else {
+            btnBackToTop.classList.remove('show');
+          }
+          isScrollingTicking = false;
+        });
+        isScrollingTicking = true;
+      }
+    }, { passive: true });
+
+    btnBackToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
 });
