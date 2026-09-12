@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- 核心樣式 -->
-  <link rel="stylesheet" href="assets/styles/main.css?v=20260912_secretary_pro">
+  <link rel="stylesheet" href="assets/styles/main.css?v=20260912_transit_guide">
 </head>
 
 <body>
@@ -146,8 +146,167 @@
       </div>
 
       <div class="transit-accordion-group">
+        <!-- 摺疊 0：💳 巴黎四大常見交通票卡詳細費用、限制與精算全攻略 (2025-2026 最新單一票價版) -->
+        <details class="transit-accordion" id="acc-pass-comparison" open>
+          <summary class="transit-accordion-summary">
+            <div class="transit-summary-left">
+              <span class="transit-summary-icon">💳</span>
+              <div class="transit-summary-text">
+                <span class="transit-summary-title">巴黎四大交通票卡費用與精算全攻略 <span class="transit-summary-badge" style="background: rgba(201,160,99,0.2); color: var(--accent-ochre); border-color: var(--border-ochre);">2025-2026 新制</span></span>
+                <span class="transit-summary-subtitle">Navigo Easy ｜ 週卡 ｜ 一日票 ｜ 觀光卡 ｜ 避坑選購策略</span>
+              </div>
+            </div>
+            <svg class="transit-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </summary>
+          <div class="transit-accordion-content">
+            <!-- 2025-2026 大巴黎單一票價大改革摘要 -->
+            <div class="transit-reform-banner">
+              <div class="transit-reform-title">
+                <span>🚀 2025-2026 大巴黎單一票價大改革 (Tarification Unique) 核心要點</span>
+              </div>
+              <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.5;">
+                大巴黎交通總局（Île-de-France Mobilités）全面簡化複雜的環狀圈數計費，改採單一均一票價：
+              </div>
+              <div class="transit-reform-badges">
+                <div class="transit-reform-pill">🚇 <strong>€2.50</strong> 地鐵 ＆ 全區 RER/火車單程（不進出機場全區均一價）</div>
+                <div class="transit-reform-pill">🚌 <strong>€2.00</strong> 市區公車 ＆ 路面電車 (Tramway) 單程</div>
+                <div class="transit-reform-pill">✈️ <strong>€13.00</strong> 機場專用票（戴高樂 CDG / 奧利 Orly 14號線單程）</div>
+              </div>
+            </div>
+
+            <!-- 四大票卡快速比價總表 (橫向滾動) -->
+            <div class="transit-table-scroll">
+              <table class="transit-compare-table">
+                <thead>
+                  <tr>
+                    <th>票卡種類</th>
+                    <th>卡片工本費</th>
+                    <th>方案票價</th>
+                    <th>涵蓋範圍與專屬線路</th>
+                    <th>限制與規則</th>
+                    <th>試算與最推薦族群</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1. Navigo Easy</strong><br><span style="font-size:0.72rem;color:var(--text-muted);">儲值感應卡</span></td>
+                    <td>€2.00<br><span style="font-size:0.72rem;color:#34d399;">非記名可轉借</span></td>
+                    <td>按次扣款：<br>• 地鐵/RER €2.50<br>• 公車/電車 €2.00<br>• 機場票 €13.00</td>
+                    <td>大巴黎地鐵、市區公車、輕軌、境內 RER 與火車。</td>
+                    <td><strong>同行需一人一卡</strong>，無法單卡連續感應讓兩人同時進站。</td>
+                    <td>單日搭乘 <strong>1～4 次</strong>最省。<br>若搭 5 次 ($2.5 \times 5 = €12.5$) 已超過一日票。</td>
+                  </tr>
+                  <tr class="highlight">
+                    <td><strong>2. Navigo 週卡</strong><br><span style="font-size:0.72rem;color:var(--accent-ochre);">Semaine (通票)</span></td>
+                    <td>€5.00<br><span style="font-size:0.72rem;color:#38bdf8;">手機開卡免工本費</span></td>
+                    <td><strong>€32.40</strong> / 週<br><span style="font-size:0.72rem;color:var(--text-muted);">(月卡 €91.00)</span></td>
+                    <td><strong>Zone 1～5 全區無限搭</strong>：含戴高樂機場 RER B、奧利機場 14 號線、凡爾賽宮、迪士尼、楓丹白露。</td>
+                    <td>固定<strong>週一 00:00 至週日 23:59</strong>。實體卡<strong>必須簽名並貼 1 吋大頭照</strong>，未貼視同無效罰 €35～€50！</td>
+                    <td>⭐ <strong>蜜月最強首選！</strong><br>停留 2 天以上且有機場來回需求者光速回本（機場來回 €26 + 地鐵 €7.5 = €33.5 > 週卡）。</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3. Navigo Jour</strong><br><span style="font-size:0.72rem;color:var(--text-muted);">一日吃到飽通票</span></td>
+                    <td>需存入 Easy 卡或手機錢包</td>
+                    <td>約 <strong>€12.00</strong> / 天</td>
+                    <td>當日巴黎 1～5 圈大眾運輸無限次搭乘。</td>
+                    <td>⚠️ <strong>完全不包含機場線！</strong>不能搭去戴高樂機場或奧利機場。</td>
+                    <td>單日市區搭乘 <strong>5 次以上</strong>且當天無機場行程者。外縣市搭高鐵進巴黎一日遊適合。</td>
+                  </tr>
+                  <tr>
+                    <td><strong>4. Paris Visite</strong><br><span style="font-size:0.72rem;color:var(--text-muted);">觀光遊客全包卡</span></td>
+                    <td>無（內含紙卡/晶片）</td>
+                    <td>1天 €29.90<br>2天 €44.45<br>3天 €62.30<br>5天 €76.25</td>
+                    <td>Zone 1～5 全區大眾交通，<strong>唯一包含私營 Orlyval 專線</strong>與機場直達。</td>
+                    <td>可自由指定啟用連續天數。特約收費景點憑票根享 10%～20% 折扣。</td>
+                    <td>純交通性價比偏低。僅適合「只快閃 1 天且往返機場」或能在 3 天內瘋狂刷特約景點門票打折者。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 四大票卡實戰小卡 (Bento Grid) -->
+            <div class="pass-cards-grid">
+              <!-- Card 1 -->
+              <div class="pass-detail-card">
+                <div class="pass-detail-header">
+                  <span class="pass-detail-title">💳 1. Navigo Easy 儲值卡</span>
+                  <span class="pass-detail-price">空卡 €2.00</span>
+                </div>
+                <div class="pass-meta-list">
+                  <div>• <strong>扣款費率</strong>：地鐵/境內RER 單程 €2.50 ｜ 公車/輕軌 單程 €2.00 ｜ 機場專用票 €13.00</div>
+                  <div>• <strong>轉讓與人數</strong>：不記名卡片，可借他人使用；但同行者<strong>必須一人持一卡</strong>，不能用同一張卡連續感應進站兩次。</div>
+                  <div>• <strong>適用族群</strong>：單日搭乘次數少於 5 次，或自駕週/返台週只需搭 1~2 趟地鐵者。</div>
+                </div>
+                <div class="pass-calc-box">
+                  📊 <strong>精算試算</strong>：搭 1～4 次地鐵花費 €2.5～€10；搭 5 次即達 €12.50，直接超過一日票 (€12)。
+                </div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="pass-detail-card featured">
+                <div class="pass-detail-header">
+                  <span class="pass-detail-title">👑 2. Navigo Découverte 週卡</span>
+                  <span class="pass-detail-price">週卡 €32.40</span>
+                </div>
+                <div class="pass-meta-list">
+                  <div>• <strong>涵蓋範圍</strong>：巴黎 1～5 圈全包（含 CDG 機場 RER B、奧利機場 14 號線、凡爾賽宮、迪士尼、楓丹白露）。</div>
+                  <div>• <strong>嚴格自然週週期</strong>：固定為<strong>每週一 00:00 至週日 23:59</strong>（非自購買日起算 7 天！週五 00:00 起系統自動開賣下週）。</div>
+                  <div>• <strong>防罰款地雷</strong>：實體卡套<strong>務必親筆簽名並貼上 1 吋大頭照</strong>，未貼照片會被查票員當場開罰 €35～€50！</div>
+                </div>
+                <div class="pass-calc-box">
+                  💡 <strong>避坑祕技</strong>：強烈建議直接用 <strong>iPhone「錢包」App 點選「+」加入交通卡</strong>（或 Android 官方 App），<strong>免 €5 工本費、免排隊、免貼大頭照</strong>！
+                </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="pass-detail-card">
+                <div class="pass-detail-header">
+                  <span class="pass-detail-title">🎫 3. Navigo Jour 一日票</span>
+                  <span class="pass-detail-price">€12.00 / 天</span>
+                </div>
+                <div class="pass-meta-list">
+                  <div>• <strong>適用形式</strong>：需儲值於 Navigo Easy 實體卡或手機虛擬交通卡中。</div>
+                  <div>• <strong>適用範圍</strong>：當日巴黎 1～5 圈大眾運輸無限次搭乘。</div>
+                  <div>• ⚠️ <strong>重大限制</strong>：<strong>不支援機場線扣款！</strong>往返戴高樂或奧利機場無法使用此一日票。</div>
+                </div>
+                <div class="pass-calc-box">
+                  ⚠️ <strong>機場致命陷阱</strong>：機場來回票 ($13 \times 2 = €26$) 加上一日票 (€12) 總額高達 €38，比買整週吃到飽的週卡 (€32.40) 還貴！往返機場千萬別買一日票。
+                </div>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="pass-detail-card">
+                <div class="pass-detail-header">
+                  <span class="pass-detail-title">🏛️ 4. Paris Visite 觀光卡</span>
+                  <span class="pass-detail-price">€29.90～€76.25</span>
+                </div>
+                <div class="pass-meta-list">
+                  <div>• <strong>版本與天數</strong>：1-5 圈全區版本分為 1天 (€29.90)、2天 (€44.45)、3天 (€62.30)、5天 (€76.25)。</div>
+                  <div>• <strong>專屬優勢</strong>：唯一包含私人營運的 Orlyval 機場專線接駁車，並享有凱旋門、先賢祠等特約景點門票 10%～20% 折扣。</div>
+                  <div>• <strong>評語</strong>：純粹以交通成本而言性價比極低，大部分行程直接選 Navigo 週卡划算非常多。</div>
+                </div>
+                <div class="pass-calc-box">
+                  🎯 <strong>唯一適用情況</strong>：只在巴黎快閃 1 天且當天需往返機場，或能在短時間內密集參觀特約折扣景點者。
+                </div>
+              </div>
+            </div>
+
+            <!-- 核心比價邏輯與選卡策略決策樹 -->
+            <div class="strategy-decision-box">
+              <div class="strategy-decision-title">
+                <span>🎯 2026 法國行・秘書精算選卡決策指南</span>
+              </div>
+              <div>
+                <strong>① 單日市區短程</strong>：單日搭乘 1～4 次 ➔ 手機悠遊卡單次扣款 (€2.5/次)；搭乘 5 次（含）以上 ➔ 買一日票 (€12)。<br>
+                <strong>② 進出機場 ＋ 停留 2 天以上</strong>：唯一正解直接選擇 <strong>Navigo 週卡 (€32.40)</strong>！機場單程票現已漲至 €13（來回 €26），加上市區地鐵隨便搭 3 趟 (€7.5) 就達 €33.5，買週卡直接倒賺省下費用，且整週 1-5 圈完全吃到飽！<br>
+                <strong>③ 手機用戶最優先</strong>：夫妻各自用 iPhone「錢包」App 點選「+」加入 Navigo 交通卡，免去排隊與攜帶大頭照的繁瑣程序，進出站免解鎖「嗶」一下就過！
+              </div>
+            </div>
+          </div>
+        </details>
+
         <!-- 摺疊 1：📱 手機虛擬卡（Apple Wallet / Google 錢包）設定指南 -->
-        <details class="transit-accordion" id="acc-phone-setup" open>
+        <details class="transit-accordion" id="acc-phone-setup">
           <summary class="transit-accordion-summary">
             <div class="transit-summary-left">
               <span class="transit-summary-icon">📱</span>
@@ -278,7 +437,7 @@
               <span class="transit-summary-icon">🚇</span>
               <div class="transit-summary-text">
                 <span class="transit-summary-title">Navigo 週卡 4 週購買建議總表</span>
-                <span class="transit-summary-subtitle">Zone 1-5 全區 €30.75 ｜ 該買 vs 不該買 完整分析</span>
+                <span class="transit-summary-subtitle">Zone 1-5 全區 €32.40 ｜ 該買 vs 不該買 完整分析</span>
               </div>
             </div>
             <svg class="transit-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -289,7 +448,7 @@
               <div class="navigo-intro-desc">
                 • <strong>有效期間</strong>：固定為<strong>每週一 00:00 至週日 23:59</strong>（非自購買日起算 7 天）。<br>
                 • <strong>購買截止</strong>：當週週卡最晚必須在<strong>週四 23:59 前</strong>購買完畢；週五 00:00 起系統自動切換為販售「下週」週卡。<br>
-                • <strong>範圍與票價</strong>：Zone 1-5 全區每張 <strong>€30.75</strong>，無限次搭乘 RER、地鐵、公車、路面電車與 Transilien 郊區火車（含戴高樂機場 RER B 與楓丹白露）。
+                • <strong>範圍與票價</strong>：Zone 1-5 全區每張 <strong>€32.40</strong>，無限次搭乘 RER、地鐵、公車、路面電車與 Transilien 郊區火車（含戴高樂機場 RER B 與楓丹白露）。
               </div>
             </div>
 
@@ -315,10 +474,10 @@
                 </div>
                 <div class="navigo-benefit-box">
                   <strong>📈 效益分析（光速回本）：</strong><br>
-                  ① 9/16 機場 RER B 到市區（單程 €11.80）。<br>
+                  ① 9/16 機場 RER B 到市區（單程 €13.00）。<br>
                   ② 9/18 楓丹白露宮 Transilien R 線（第 5 圈，單程約 €5.00，來回 €10.00）。<br>
                   ③ 9/16–9/20 市區頻繁搭乘地鐵與路面電車。<br>
-                  👉 單獨購票總額超過 €50，買週卡 (€30.75) 現省超過 €20！
+                  👉 單獨購票總額超過 €50，買週卡 (€32.40) 現省超過 €20！
                 </div>
                 <div class="navigo-timing-box">
                   ⏰ <strong>最佳購買/儲值時間：</strong>9/11 (五) ～ 9/15 (二) 出發前（⚠️ 最晚需在 9/17 週四 23:59 前購買完成）
@@ -373,7 +532,7 @@
                 <div class="navigo-benefit-box">
                   <strong>📈 效益分析（買週卡會虧錢）：</strong><br>
                   • 9/28–9/30 全程自駕，完全用不到巴黎地鐵。<br>
-                  • 10/1–10/2 住在 Residhome，前往迪士尼搭 RER A 僅 1 站（單程僅約 €2.15）。<br>
+                  • 10/1–10/2 住在 Residhome，前往迪士尼搭 RER A 僅 1 站（單程 €2.50）。<br>
                   • 10/3 迪士尼搭 RER A 回市區＋10/4 逛街，以 Navigo Easy 儲值單獨扣款更划算。
                 </div>
                 <div class="navigo-timing-box">
@@ -400,7 +559,7 @@
                 </div>
                 <div class="navigo-benefit-box">
                   <strong>📈 效益分析：</strong><br>
-                  這週在巴黎僅需搭乘一趟 10/5 從市區至戴高樂機場的 RER B 單程車票（約 €11.80），買週卡 (€30.75) 會倒虧近 €19。
+                  這週在巴黎僅需搭乘一趟 10/5 從市區至戴高樂機場的 RER B 單程車票 (€13.00)，買週卡 (€32.40) 會倒虧近 €19.40。
                 </div>
                 <div class="navigo-timing-box">
                   ⏰ <strong>建議方案：</strong>10/5 當天在市區車站機台購買 1 張往 CDG 機場的 RER B 單程票即可。
@@ -565,7 +724,7 @@
   <div class="toast-notice" id="toastNotice">✅ 已複製到剪貼簿</div>
 
   <!-- 核心 JavaScript 腳本 -->
-  <script src="js/app.js?v=20260912_secretary_pro"></script>
+  <script src="js/app.js?v=20260912_transit_guide"></script>
 </body>
 
 </html>
