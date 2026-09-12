@@ -90,9 +90,47 @@ async function decryptVault(password) {
 }
 
 // ==========================================
-// 1. 狀態管理與變數
+// 1. 智慧時間狀態管理與變數
 // ==========================================
-let currentSelectedDate = '9/26'; // 預設聚焦自駕高光日 (可自由切換)
+// 依當前日期時間智慧定向：
+// - 9/15 之前 -> 9/15
+// - 9/15 當天 -> 9/15
+// - 9/15 22:00 之後 -> 9/16
+// - 9/16 當天 -> 9/16
+// - 10/7 22:00 之後 或 10/7 以後 -> 9/15
+function calculateDefaultFocusDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const hours = now.getHours();
+
+  // 1. 2026 年 9/15 之前：轉到 9/15
+  if (year < 2026 || (year === 2026 && (month < 9 || (month === 9 && day < 15)))) {
+    return '9/15';
+  }
+
+  // 2. 2026 年 10/7 22:00 之後 或 10/7 以後：旅程結束轉回 9/15
+  if (year > 2026 || (year === 2026 && (month > 10 || (month === 10 && (day > 7 || (day === 7 && hours >= 22)))))) {
+    return '9/15';
+  }
+
+  // 3. 2026/09/15 ~ 2026/10/07 旅行期間：
+  // 晚上 22:00 之後 -> 自動轉向隔天行程；未滿 22:00 -> 當天行程
+  let target = new Date(now);
+  if (hours >= 22) {
+    target.setDate(target.getDate() + 1);
+  }
+
+  const targetDateStr = `${target.getMonth() + 1}/${target.getDate()}`;
+  if (itineraryData && itineraryData.length > 0) {
+    const matched = itineraryData.find(d => d.date === targetDateStr);
+    if (matched) return matched.date;
+  }
+  return '9/15';
+}
+
+let currentSelectedDate = calculateDefaultFocusDate();
 let currentTab = 'timeline';
 
 // ==========================================
@@ -511,12 +549,21 @@ function toggleTheme() {
 }
 
 function renderAllViews() {
+  currentSelectedDate = calculateDefaultFocusDate();
   renderDateCarousel();
   renderKeynoteCard(currentSelectedDate);
   renderTimeline(currentSelectedDate);
   renderHotelVault();
   renderTicketVault();
   renderPocketPlaces('all');
+
+  // 自動平滑捲動膠囊列表，將焦點日期置中
+  setTimeout(() => {
+    const activePill = document.querySelector(`.date-pill[data-date="${currentSelectedDate}"]`);
+    if (activePill) {
+      activePill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }, 150);
 }
 
 // ==========================================
