@@ -498,6 +498,16 @@ function showToast(message) {
   }, 2400);
 }
 
+// (8-1) 交通指南手風琴全開 / 全關
+function toggleAllAccordions(open) {
+  const accordions = document.querySelectorAll('#view-driving .transit-accordion');
+  accordions.forEach(acc => {
+    acc.open = open;
+  });
+}
+window.toggleAllAccordions = toggleAllAccordions;
+
+
 // ==========================================
 // 3. 互動與導覽控制
 // ==========================================

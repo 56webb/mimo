@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- 核心樣式 -->
-  <link rel="stylesheet" href="assets/styles/main.css?v=20260912_transit_guide">
+  <link rel="stylesheet" href="assets/styles/main.css?v=20260912_transit_accordion">
 </head>
 
 <body>
@@ -139,189 +139,349 @@
         <a href="tel:112" class="btn-sos-call">撥打 112</a>
       </div>
 
-      <!-- 🚇 巴黎大眾交通 ＆ Navigo 週卡購買策略總表 -->
-      <h2 class="vault-section-title">🚇 巴黎地鐵 ＆ Navigo 週卡購買建議總表</h2>
-
-      <div class="navigo-intro-banner">
-        <div class="navigo-intro-title">💡 Navigo 週卡 (Semaine) 核心規則須知</div>
-        <div class="navigo-intro-desc">
-          • <strong>有效期間</strong>：固定為<strong>每週一 00:00 至週日 23:59</strong>（非自購買日起算 7 天）。<br>
-          • <strong>購買截止</strong>：當週週卡最晚必須在<strong>週四 23:59 前</strong>購買完畢；週五 00:00 起系統自動切換為販售「下週」週卡。<br>
-          • <strong>範圍與票價</strong>：Zone 1-5 全區每張 <strong>€30.75</strong>，無限次搭乘 RER、地鐵、公車、路面電車與 Transilien 郊區火車（含戴高樂機場 RER B 與楓丹白露）。可使用 iPhone / Android 官方 App (Île-de-France Mobilités) 逼卡感應或購買實體卡。
-        </div>
+      <!-- 控制列：全部展開 / 全部收合 -->
+      <div class="accordion-controls">
+        <button type="button" class="btn-accordion-toggle" onclick="toggleAllAccordions(true)">展開全部</button>
+        <button type="button" class="btn-accordion-toggle" onclick="toggleAllAccordions(false)">收合全部</button>
       </div>
 
-      <div class="navigo-summary-container">
-        <!-- 第 1 張週卡 -->
-        <div class="navigo-week-card recommend-yes">
-          <div class="navigo-card-header">
-            <div class="navigo-card-title-group">
-              <span class="navigo-week-title">第 1 張週卡・初抵巴黎與外景婚紗</span>
-              <span class="navigo-week-dates">9/14 (一) ～ 9/20 (日)</span>
+      <div class="transit-accordion-group">
+        <!-- 摺疊 1：📱 手機虛擬卡（Apple Wallet / Google 錢包）設定指南 -->
+        <details class="transit-accordion" id="acc-phone-setup" open>
+          <summary class="transit-accordion-summary">
+            <div class="transit-summary-left">
+              <span class="transit-summary-icon">📱</span>
+              <div class="transit-summary-text">
+                <span class="transit-summary-title">手機虛擬卡設定流程 <span class="transit-summary-badge">最推薦</span></span>
+                <span class="transit-summary-subtitle">iPhone 錢包免裝 App ｜ Android 官方設定 ｜ 免 €5 製卡費</span>
+              </div>
             </div>
-            <span class="navigo-status-badge badge-buy">【必買】現省超值</span>
-          </div>
-
-          <div class="navigo-section-block">
-            <span class="navigo-section-label">🎯 涵蓋行程</span>
-            <div class="navigo-itinerary-desc">
-              • 9/16 抵達戴高樂機場（CDG）搭 RER B 直達市區<br>
-              • 9/17 試婚紗與市區往返<br>
-              • 9/18 楓丹白露宮（第 5 圈）Transilien R 線一日遊<br>
-              • 9/19 市區漫遊（巴黎市政廳、星夜銀行）<br>
-              • 9/20 蜜月婚紗拍攝日
+            <svg class="transit-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </summary>
+          <div class="transit-accordion-content">
+            <div class="setup-guide-grid">
+              <!-- iPhone -->
+              <div class="setup-card apple">
+                <div class="setup-card-header">
+                  <span>🍎 iPhone（使用內建「錢包」App）</span>
+                  <span class="transit-summary-badge" style="background: rgba(56,189,248,0.15); color: #38bdf8; border-color: rgba(56,189,248,0.3);">免額外 App</span>
+                </div>
+                <ul class="setup-steps-list">
+                  <li class="setup-step-item"><span class="setup-step-num">1</span><span>打開<strong>「錢包 (Apple Wallet)」</strong>App，點右上角「<strong>+</strong>」符號</span></li>
+                  <li class="setup-step-item"><span class="setup-step-num">2</span><span>點選「<strong>大眾運輸卡</strong>」➔ 搜尋欄輸入並選取「<strong>Navigo</strong>」</span></li>
+                  <li class="setup-step-item"><span class="setup-step-num">3</span><span>票券類型選擇「<strong>Navigo Semaine (週卡)</strong>」➔ 範圍選「<strong>Zones 1-5 全區</strong>」</span></li>
+                  <li class="setup-step-item"><span class="setup-step-num">4</span><span>Apple Pay 台灣信用卡直接結帳扣款（約 €31.35）</span></li>
+                  <li class="setup-step-item"><span class="setup-step-num">5</span><span><strong>關鍵！務必開啟「快速交通卡」</strong>：搭車進出閘門免解鎖、免喚醒螢幕、免 Face ID，手機頂部靠近閘門「嗶」聲即可通過（低電量仍可感應）！</span></li>
+                </ul>
+              </div>
+              <!-- Android -->
+              <div class="setup-card android">
+                <div class="setup-card-header">
+                  <span>🤖 Android（搭配官方 App）</span>
+                  <span class="transit-summary-badge" style="background: rgba(52,211,153,0.15); color: #34d399; border-color: rgba(52,211,153,0.3);">需官方 App</span>
+                </div>
+                <ul class="setup-steps-list">
+                  <li class="setup-step-item"><span class="setup-step-num">1</span><span>Google Play 下載安裝官方<strong>《Île-de-France Mobilités》</strong></span></li>
+                  <li class="setup-step-item"><span class="setup-step-num">2</span><span>手機「設定 ➔ 連線」開啟 <strong>NFC</strong>，預設感應設為 Google 錢包</span></li>
+                  <li class="setup-step-item"><span class="setup-step-num">3</span><span>開啟 App 點底部「<strong>Purchase (購票)</strong>」➔「<strong>On my phone (本機儲存)</strong>」</span></li>
+                  <li class="setup-step-item"><span class="setup-step-num">4</span><span>選擇「<strong>Navigo Semaine (Zones 1-5)</strong>」線上刷卡結帳</span></li>
+                  <li class="setup-step-item"><span class="setup-step-num">5</span><span>進出閘門以手機背面 NFC 感應區貼近感應處即可通過</span></li>
+                </ul>
+              </div>
             </div>
-          </div>
 
-          <div class="navigo-benefit-box">
-            <strong>📈 效益分析（光速回本）：</strong><br>
-            ① 9/16 機場 RER B 到市區（單程 €11.80）。<br>
-            ② 9/18 楓丹白露宮 Transilien R 線（第 5 圈，單程約 €5.00，來回 €10.00）。<br>
-            ③ 9/16–9/20 市區頻繁搭乘地鐵與路面電車。<br>
-            👉 單獨購票總額超過 €50，買週卡 (€30.75) 現省超過 €20！
-          </div>
-
-          <div class="navigo-timing-box">
-            ⏰ <strong>最佳購買/儲值時間：</strong>9/11 (五) ～ 9/15 (二) 出發前（⚠️ 最晚需在 9/17 週四 23:59 前購買完成）
-          </div>
-        </div>
-
-        <!-- 第 2 張週卡 -->
-        <div class="navigo-week-card recommend-yes">
-          <div class="navigo-card-header">
-            <div class="navigo-card-title-group">
-              <span class="navigo-week-title">第 2 張週卡・博物館通行證密集週</span>
-              <span class="navigo-week-dates">9/21 (一) ～ 9/27 (日)</span>
-            </div>
-            <span class="navigo-status-badge badge-suggest">【強烈建議買】省力省心</span>
-          </div>
-
-          <div class="navigo-section-block">
-            <span class="navigo-section-label">🎯 涵蓋行程</span>
-            <div class="navigo-itinerary-desc">
-              • 9/21–9/24 四天博物館通票密集參觀（聖禮拜堂、橘園、奧塞、羅浮宮、蒙馬特等）<br>
-              • 9/24 歌劇院夜間導覽<br>
-              • 9/25 清晨趕蒙帕納斯車站 (Gare Montparnasse) 搭 TGV<br>
-              • (9/25–9/27 已在諾曼第開車自駕)
+            <div class="navigo-timing-box">
+              ⚠️ <strong>秘書三大關鍵提醒：</strong><br>
+              ① <strong>購買時效限制</strong>：第 1 週週卡（9/14–9/20）<strong>最晚在 9/17（四）23:59 截止購買</strong>！建議在台灣出發前（9/11～9/15）就先在手機上買好，9/16 抵達 CDG 機場免排隊直刷手機搭乘 RER B。<br>
+              ② <strong>一人一機專用</strong>：法國地鐵同一站禁止兩人連續刷同一隻手機，會判定重複進站而鎖卡，夫妻兩人請用各自的手機設定。<br>
+              ③ <strong>隨身攜帶行動電源</strong>：便衣查票員要求出示手機檢驗時需點亮螢幕，手機務必保持有電以防開罰爭議。
             </div>
           </div>
+        </details>
 
-          <div class="navigo-benefit-box">
-            <strong>📈 效益分析（免排隊省心省力）：</strong><br>
-            雖然 9/25 早上就要離開巴黎前往雷恩取車自駕，但 9/21–9/24 整整 4 天半是高強度的巴黎市區交通，每天搭乘 4~6 趟地鐵。直接刷週卡不需每次在機台排隊買票，9/25 趕清晨 06:48 高鐵也能無縫進出閘門！
-          </div>
-
-          <div class="navigo-timing-box">
-            ⏰ <strong>最佳購買/儲值時間：</strong>9/18 (五) 00:00 後 ～ 9/20 (日)（週五系統開放預購下週週卡）
-          </div>
-        </div>
-
-        <!-- 第 3 週 -->
-        <div class="navigo-week-card recommend-warn">
-          <div class="navigo-card-header">
-            <div class="navigo-card-title-group">
-              <span class="navigo-week-title">第 3 週・自駕還車與迪士尼雙樂園</span>
-              <span class="navigo-week-dates">9/28 (一) ～ 10/4 (日)</span>
+        <!-- 摺疊 2：🚨 為何有人買了週卡還被罰 €35～€50？（5 大地雷與防罰須知） -->
+        <details class="transit-accordion" id="acc-penalty-warning">
+          <summary class="transit-accordion-summary">
+            <div class="transit-summary-left">
+              <span class="transit-summary-icon">🚨</span>
+              <div class="transit-summary-text">
+                <span class="transit-summary-title">為何有週卡還被罰 €35～€50？ <span class="transit-summary-badge" style="background: rgba(239,68,68,0.15); color: #f87171; border-color: rgba(239,68,68,0.3);">5 大地雷</span></span>
+                <span class="transit-summary-subtitle">法國查票員嚴查違規陷阱與防罰必看守則</span>
+              </div>
             </div>
-            <span class="navigo-status-badge badge-skip">【切勿買週卡】單程計次更省</span>
-          </div>
+            <svg class="transit-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </summary>
+          <div class="transit-accordion-content">
+            <div class="penalty-grid">
+              <div class="penalty-item">
+                <div class="penalty-header">
+                  <span>1. 實體卡「未貼 1 吋照片」或「未簽名」</span>
+                  <span class="transit-summary-badge" style="background: rgba(239,68,68,0.2); color:#fca5a5;">觀光客被罰第 1 名</span>
+                </div>
+                <div class="penalty-desc">
+                  很多觀光客買實體卡直接塞皮夾刷進站，但規定必須貼上本人 1 吋照片並簽上護照英文姓名。只要沒有照片或簽名，查票員一律視同「無效票券/冒用他人卡片」，當場開罰 €35～€50。
+                </div>
+                <div class="penalty-solution">💡 秘書解方：使用手機虛擬卡（免照片、免簽名）完全免疫此罰則；若持實體卡拿到第一分鐘立刻貼妥照片並簽名。</div>
+              </div>
 
-          <div class="navigo-section-block">
-            <span class="navigo-section-label">🎯 涵蓋行程</span>
-            <div class="navigo-itinerary-desc">
-              • 9/28–9/30 盧昂/吉維尼/凡爾賽自駕<br>
-              • 9/30 凡爾賽 ➔ 迪士尼 Chessy 還車<br>
-              • 10/1–10/2 迪士尼雙樂園（住 Residhome）<br>
-              • 10/3–10/4 迪士尼搭 RER A 回巴黎市區＋商圈購物
+              <div class="penalty-item">
+                <div class="penalty-header">
+                  <span>2. 進站或搭公車/電車「未確實感應刷卡」</span>
+                  <span class="transit-summary-badge" style="background: rgba(239,68,68,0.2); color:#fca5a5;">無感應紀錄</span>
+                </div>
+                <div class="penalty-desc">
+                  跟在他人身後直接走過閘門，或轉乘路面電車 (Tramway)、搭乘公車時以為週卡無限搭就沒去刷卡。查票機若顯示「無本次進站感應紀錄 (Non-Validation)」，就算票期有效仍依法開罰 €35。
+                </div>
+                <div class="penalty-solution">💡 秘書解方：每次進站、轉乘公車或路面電車，務必確實靠卡發出「嗶」一聲再通行。</div>
+              </div>
+
+              <div class="penalty-item">
+                <div class="penalty-header">
+                  <span>3. 週卡「自然週」效期搞錯（非自買起算 7 天）</span>
+                  <span class="transit-summary-badge" style="background: rgba(239,68,68,0.2); color:#fca5a5;">效期誤判</span>
+                </div>
+                <div class="penalty-desc">
+                  週卡固定為「週一 00:00 至週日 23:59」。若在週四買只能用到週日；週五 00:00 後買的是「下週」週卡，若在當週搭乘會因票卡尚未生效而被直接罰款。
+                </div>
+                <div class="penalty-solution">💡 秘書解方：認明啟用週別，嚴格依照每週一至週日區間使用。</div>
+              </div>
+
+              <div class="penalty-item">
+                <div class="penalty-header">
+                  <span>4. 晶片卡與卡套分離，或借他人使用</span>
+                  <span class="transit-summary-badge" style="background: rgba(239,68,68,0.2); color:#fca5a5;">記名專用</span>
+                </div>
+                <div class="penalty-desc">
+                  Navigo 為記名專用，夫妻或旅伴不能交換使用；也不能為了攜帶方便只抽晶片卡、把照片卡套留在飯店。查票時無法同時出示晶片與卡套會直接開罰並沒收晶片。
+                </div>
+                <div class="penalty-solution">💡 秘書解方：一人一卡專人專用，實體卡晶片與卡套切勿分離。</div>
+              </div>
+
+              <div class="penalty-item">
+                <div class="penalty-header">
+                  <span>5. 手機虛擬卡手機沒電無法出示</span>
+                  <span class="transit-summary-badge" style="background: rgba(239,68,68,0.2); color:#fca5a5;">電量耗盡</span>
+                </div>
+                <div class="penalty-desc">
+                  查票員要求出示購票憑證時，若手機完全沒電關機無法點亮出示，依規定直接視同無票乘車開罰。
+                </div>
+                <div class="penalty-solution">💡 秘書解方：外出隨身攜帶行動電源，確保手機有充足電量供查驗。</div>
+              </div>
             </div>
           </div>
+        </details>
 
-          <div class="navigo-benefit-box">
-            <strong>📈 效益分析（買週卡會虧錢）：</strong><br>
-            • 9/28–9/30 全程自駕，完全用不到巴黎地鐵。<br>
-            • 10/1–10/2 住在 Residhome，前往迪士尼搭 RER A 僅 1 站（單程僅約 €2.15）。<br>
-            • 10/3 迪士尼搭 RER A 回市區＋10/4 逛街，以 Navigo Easy 儲值單獨扣款更划算。
-          </div>
-
-          <div class="navigo-timing-box">
-            ⏰ <strong>建議方案：</strong>9/30 抵達迪士尼後，在車站機台或手機購買單程票/儲值扣款即可。
-          </div>
-        </div>
-
-        <!-- 第 4 週 -->
-        <div class="navigo-week-card">
-          <div class="navigo-card-header">
-            <div class="navigo-card-title-group">
-              <span class="navigo-week-title">第 4 週・退房前往機場與返台</span>
-              <span class="navigo-week-dates">10/5 (一) ～ 10/7 (三)</span>
+        <!-- 摺疊 3：🚇 Navigo 週卡 4 週購買建議總表（該買 vs 不買） -->
+        <details class="transit-accordion" id="acc-weekly-strategy">
+          <summary class="transit-accordion-summary">
+            <div class="transit-summary-left">
+              <span class="transit-summary-icon">🚇</span>
+              <div class="transit-summary-text">
+                <span class="transit-summary-title">Navigo 週卡 4 週購買建議總表</span>
+                <span class="transit-summary-subtitle">Zone 1-5 全區 €30.75 ｜ 該買 vs 不該買 完整分析</span>
+              </div>
             </div>
-            <span class="navigo-status-badge badge-skip">【切勿買週卡】單買機場票</span>
-          </div>
+            <svg class="transit-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </summary>
+          <div class="transit-accordion-content">
+            <div class="navigo-intro-banner">
+              <div class="navigo-intro-title">💡 Navigo 週卡 (Semaine) 核心規則須知</div>
+              <div class="navigo-intro-desc">
+                • <strong>有效期間</strong>：固定為<strong>每週一 00:00 至週日 23:59</strong>（非自購買日起算 7 天）。<br>
+                • <strong>購買截止</strong>：當週週卡最晚必須在<strong>週四 23:59 前</strong>購買完畢；週五 00:00 起系統自動切換為販售「下週」週卡。<br>
+                • <strong>範圍與票價</strong>：Zone 1-5 全區每張 <strong>€30.75</strong>，無限次搭乘 RER、地鐵、公車、路面電車與 Transilien 郊區火車（含戴高樂機場 RER B 與楓丹白露）。
+              </div>
+            </div>
 
-          <div class="navigo-section-block">
-            <span class="navigo-section-label">🎯 涵蓋行程</span>
-            <div class="navigo-itinerary-desc">
-              • 10/5 巴黎市區退房，直奔戴高樂機場飯店（Radisson Blu）<br>
-              • 10/6 戴高樂機場搭機返台（長榮 BR88 11:20）<br>
-              • 10/7 抵達台灣
+            <div class="navigo-summary-container">
+              <!-- 第 1 張週卡 -->
+              <div class="navigo-week-card recommend-yes">
+                <div class="navigo-card-header">
+                  <div class="navigo-card-title-group">
+                    <span class="navigo-week-title">第 1 張週卡・初抵巴黎與外景婚紗</span>
+                    <span class="navigo-week-dates">9/14 (一) ～ 9/20 (日)</span>
+                  </div>
+                  <span class="navigo-status-badge badge-buy">【必買】現省超值</span>
+                </div>
+                <div class="navigo-section-block">
+                  <span class="navigo-section-label">🎯 涵蓋行程</span>
+                  <div class="navigo-itinerary-desc">
+                    • 9/16 抵達戴高樂機場（CDG）搭 RER B 直達市區<br>
+                    • 9/17 試婚紗與市區往返<br>
+                    • 9/18 楓丹白露宮（第 5 圈）Transilien R 線一日遊<br>
+                    • 9/19 市區漫遊（巴黎市政廳、星夜銀行）<br>
+                    • 9/20 蜜月婚紗拍攝日
+                  </div>
+                </div>
+                <div class="navigo-benefit-box">
+                  <strong>📈 效益分析（光速回本）：</strong><br>
+                  ① 9/16 機場 RER B 到市區（單程 €11.80）。<br>
+                  ② 9/18 楓丹白露宮 Transilien R 線（第 5 圈，單程約 €5.00，來回 €10.00）。<br>
+                  ③ 9/16–9/20 市區頻繁搭乘地鐵與路面電車。<br>
+                  👉 單獨購票總額超過 €50，買週卡 (€30.75) 現省超過 €20！
+                </div>
+                <div class="navigo-timing-box">
+                  ⏰ <strong>最佳購買/儲值時間：</strong>9/11 (五) ～ 9/15 (二) 出發前（⚠️ 最晚需在 9/17 週四 23:59 前購買完成）
+                </div>
+              </div>
+
+              <!-- 第 2 張週卡 -->
+              <div class="navigo-week-card recommend-yes">
+                <div class="navigo-card-header">
+                  <div class="navigo-card-title-group">
+                    <span class="navigo-week-title">第 2 張週卡・博物館通行證密集週</span>
+                    <span class="navigo-week-dates">9/21 (一) ～ 9/27 (日)</span>
+                  </div>
+                  <span class="navigo-status-badge badge-suggest">【強烈建議買】省力省心</span>
+                </div>
+                <div class="navigo-section-block">
+                  <span class="navigo-section-label">🎯 涵蓋行程</span>
+                  <div class="navigo-itinerary-desc">
+                    • 9/21–9/24 四天博物館通票密集參觀（聖禮拜堂、橘園、奧塞、羅浮宮、蒙馬特等）<br>
+                    • 9/24 歌劇院夜間導覽<br>
+                    • 9/25 清晨趕蒙帕納斯車站 (Gare Montparnasse) 搭 TGV<br>
+                    • (9/25–9/27 已在諾曼第開車自駕)
+                  </div>
+                </div>
+                <div class="navigo-benefit-box">
+                  <strong>📈 效益分析（免排隊省心省力）：</strong><br>
+                  雖然 9/25 早上就要離開巴黎前往雷恩取車自駕，但 9/21–9/24 整整 4 天半是高強度的巴黎市區交通，每天搭乘 4~6 趟地鐵。直接刷週卡不需每次在機台排隊買票，9/25 趕清晨 06:48 高鐵也能無縫進出閘門！
+                </div>
+                <div class="navigo-timing-box">
+                  ⏰ <strong>最佳購買/儲值時間：</strong>9/18 (五) 00:00 後 ～ 9/20 (日)（週五系統開放預購下週週卡）
+                </div>
+              </div>
+
+              <!-- 第 3 週 -->
+              <div class="navigo-week-card recommend-warn">
+                <div class="navigo-card-header">
+                  <div class="navigo-card-title-group">
+                    <span class="navigo-week-title">第 3 週・自駕還車與迪士尼雙樂園</span>
+                    <span class="navigo-week-dates">9/28 (一) ～ 10/4 (日)</span>
+                  </div>
+                  <span class="navigo-status-badge badge-skip">【切勿買週卡】單程計次更省</span>
+                </div>
+                <div class="navigo-section-block">
+                  <span class="navigo-section-label">🎯 涵蓋行程</span>
+                  <div class="navigo-itinerary-desc">
+                    • 9/28–9/30 盧昂/吉維尼/凡爾賽自駕<br>
+                    • 9/30 凡爾賽 ➔ 迪士尼 Chessy 還車<br>
+                    • 10/1–10/2 迪士尼雙樂園（住 Residhome）<br>
+                    • 10/3–10/4 迪士尼搭 RER A 回巴黎市區＋商圈購物
+                  </div>
+                </div>
+                <div class="navigo-benefit-box">
+                  <strong>📈 效益分析（買週卡會虧錢）：</strong><br>
+                  • 9/28–9/30 全程自駕，完全用不到巴黎地鐵。<br>
+                  • 10/1–10/2 住在 Residhome，前往迪士尼搭 RER A 僅 1 站（單程僅約 €2.15）。<br>
+                  • 10/3 迪士尼搭 RER A 回市區＋10/4 逛街，以 Navigo Easy 儲值單獨扣款更划算。
+                </div>
+                <div class="navigo-timing-box">
+                  ⏰ <strong>建議方案：</strong>9/30 抵達迪士尼後，在車站機台或手機購買單程票/儲值扣款即可。
+                </div>
+              </div>
+
+              <!-- 第 4 週 -->
+              <div class="navigo-week-card">
+                <div class="navigo-card-header">
+                  <div class="navigo-card-title-group">
+                    <span class="navigo-week-title">第 4 週・退房前往機場與返台</span>
+                    <span class="navigo-week-dates">10/5 (一) ～ 10/7 (三)</span>
+                  </div>
+                  <span class="navigo-status-badge badge-skip">【切勿買週卡】單買機場票</span>
+                </div>
+                <div class="navigo-section-block">
+                  <span class="navigo-section-label">🎯 涵蓋行程</span>
+                  <div class="navigo-itinerary-desc">
+                    • 10/5 巴黎市區退房，直奔戴高樂機場飯店（Radisson Blu）<br>
+                    • 10/6 戴高樂機場搭機返台（長榮 BR88 11:20）<br>
+                    • 10/7 抵達台灣
+                  </div>
+                </div>
+                <div class="navigo-benefit-box">
+                  <strong>📈 效益分析：</strong><br>
+                  這週在巴黎僅需搭乘一趟 10/5 從市區至戴高樂機場的 RER B 單程車票（約 €11.80），買週卡 (€30.75) 會倒虧近 €19。
+                </div>
+                <div class="navigo-timing-box">
+                  ⏰ <strong>建議方案：</strong>10/5 當天在市區車站機台購買 1 張往 CDG 機場的 RER B 單程票即可。
+                </div>
+              </div>
             </div>
           </div>
+        </details>
 
-          <div class="navigo-benefit-box">
-            <strong>📈 效益分析：</strong><br>
-            這週在巴黎僅需搭乘一趟 10/5 從市區至戴高樂機場的 RER B 單程車票（約 €11.80），買週卡 (€30.75) 會倒虧近 €19。
+        <!-- 摺疊 4：🚗 諾曼第 6 天自駕車輛憑證 -->
+        <details class="transit-accordion" id="acc-rental-voucher">
+          <summary class="transit-accordion-summary">
+            <div class="transit-summary-left">
+              <span class="transit-summary-icon">🚗</span>
+              <div class="transit-summary-text">
+                <span class="transit-summary-title">諾曼第 6 天自駕車輛憑證</span>
+                <span class="transit-summary-subtitle">Sixt 雷恩取車 ➔ 迪士尼 Chessy 還車 ｜ 停車密碼 6060</span>
+              </div>
+            </div>
+            <svg class="transit-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </summary>
+          <div class="transit-accordion-content">
+            <div class="vault-ticket-card highlight" style="margin-bottom: 0;">
+              <div class="vault-card-header">
+                <div class="vault-hotel-name">🚗 Sixt 雷恩取車 ➔ 迪士尼 Chessy 還車</div>
+                <span class="vault-date-badge">已付 €624.46</span>
+              </div>
+              <div class="vault-info-row">
+                <span>租車訂單代碼：</span>
+                <strong>9738701348 (Peugeot 3008 休旅)</strong>
+              </div>
+              <div class="vault-code-box">
+                <span class="code-title">雷恩 Effia 停車場 0 樓電梯密碼</span>
+                <span class="code-text">6060</span>
+                <button class="btn-copy-mini" onclick="copyToClipboard('6060', '雷恩停車場密碼')">複製</button>
+              </div>
+              <div class="vault-info-row">
+                <span>取車地點：</span>
+                <span>雷恩站北出口 Relay 左側手扶梯至 Sixt 櫃檯</span>
+              </div>
+              <div class="vault-info-row">
+                <span>還車地點：</span>
+                <span>9/30 18:00 前至 Marne-la-Vallée Chessy 還車</span>
+              </div>
+            </div>
           </div>
+        </details>
 
-          <div class="navigo-timing-box">
-            ⏰ <strong>建議方案：</strong>10/5 當天在市區車站機台購買 1 張往 CDG 機場的 RER B 單程票即可。
+        <!-- 摺疊 5：⚠️ 法國自駕核心防踩雷與注意事項 -->
+        <details class="transit-accordion" id="acc-driving-rules">
+          <summary class="transit-accordion-summary">
+            <div class="transit-summary-left">
+              <span class="transit-summary-icon">⚠️</span>
+              <div class="transit-summary-text">
+                <span class="transit-summary-title">法國自駕核心注意事項</span>
+                <span class="transit-summary-subtitle">圓環路權 ｜ 加油油品 ｜ 收費站 PIN 碼 ｜ 防砸窗守則</span>
+              </div>
+            </div>
+            <svg class="transit-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </summary>
+          <div class="transit-accordion-content">
+            <div class="rules-grid">
+              <div class="rule-box">
+                <div class="rule-box-title">🔄 圓環絕對優先權</div>
+                <div class="rule-box-desc">進圓環前必須減速禮讓「左方已在圓環內的車輛」。未禮讓會吃高額罰單。</div>
+              </div>
+              <div class="rule-box">
+                <div class="rule-box-title">💳 信用卡 4 位數 PIN 碼</div>
+                <div class="rule-box-desc">高速公路收費站與無人加油機必須輸入預借現金 4 位數 PIN 碼才能感應扣款。</div>
+              </div>
+              <div class="rule-box">
+                <div class="rule-box-title">⛽ 正確加油油品</div>
+                <div class="rule-box-desc">柴油車認明黃色「Gazole / B7/B10」；汽油車認明綠色「SP95-E10 / SP98」。切勿加錯！</div>
+              </div>
+              <div class="rule-box">
+                <div class="rule-box-title">🔒 防砸窗黃金守則</div>
+                <div class="rule-box-desc">行李放後車廂務必拉好遮物簾，車內座位與中控台不可留任何零錢、包包或外套。</div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <!-- 🚗 諾曼第 6 天自駕車輛憑證 -->
-      <h2 class="vault-section-title">🚗 諾曼第 6 天自駕車輛憑證</h2>
-      <div class="vault-ticket-card highlight" style="margin-bottom: 16px;">
-        <div class="vault-card-header">
-          <div class="vault-hotel-name">🚗 Sixt 雷恩取車 ➔ 迪士尼 Chessy 還車</div>
-          <span class="vault-date-badge">已付 €624.46</span>
-        </div>
-        <div class="vault-info-row">
-          <span>租車訂單代碼：</span>
-          <strong>9738701348 (Peugeot 3008 休旅)</strong>
-        </div>
-        <div class="vault-code-box">
-          <span class="code-title">雷恩 Effia 停車場 0 樓電梯密碼</span>
-          <span class="code-text">6060</span>
-          <button class="btn-copy-mini" onclick="copyToClipboard('6060', '雷恩停車場密碼')">複製</button>
-        </div>
-        <div class="vault-info-row">
-          <span>取車地點：</span>
-          <span>雷恩站北出口 Relay 左側手扶梯至 Sixt 櫃檯</span>
-        </div>
-        <div class="vault-info-row">
-          <span>還車地點：</span>
-          <span>9/30 18:00 前至 Marne-la-Vallée Chessy 還車</span>
-        </div>
-      </div>
-
-      <h2 class="vault-section-title">⚠️ 法國自駕核心防踩雷與注意事項</h2>
-      <div class="rules-grid">
-        <div class="rule-box">
-          <div class="rule-box-title">🔄 圓環絕對優先權</div>
-          <div class="rule-box-desc">進圓環前必須減速禮讓「左方已在圓環內的車輛」。未禮讓會吃高額罰單。</div>
-        </div>
-        <div class="rule-box">
-          <div class="rule-box-title">💳 信用卡 4 位數 PIN 碼</div>
-          <div class="rule-box-desc">高速公路收費站與無人加油機必須輸入預借現金 4 位數 PIN 碼才能感應扣款。</div>
-        </div>
-        <div class="rule-box">
-          <div class="rule-box-title">⛽ 正確加油油品</div>
-          <div class="rule-box-desc">柴油車認明黃色「Gazole / B7/B10」；汽油車認明綠色「SP95-E10 / SP98」。切勿加錯！</div>
-        </div>
-        <div class="rule-box">
-          <div class="rule-box-title">🔒 防砸窗黃金守則</div>
-          <div class="rule-box-desc">行李放後車廂務必拉好遮物簾，車內座位與中控台不可留任何零錢、包包或外套。</div>
-        </div>
+        </details>
       </div>
     </section>
 
@@ -358,7 +518,7 @@
   <div class="toast-notice" id="toastNotice">✅ 已複製到剪貼簿</div>
 
   <!-- 核心 JavaScript 腳本 -->
-  <script src="js/app.js?v=20260912_goyard_ami"></script>
+  <script src="js/app.js?v=20260912_transit_accordion"></script>
 </body>
 
 </html>

@@ -1593,3 +1593,272 @@ body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ===== 14. 交通指南收合面板 (Transit Accordions) ===== */
+.transit-accordion-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px;
+  margin-bottom: 30px;
+}
+
+.transit-accordion {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.transit-accordion[open] {
+  border-color: rgba(212, 163, 89, 0.5);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.transit-accordion-summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 18px;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255, 255, 255, 0.02);
+  transition: background-color 0.2s ease;
+}
+
+.transit-accordion-summary::-webkit-details-marker {
+  display: none;
+}
+
+.transit-accordion-summary:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.transit-summary-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.transit-summary-icon {
+  font-size: 1.3rem;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-whisper);
+  flex-shrink: 0;
+}
+
+.transit-summary-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.transit-summary-title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.transit-summary-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.transit-summary-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-ochre-surface);
+  color: var(--accent-ochre);
+  border: 1px solid var(--border-ochre);
+}
+
+.transit-accordion-chevron {
+  width: 20px;
+  height: 20px;
+  color: var(--text-tertiary);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.transit-accordion[open] .transit-accordion-chevron {
+  transform: rotate(180deg);
+  color: var(--accent-ochre);
+}
+
+.transit-accordion-content {
+  padding: 16px 18px 20px 18px;
+  border-top: 1px solid var(--border-whisper);
+  background: rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeInAccordion 0.25s ease-out;
+}
+
+@keyframes fadeInAccordion {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 快速切換收合按鈕列 */
+.accordion-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.btn-accordion-toggle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-whisper);
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-accordion-toggle:hover {
+  background: var(--accent-ochre-surface);
+  color: var(--accent-ochre);
+  border-color: var(--border-ochre);
+}
+
+/* 虛擬卡設定步驟卡片 */
+.setup-guide-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 680px) {
+  .setup-guide-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.setup-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.setup-card.apple {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.06) 0%, rgba(15, 23, 42, 0.7) 100%);
+}
+
+.setup-card.android {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: linear-gradient(180deg, rgba(52, 211, 153, 0.06) 0%, rgba(15, 23, 42, 0.7) 100%);
+}
+
+.setup-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-whisper);
+  padding-bottom: 8px;
+}
+
+.setup-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.setup-step-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.setup-step-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-weight: 700;
+}
+
+/* 罰款地雷警示方塊 */
+.penalty-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.penalty-item {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.penalty-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f87171;
+}
+
+.penalty-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.penalty-solution {
+  font-size: 0.8rem;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.08);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  margin-top: 4px;
+  display: inline-block;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
