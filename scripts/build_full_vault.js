@@ -1525,11 +1525,11 @@ const flagshipMalls = [
   {
     category: "mall",
     categoryLabel: "🏬 百貨購物",
-    name: "La Samaritaine (莎瑪麗丹百貨)",
+    name: "La Samaritaine (莎瑪麗丹百貨・新橋旗艦店)",
     tag: "mall",
-    desc: "塞納河畔新藝術與裝飾藝術經典，LVMH耗時16年修復重開！五層樓挑高金黃孔雀壁畫穹頂，周杰倫《最偉大的作品》MV 取景地。",
+    desc: "1870年創立，LVMH耗時16年斥資7.5億歐元重生！頂樓115米天井1910年金色孔雀壁畫、16,000片手工金色橡樹葉琺瑯大樓梯(周杰倫《最偉大的作品》取景)、B1全歐最大美妝香氛、Loulou法式幽默文創選品、頂樓露台餐廳看鐵塔塞納河夕陽。",
     address: "9 Rue de la Monnaie, 75001 Paris (新橋 Pont Neuf 旁)",
-    highlight: "⏰ 每天 10:00-20:00 ｜ 頂層巨幅金黃孔雀壁畫、百年玻璃透光天頂、周杰倫 MV 取景地",
+    highlight: "⏰ 週一至週六 10:00-20:00，週日 11:00-19:00 ｜ 頂層金箔孔雀壁畫、16,000片琺瑯大階梯、免購物免費參觀看景、人比老佛爺少90%",
     mapQuery: "La Samaritaine Paris"
   },
   {
