@@ -413,9 +413,9 @@ const itineraryData = [
       },
       {
         time: "19:30",
-        title: "拉丁區巷弄小酒館享用高性價比傳統法式油封鴨晚餐",
+        title: "拉丁區巷弄小酒館享用高 CP 值傳統法式油封鴨晚餐",
         desc: "外皮酥脆金黃、肉質軟嫩多汁的傳統油封鴨腿佐香煎馬鈴薯，漫步塞納河畔欣賞初秋巴黎夜景。",
-        badges: ["傳統油封鴨", "高性價比", "塞納河夜景"],
+        badges: ["傳統油封鴨", "高 CP 值", "塞納河夜景"],
         map: "Quartier Latin Paris"
       }
     ],
@@ -851,8 +851,8 @@ const itineraryData = [
       {
         time: "17:35",
         title: "TotalEnergies Relais Chessy 加油站加滿油 (Full Tank)",
-        desc: "在距離還車站 2 公里處將油箱加滿 (Full Tank)，保留加油發票供還車查驗。",
-        badges: ["加滿油箱", "保留加油發票"],
+        desc: "在距離還車站 2 公里處將油箱加滿 (Full Tank)，保留加油收據供還車查驗。",
+        badges: ["加滿油箱", "保留加油收據"],
         map: "TotalEnergies Relais Chessy"
       },
       {
@@ -1575,7 +1575,31 @@ const finalData = {
   pocketPlacesData
 };
 
-const finalJsonStr = JSON.stringify(finalData);
+function sanitizeTaiwanTerms(text) {
+  if (typeof text !== 'string') return text;
+  return text
+    .replace(/屏幕/g, '螢幕')
+    .replace(/視頻/g, '影片')
+    .replace(/音頻/g, '音訊')
+    .replace(/打印/g, '列印')
+    .replace(/激光/g, '雷射')
+    .replace(/內存/g, '記憶體')
+    .replace(/巡遊/g, '大遊行')
+    .replace(/節瓜/g, '櫛瓜')
+    .replace(/過山車/g, '雲霄飛車')
+    .replace(/跳樓機/g, '大怒神')
+    .replace(/性價比/g, 'CP值')
+    .replace(/極度出片/g, '拍照超有法式美感')
+    .replace(/出片帶有/g, '洗出來的照片帶有')
+    .replace(/出片/g, '超好拍')
+    .replace(/膠卷/g, '底片')
+    .replace(/龍蝦卷/g, '龍蝦堡')
+    .replace(/避坑/g, '注意事項')
+    .replace(/加油發票/g, '加油收據')
+    .replace(/托運/g, '託運');
+}
+
+const finalJsonStr = sanitizeTaiwanTerms(JSON.stringify(finalData));
 
 // 提取現有 salt 與 iv
 let appJsContent = fs.readFileSync(APP_JS_PATH, 'utf8');
