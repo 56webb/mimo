@@ -1469,7 +1469,8 @@ const pocketPlacesMap = new Map();
 
 // 先放入原有 baseData.pocketPlacesData
 (baseData.pocketPlacesData || []).forEach(p => {
-  const key = p.name.split(' ')[0].replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+  const key = (p.name || '').trim().replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+  if (!key) return;
   // 確保沒有違規詞
   p.desc = (p.desc || '').replace(/屏幕/g, '螢幕').replace(/視頻/g, '影片').replace(/音頻/g, '音訊');
   p.highlight = (p.highlight || '').replace(/屏幕/g, '螢幕').replace(/視頻/g, '影片').replace(/音頻/g, '音訊');
@@ -1478,7 +1479,8 @@ const pocketPlacesMap = new Map();
 
 // 再補入 CSV 的最新內容
 parsedCsvStores.forEach(s => {
-  const key = s.name.split(' ')[0].replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+  const key = (s.name || '').trim().replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+  if (!key) return;
   if (!pocketPlacesMap.has(key)) {
     pocketPlacesMap.set(key, s);
   } else {
@@ -1553,8 +1555,8 @@ const flagshipMalls = [
 ];
 
 flagshipMalls.forEach(m => {
-  const key = m.name.split(' ')[0];
-  pocketPlacesMap.set(key, m);
+  const key = (m.name || '').trim().replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, '');
+  if (key) pocketPlacesMap.set(key, m);
 });
 
 const pocketPlacesData = Array.from(pocketPlacesMap.values());
