@@ -67,15 +67,15 @@ const itineraryData = [
   {
     date: "9/16",
     weekday: "三",
-    title: "抵達巴黎 ➔ 13區 B&B 寄行李 ➔ 瑪黑區散步調時差",
+    title: "抵達巴黎 ➔ 13區 B&B 寄行李 ➔ 14:00 MALRO 瑪黑午餐 ➔ 孚日廣場調時差",
     tag: "初見巴黎",
-    summary: "07:55 降落巴黎 CDG，搭 RER B 直達 13 區 B&B 寄行李，午後悠閒漫步瑪黑區！",
+    summary: "07:55 降落巴黎 CDG，搭 RER B 直達 13 區 B&B 寄行李，14:00 預約 MALRO 享受 22€ 牛排午間套餐與全網封神開心果流心熔岩蛋糕！午後悠閒漫步瑪黑選品街與孚日廣場！",
     keynote: {
-      code: "BB22425685",
-      codeLabel: "B&B 訂房代碼 (3晚)",
-      spot: "戴高樂機場 ➔ 13區 B&B ➔ 瑪黑區",
+      code: "MALRO 14:00 / B&B: BB22425685",
+      codeLabel: "當日預約與訂房號",
+      spot: "戴高樂機場 ➔ 13區 B&B ➔ 14:00 MALRO ➔ 孚日廣場",
       hotel: "B&B HOTEL Paris Italie Porte de Choisy 3 étoiles",
-      mapQuery: "B&B HOTEL Paris Italie Porte de Choisy"
+      mapQuery: "7 Rue Froissart 75003 Paris"
     },
     items: [
       {
@@ -100,25 +100,32 @@ const itineraryData = [
         map: "B&B HOTEL Paris Italie Porte de Choisy"
       },
       {
-        time: "13:00",
-        title: "飯店周邊法式小酒館享用抵法第一餐",
-        desc: "品嚐道地法式油封鴨或烤牛排薯條，喝一杯黑咖啡驅散長途飛行疲憊。",
-        badges: ["道地法餐", "熱咖啡休整"],
-        map: ""
+        time: "12:45",
+        title: "搭地鐵 7 號轉 8 號線前往瑪黑區享用抵法第一餐",
+        desc: "自飯店搭乘地鐵 7 號轉 8 號線直達 Saint-Sébastien - Froissart 站（車程約 35 分鐘），出站步行 1 分鐘直達 7 Rue Froissart 餐廳門口。",
+        badges: ["地鐵7轉8號", "直奔瑪黑區", "車程35分"],
+        map: "7 Rue Froissart 75003 Paris"
       },
       {
-        time: "15:00",
-        title: "瑪黑區 (Le Marais) 悠閒漫步 ＆ 孚日廣場",
-        desc: "漫步巴黎最古老唯美的孚日廣場 (Place des Vosges)，欣賞文藝復興紅磚拱廊，品嚐 Amorino 小天使花朵冰淇淋。",
-        badges: ["孚日廣場", "小天使冰淇淋", "瑪黑文青巷"],
+        time: "14:00",
+        title: "⭐【MALRO】上瑪黑時髦地中海午餐（已預約 2 人席！）",
+        desc: "地點：7 Rue Froissart, 75003 Paris（近 Merci / SABRE）。已成功預約 14:00 雙人席。挑高橘色球燈時髦空間！必點：【22€ 午間套餐】（前菜突尼西亞鮪魚沙拉＋主菜炭火烤 Bavette 側腹牛排附香料炸洋芋片）、酥炸花椰菜球、蜜汁慢烤牛肋排，以及全網封神的【熱開心果流心熔岩蛋糕】！⚠️注意：午餐 15:00 打烊，後廚 14:15-14:30 收單，請入座立即點餐。",
+        badges: ["✅ 14:00已預約", "22€午間牛排套餐", "招牌慢烤牛肋排", "開心果流心蛋糕", "上瑪黑名店"],
+        map: "7 Rue Froissart 75003 Paris"
+      },
+      {
+        time: "15:30",
+        title: "瑪黑區選品店巡禮（Ami / Merci）＆ 孚日廣場曬太陽調時差",
+        desc: "餐廳出門隔壁 109 號就是 Ami 瑪黑二店、111 號是 Merci 概念店（拍經典紅色文創小車），沿著老街漫步至巴黎最古老唯美的孚日廣場 (Place des Vosges)，坐在綠色長椅吹微風調時差。",
+        badges: ["Ami瑪黑二店", "Merci選物店", "孚日廣場", "散步調時差"],
         map: "Place des Vosges Paris"
       },
       {
-        time: "19:00",
-        title: "返回 13 區 B&B 入住整理 ＆ 早睡調時差",
-        desc: "回飯店正式領房卡 Check-in，熱水淋浴，21:00 準時就寢調整時差，迎接明日婚紗試穿！",
-        badges: ["正式Check-in", "熱水澡", "早睡調時差"],
-        map: ""
+        time: "18:30",
+        title: "超市採買大瓶水與優格 ➔ 返回 B&B 早睡調時差",
+        desc: "至 Monoprix 超市採買 1.5L 礦泉水、新鮮水果與優格，回飯店正式進房熱水淋浴，21:00 準時熄燈就寢調整時差，迎接明日婚紗試穿！",
+        badges: ["超市採買", "正式進房", "21:00早睡調時差"],
+        map: "B&B HOTEL Paris Italie Porte de Choisy"
       }
     ],
     coverImage: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&auto=format&fit=crop&q=80"
@@ -1378,6 +1385,16 @@ const ticketsData = [
     file: "0919_巴黎市政廳_歐洲遺產日參觀憑證.pdf",
     note: "歐洲遺產日（Journées du Patrimoine 2026）限定開放！出示手機 PDF 或列印紙本條碼。專屬入口地址：3 Rue de Lobau, 75004 Paris（地鐵 1/7 號線 Hôtel de Ville 站步行 2 分鐘）。參觀奢華金箔節慶大廳、市長辦公室與精緻天花板壁畫。檔案存於 data/0919_巴黎市政廳_歐洲遺產日參觀憑證.pdf。",
     mapQuery: "3 Rue de Lobau 75004 Paris"
+  },
+  {
+    type: "🍽️ 人氣名店訂位",
+    title: "MALRO 上瑪黑義式地中海餐酒館 (已預約 14:00 雙人席)",
+    datetime: "2026/09/16 (三) 14:00 準時入座",
+    status: "✅ 已預約確認 (雙人席)",
+    code: "MALRO 14:00",
+    file: "",
+    note: "訂位人：ChangChin yu（2 人）。預約時間：2026/09/16 (三) 14:00。地址：7 Rue Froissart, 75003 Paris（近 Merci / SABRE，地鐵 Saint-Sébastien 站步行 1 分鐘）。規範：取消請提前 3 小時。必點：【22€ 午間套餐】（前菜鮪魚沙拉＋主菜炭火牛排）、酥炸花椰菜球、蜜汁慢烤牛肋排、以及全網封神【熱開心果流心熔岩蛋糕】！⚠️提醒：後廚 14:15-14:30 收單，請入座立即點餐。",
+    mapQuery: "7 Rue Froissart 75003 Paris"
   },
   {
     type: "🍽️ 人氣名店訂位",
