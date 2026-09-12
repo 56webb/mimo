@@ -126,17 +126,38 @@ const itineraryData = [
   {
     date: "9/17",
     weekday: "四",
-    title: "適應環境 ＋ The Bride 試婚紗 ➔ 聖日耳曼德佩區漫步 ➔ 盧森堡公園",
-    tag: "婚紗試穿",
-    summary: "11:00 前往 The Bride Paris 試穿精緻婚紗，午後漫步聖日耳曼左岸與盧森堡公園！",
+    title: "⛪ 09:00 聖禮拜堂晨光彩窗 ➔ 11:00 The Bride 試婚紗 ➔ 左岸雙叟午餐",
+    tag: "晨光彩窗＋試婚紗",
+    summary: "09:00 第一批參觀聖禮拜堂欣賞晨光彩繪玻璃（已預約），步行 15 分鐘接續 11:00 The Bride 試婚紗，午後漫步聖日耳曼左岸與雙叟咖啡館！",
     keynote: {
-      code: "門禁2734 / 電梯1869",
-      codeLabel: "The Bride 門禁密碼",
-      spot: "The Bride 婚紗店 ➔ 聖日耳曼 ➔ 盧森堡公園",
+      code: "09:00聖禮拜堂 / 11:00試婚紗",
+      codeLabel: "預約憑證與門禁",
+      spot: "西堤島聖禮拜堂 ➔ The Bride 婚紗店 ➔ 雙叟咖啡館",
       hotel: "B&B HOTEL Paris Italie Porte de Choisy (第2晚)",
-      mapQuery: "22 rue de l Odeon 75006 Paris"
+      mapQuery: "8 boulevard du Palais 75001 Paris"
     },
     items: [
+      {
+        time: "08:15",
+        title: "自飯店搭乘地鐵前往西堤島聖禮拜堂",
+        desc: "搭乘地鐵 7 號至 Châtelet 轉 4 號至 Cité 站，車程約 25 分鐘，出站步行 2 分鐘直達聖禮拜堂入口。",
+        badges: ["地鐵Cité站", "Navigo全包", "西堤島"],
+        map: "8 boulevard du Palais 75001 Paris"
+      },
+      {
+        time: "09:00",
+        title: "⭐【聖禮拜堂 Sainte-Chapelle】早晨第一批！極致晨光彩繪玻璃",
+        desc: "訂單【2618864216850403140】(票號 759304466060400 等)。早晨第 1 批晨光穿透 15 面高達 15 米的 13 世紀彩繪玻璃窗，色彩燦爛奪目！避開午後排隊人潮。憑證存 data/0917_聖禮拜堂_預約入場時段憑證_4人.pdf。",
+        badges: ["✅已預約09:00", "第一批晨光彩窗", "西堤島必看", "訂單2618864216850403140"],
+        map: "8 boulevard du Palais 75001 Paris"
+      },
+      {
+        time: "10:00",
+        title: "出館漫步跨聖米歇爾橋前往 6 區婚紗工作室",
+        desc: "沿塞納河畔舊書攤漫步跨橋進入拉丁區與聖日耳曼商圈，步行僅需 15 分鐘 (1.1 公里) 直達 The Bride Paris，時間充裕動線極順暢！",
+        badges: ["順路步行15分", "塞納河舊書攤", "跨聖米歇爾橋"],
+        map: "22 rue de l Odeon 75006 Paris"
+      },
       {
         time: "11:00",
         title: "⭐The Bride Paris 試穿婚紗（準時 11:00 抵達）",
@@ -145,24 +166,17 @@ const itineraryData = [
         map: "22 rue de l Odeon 75006 Paris"
       },
       {
-        time: "13:00",
-        title: "聖日耳曼左岸人氣法式小酒館：La Jacobine 午餐",
-        desc: "步行至聖安德烈商場古老拱廊街，品嚐全巴黎最濃郁的焗烤洋蔥湯 (Soupe à l'oignon) 與香煎油封鴨胸，暖胃美味！",
-        badges: ["La Jacobine", "排隊洋蔥湯", "油封鴨胸"],
-        map: "La Jacobine Paris"
+        time: "12:45",
+        title: "⭐雙叟咖啡館 (Les Deux Magots) 露台午餐 ＆ 花神合影",
+        desc: "自工作室步行 7 分鐘直達！1885 年傳奇咖啡館，坐二樓露台俯瞰教堂廣場，品嚐熱火腿起司三明治與烤蘋果塔，對門花神咖啡館合影拍照。",
+        badges: ["雙叟二樓露台", "烤火腿三明治", "對門花神拍照"],
+        map: "Les Deux Magots Paris"
       },
       {
-        time: "15:00",
-        title: "聖日耳曼德佩區漫步 ＆ 花神/雙叟咖啡館地標",
-        desc: "走過聖日耳曼德佩教堂，仰望左岸百年文化地標花神咖啡館與雙叟咖啡館，感受濃郁巴黎左岸文藝氣息。",
-        badges: ["花神咖啡館", "雙叟咖啡館", "左岸文藝"],
-        map: "Cafe de Flore Paris"
-      },
-      {
-        time: "16:30",
-        title: "盧森堡公園 (Jardin du Luxembourg) 綠椅悠閒時光",
-        desc: "在梅第奇噴泉旁的經典綠色鐵椅坐下，欣賞宮殿花園、水池帆船與午後法式浪漫陽光。",
-        badges: ["梅第奇噴泉", "經典綠椅", "皇家宮殿花園"],
+        time: "14:30",
+        title: "聖日耳曼德佩區漫步 ＆ 盧森堡公園綠椅日光浴",
+        desc: "漫步左岸林蔭大道，在盧森堡公園梅第奇噴泉旁經典綠色鐵椅坐下，享受法式優雅陽光。下午將修改好的白紗帶回飯店高處懸掛防皺。",
+        badges: ["聖日耳曼左岸", "盧森堡公園", "婚紗回房懸掛"],
         map: "Jardin du Luxembourg Paris"
       }
     ],
