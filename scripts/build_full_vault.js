@@ -261,8 +261,8 @@ const itineraryData = [
   {
     date: "9/20",
     weekday: "日",
-    title: "💍 巴黎蜜月婚紗大片拍攝日（日出開拍！）",
-    tag: "婚紗大片",
+    title: "💍 巴黎蜜月婚紗拍攝日（日出開拍）",
+    tag: "蜜月婚紗",
     summary: "清晨梳化，日出開拍！專車接送至鐵塔、羅浮宮、亞歷山大三世橋拍攝一生回憶！",
     keynote: {
       code: "04:00梳化 / 07:00開拍",
@@ -282,7 +282,7 @@ const itineraryData = [
       {
         time: "07:00",
         title: "⭐晨光日出開拍：艾菲爾鐵塔 (夏樂宮與戰神廣場)",
-        desc: "攝影團隊專車接送。把握清晨柔和金光與無人空景，在夏樂宮露台拍下艾菲爾鐵塔全景絕美大片！",
+        desc: "攝影團隊專車接送。把握清晨柔和金光與無人空景，在夏樂宮露台與艾菲爾鐵塔合影，留下晨光下的經典紀念！",
         badges: ["鐵塔日出", "夏樂宮無人空景", "專車接送"],
         map: "Place du Trocadero Paris"
       },
@@ -297,7 +297,7 @@ const itineraryData = [
         time: "12:00",
         title: "亞歷山大三世橋 (Pont Alexandre III) ＆ 塞納河畔",
         desc: "在全巴黎最華麗的金翼天使橋頭與路燈下拍攝電影感構圖，背景遠眺榮軍院金色圓頂與塞納河。",
-        badges: ["亞歷山大三世橋", "金翼飛馬", "電影感大片"],
+        badges: ["亞歷山大三世橋", "金翼飛馬", "電影質感場景"],
         map: "Pont Alexandre III Paris"
       },
       {
@@ -459,8 +459,8 @@ const itineraryData = [
       {
         time: "20:00",
         title: "走出羅浮宮拍攝玻璃金字塔科幻金光夜景",
-        desc: "週三夜間開放至 21:00！出館時華燈初上，貝聿銘玻璃金字塔在夜色中散發溫暖金黃光芒，與古典宮殿互相映照，畫面震撼。",
-        badges: ["週三夜間開放", "金字塔夜景", "絕美夜色"],
+        desc: "週三夜間開放至 21:00！出館時華燈初上，貝聿銘玻璃金字塔在夜色中散發溫暖金黃光芒，與古典宮殿互相映照，畫面典雅動人。",
+        badges: ["週三夜間開放", "金字塔夜景", "迷人夜色"],
         map: "Pyramide du Louvre Paris"
       }
     ],
@@ -666,8 +666,8 @@ const itineraryData = [
       },
       {
         time: "10:45",
-        title: "⭐象鼻海岸 (Étretat) 白堊紀絕美懸崖步道",
-        desc: "停入 Grand Val 停車場。沿著阿瓦爾懸崖 (Falaise d'Aval) 步道登頂，俯瞰象鼻穿入大海與高聳針峰海蝕柱，讚嘆莫內無數幅筆下的自然神作！",
+        title: "⭐象鼻海岸 (Étretat) 白堊紀壯麗懸崖步道",
+        desc: "停入 Grand Val 停車場。沿著阿瓦爾懸崖 (Falaise d'Aval) 步道登頂，俯瞰象鼻穿入大海與高聳針峰海蝕柱，讚嘆莫內畫筆下大自然的鬼斧神工！",
         badges: ["阿瓦爾象鼻懸崖", "海蝕針峰", "莫內畫作地標"],
         map: "Falaise d Aval Etretat"
       },
@@ -719,7 +719,7 @@ const itineraryData = [
       {
         time: "13:45",
         title: "⭐盧昂美術館 (Musée des Beaux-Arts) 名畫鑑賞",
-        desc: "常設展免費入場！親睹莫內《盧昂大教堂》系列油畫真跡與卡拉瓦喬、傑利柯等大師名作，館藏極為震撼豐富。",
+        desc: "常設展免費入場！親睹莫內《盧昂大教堂》系列油畫真跡與卡拉瓦喬、傑利柯等大師名作，館藏極為豐富典雅。",
         badges: ["莫內教堂真跡", "常設展免費", "卡拉瓦喬大師名畫"],
         map: "Musee des Beaux-Arts Rouen"
       },
@@ -738,7 +738,7 @@ const itineraryData = [
     weekday: "二",
     title: "盧昂出發 ➔ 10:00 莫內睡蓮花園 ➔ 韋爾農老磨坊 ➔ 凡爾賽商場採買",
     tag: "印象睡蓮",
-    summary: "08:30 退房，10:00 莫內睡蓮池快速通關，百年玫瑰餐廳午餐，老磨坊打卡，入住凡爾賽！",
+    summary: "08:30 退房，10:00 莫內睡蓮池快速通關，百年玫瑰餐廳午餐，老磨坊留影，入住凡爾賽！",
     keynote: {
       code: "2624364336390402463",
       codeLabel: "莫內花園門票訂單號 (10:00入場)",
@@ -777,7 +777,7 @@ const itineraryData = [
       },
       {
         time: "13:45",
-        title: "韋爾農懸空老磨坊 (Vieux Moulin de Vernon) 拍照打卡",
+        title: "韋爾農懸空老磨坊 (Vieux Moulin de Vernon) 留影漫步",
         desc: "順道自駕前往 Vernon（約 5 分鐘），欣賞建在中世紀塞納河古斷橋橋墩上的木造懸空古磨坊，如童話繪本走出的場景！",
         badges: ["懸空中世紀老磨坊", "莫內畫作取景地", "免費停車"],
         map: "Le Vieux Moulin Vernon"
@@ -823,7 +823,7 @@ const itineraryData = [
       {
         time: "09:00",
         title: "⭐凡爾賽宮「鏡廳衝刺法」搶拍無人空景 ＆ 國王大套房",
-        desc: "一開門直衝 2 樓拍下無人絕美鏡廳 (Galerie des Glaces) 晨光大片！（📸 機位：落地窗與鏡面中央 2x 側光；⚠️ 館內嚴禁自拍棒）。隨後深度參觀國王寢宮、王后套房與加冕廳。",
+        desc: "一開門直衝 2 樓細賞晨光灑落的鏡廳 (Galerie des Glaces)！（📸 取景建議：落地窗與鏡面中央 2x 側光；⚠️ 館內嚴禁自拍棒）。隨後深度參觀國王寢宮、王后套房與加冕廳。",
         badges: ["鏡廳無人空景", "2x側光機位", "國王寢宮", "加冕廳"],
         map: "Galerie des Glaces Versailles"
       },
@@ -909,8 +909,8 @@ const itineraryData = [
       },
       {
         time: "21:30",
-        title: "⭐睡美人城堡夜間無人機燈光秀 ＆ 絕美城堡煙火秀",
-        desc: "全日最高潮！數百架無人機在夜空中拼出立體魔法圖騰，搭配城堡水幕投影、雷射與璀璨煙火，一生必看一次的震撼感動！",
+        title: "⭐睡美人城堡夜間無人機燈光秀 ＆ 璀璨城堡煙火",
+        desc: "全日最高潮！數百架無人機在夜空中拼出立體魔法圖騰，搭配城堡水幕投影、雷射與璀璨煙火，相當值得駐足欣賞的精彩演出！",
         badges: ["無人機燈光秀", "城堡夜間煙火", "終生難忘感動"],
         map: "Sleeping Beauty Castle Disneyland Paris"
       }
@@ -1527,7 +1527,7 @@ const flagshipMalls = [
     tag: "mall",
     desc: "塞納河畔新藝術與裝飾藝術經典，LVMH耗時16年修復重開！五層樓挑高金黃孔雀壁畫穹頂，周杰倫《最偉大的作品》MV 取景地。",
     address: "9 Rue de la Monnaie, 75001 Paris (新橋 Pont Neuf 旁)",
-    highlight: "⏰ 每天 10:00-20:00 ｜ 頂層巨幅金黃孔雀壁畫、百年玻璃透光天頂、周杰倫 MV 取景地打卡",
+    highlight: "⏰ 每天 10:00-20:00 ｜ 頂層巨幅金黃孔雀壁畫、百年玻璃透光天頂、周杰倫 MV 取景地",
     mapQuery: "La Samaritaine Paris"
   },
   {
@@ -1578,6 +1578,30 @@ const finalData = {
 function sanitizeTaiwanTerms(text) {
   if (typeof text !== 'string') return text;
   return text
+    .replace(/當日高光/g, '今日重點')
+    .replace(/今日高光/g, '今日重點')
+    .replace(/高光/g, '重點')
+    .replace(/手沖天花板/g, '頂級手沖咖啡')
+    .replace(/咖啡天花板/g, '頂級精品咖啡')
+    .replace(/美學天花板/g, '典雅美學典範')
+    .replace(/皮包天花板/g, '頂級小眾皮件')
+    .replace(/天花板！/g, '頂級首選！')
+    .replace(/婚紗大片/g, '蜜月婚紗')
+    .replace(/絕美大片/g, '經典合影')
+    .replace(/晨光大片/g, '晨光美景')
+    .replace(/電影感大片/g, '電影質感場景')
+    .replace(/自然神作/g, '大自然的鬼斧神工')
+    .replace(/神作/g, '經典之作')
+    .replace(/寶藏小巷/g, '幽靜小巷')
+    .replace(/微型寶藏/g, '精緻私房')
+    .replace(/寶藏/g, '私房精選')
+    .replace(/爆款/g, '熱銷人氣款')
+    .replace(/速刷/g, '快速入場')
+    .replace(/拍照神地/g, '拍照好去處')
+    .replace(/拍照打卡機位/g, '拍照取景角度')
+    .replace(/拍照打卡/g, '合影留念')
+    .replace(/打卡拍照/g, '合影留念')
+    .replace(/打卡/g, '留影')
     .replace(/屏幕/g, '螢幕')
     .replace(/視頻/g, '影片')
     .replace(/音頻/g, '音訊')
@@ -1589,7 +1613,7 @@ function sanitizeTaiwanTerms(text) {
     .replace(/過山車/g, '雲霄飛車')
     .replace(/跳樓機/g, '大怒神')
     .replace(/性價比/g, 'CP值')
-    .replace(/極度出片/g, '拍照超有法式美感')
+    .replace(/極度出片/g, '拍照超有美感')
     .replace(/出片帶有/g, '洗出來的照片帶有')
     .replace(/出片/g, '超好拍')
     .replace(/膠卷/g, '底片')
