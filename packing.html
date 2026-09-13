@@ -3092,7 +3092,7 @@
       const bagItemCount = items.filter(i => getItemLocs(i).includes(bag.name)).length;
       let msg = `確定要刪除包包【${bag.name}】嗎？`;
       if (bagItemCount > 0) {
-        msg += `\n該包包內的 ${bagItemCount} 件物品將會自此包包移除（若無其他包包則移至「未指定包包」），不會遺失。`;
+        msg += `\n\n💡 請放心：裡面的 ${bagItemCount} 件物品【絕對不會被刪除】！系統將會全數自動還原為「未指定包包」，您可以隨時重新分配收納！`;
       }
 
       if (confirm(msg)) {
@@ -3100,10 +3100,13 @@
           let locs = getItemLocs(i);
           if (locs.includes(bag.name)) {
             locs = locs.filter(loc => loc !== bag.name);
-            setItemLocs(i, locs);
+            setItemLocs(i, locs.length > 0 ? locs : ['未指定包包']);
           }
         });
         bags = bags.filter(b => b.id !== bagId);
+        airtags.forEach(a => {
+          if (a.target === bag.name) a.target = '未指定包包';
+        });
         playDeleteSound();
         saveData();
         renderBagView();
@@ -3111,6 +3114,8 @@
         renderItems();
         updateDashboard();
         renderManageBagsList();
+        renderAirtags();
+        showToast(`🗑️ 已刪除【${bag.name}】，${bagItemCount} 件物品已全數安全還原為「未指定包包」！`, 'success', 3500);
       }
     }
 
@@ -3508,6 +3513,20 @@
         </button>
       `;
 
+      const unassignedCount = items.filter(i => {
+        const locs = getItemLocs(i);
+        return locs.length === 0 || locs.includes('未指定包包') || !locs.some(l => bags.some(b => b.name === l));
+      }).length;
+
+      if (unassignedCount > 0) {
+        html += `
+          <button class="filter-pill ${currentFilterBag === 'UNASSIGNED' ? 'active' : ''}" onclick="setBagFilter('UNASSIGNED')" style="border-color: rgba(212, 118, 10, 0.35); color: #b86200;">
+            <span>📍 未指定包包</span>
+            <span class="count">${unassignedCount}</span>
+          </button>
+        `;
+      }
+
       bags.forEach(b => {
         const count = items.filter(i => getItemLocs(i).includes(b.name)).length;
         const isActive = currentFilterBag === b.name;
@@ -3552,6 +3571,10 @@
 
         if (currentFilterBag === 'ALL') return true;
         if (currentFilterBag === 'TODO') return !item.checked;
+        if (currentFilterBag === 'UNASSIGNED') {
+          const locs = getItemLocs(item);
+          return locs.length === 0 || locs.includes('未指定包包') || !locs.some(l => bags.some(b => b.name === l));
+        }
         return getItemLocs(item).includes(currentFilterBag);
       });
 
