@@ -1766,6 +1766,36 @@
       outline: none;
     }
 
+    /* ⚙️ 設定視窗專用樣式 */
+    .setting-item-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      gap: 12px;
+      transition: all 0.2s;
+    }
+    .setting-item-card.sound {
+      background: rgba(0, 0, 0, 0.025);
+      border: 1px solid var(--border-subtle);
+    }
+    .setting-item-card.reset {
+      background: rgba(192, 57, 43, 0.035);
+      border: 1px solid rgba(192, 57, 43, 0.2);
+    }
+    #setting-sound-toggle.on {
+      background: rgba(46, 125, 50, 0.08);
+      color: #2e7d32;
+      border-color: rgba(46, 125, 50, 0.3);
+      font-weight: 700;
+    }
+    #setting-sound-toggle.off {
+      background: rgba(0, 0, 0, 0.04);
+      color: var(--text-muted);
+      border-color: var(--border-subtle);
+      font-weight: 600;
+    }
 
     /* 🍞 全域自製提示訊息 (Toast) - 完全相容手機 HTML Viewer 與 Webview */
     .toast-container {
@@ -2091,8 +2121,8 @@
         <a href="index.html" class="nav-pill-btn" title="回法國旅行主行程">
           <span>🇫🇷 主行程</span>
         </a>
-        <button type="button" class="nav-icon-btn on" id="sound-btn" onclick="toggleSound()" title="切換音效">
-          <span id="sound-icon">🔔</span>
+        <button type="button" class="nav-icon-btn" id="settings-btn" onclick="openSettingsModal()" title="設定與重設">
+          <span>⚙️</span>
         </button>
       </div>
     </div>
@@ -2202,26 +2232,60 @@
     </div>
   </div>
 
-  <!-- ⚙️ 管理包包彈出視窗 -->
+  <!-- ⚙️ 系統設定與管理 Modal -->
+  <div class="modal-overlay" id="settings-modal" onclick="if(event.target===this) closeSettingsModal()">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-title">
+        <span>⚙️ 設定與重置</span>
+      </div>
+
+      <div class="setting-list" style="display: flex; flex-direction: column; gap: 14px; margin: 8px 0 16px 0;">
+        <!-- 鈴鐺音效開關 -->
+        <div class="setting-item-card sound">
+          <div>
+            <div style="font-weight: 700; font-size: 0.98rem; color: var(--text-main); margin-bottom: 4px;">🔔 鈴鐺提示音效</div>
+            <div style="font-size: 0.8rem; color: var(--text-sub);" id="setting-sound-desc">勾選物品時播放輕脆提示音</div>
+          </div>
+          <button type="button" id="setting-sound-toggle" class="btn-action on" onclick="toggleSound()" style="min-width: 100px; padding: 8px 12px; font-size: 0.9rem; cursor: pointer;">
+            🔔 已開啟
+          </button>
+        </div>
+
+        <!-- 重設全部勾選狀態 -->
+        <div class="setting-item-card reset">
+          <div>
+            <div style="font-weight: 700; font-size: 0.98rem; color: var(--accent-red); margin-bottom: 4px;">🔄 重置全部勾選</div>
+            <div style="font-size: 0.8rem; color: var(--text-sub);">清除所有物品的已打包進度</div>
+          </div>
+          <button type="button" class="btn-action danger" onclick="resetAllChecks()" style="color: var(--accent-red); border-color: rgba(192, 57, 43, 0.4); background: #fff; font-weight: 700; min-width: 100px; padding: 8px 12px; font-size: 0.9rem; cursor: pointer;">
+            重置進度
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-actions" style="justify-content: flex-end;">
+        <button type="button" class="btn-action" onclick="closeSettingsModal()">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🧳 管理包包彈出視窗 -->
   <div class="modal-overlay" id="manage-bags-modal">
     <div class="modal-card" style="max-width: 620px;">
       <div class="modal-title">
-        <span>⚙️ 管理包包清單與密碼備忘</span>
+        <span>🧳 管理包包清單與備註</span>
       </div>
       <div style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 12px;">
-        💡 可按住左側「⋮⋮」拖曳調整順序，或點「▲ / ▼」微調，亦可在此設定行李箱密碼：
+        💡 可按住左側「⋮⋮」拖曳調整順序，或點「▲ / ▼」微調，亦可在此填寫備註：
       </div>
       
       <div class="manage-bag-list" id="manage-bag-list-container" ontouchmove="handleBagTouchMove(event)" ontouchend="handleBagTouchEnd(event)">
         <!-- 由 JS 動態生成包包管理項目 -->
       </div>
 
-      <div class="modal-actions" style="justify-content: space-between; margin-top: 20px; flex-wrap: wrap; gap: 8px;">
-        <button type="button" class="btn-action danger" onclick="resetAllChecks()" style="color: var(--accent-red); border-color: rgba(192, 57, 43, 0.3);">🔄 重置全部勾選狀態</button>
-        <div style="display: flex; gap: 8px;">
-          <button type="button" class="btn-action gold" onclick="openAddBagModal()">＋ 新增包包</button>
-          <button type="button" class="btn-action" onclick="closeManageBagsModal()">關閉</button>
-        </div>
+      <div class="modal-actions" style="justify-content: flex-end; margin-top: 20px; gap: 8px;">
+        <button type="button" class="btn-action gold" onclick="openAddBagModal()">＋ 新增包包</button>
+        <button type="button" class="btn-action" onclick="closeManageBagsModal()">關閉</button>
       </div>
     </div>
   </div>
@@ -2363,8 +2427,8 @@
         <input type="text" id="input-bag-name" class="form-input" placeholder="例如：28吋銀色行李箱、單眼相機包...">
       </div>
       <div class="form-group">
-        <label>密碼備忘 (選填)</label>
-        <input type="text" id="input-bag-pwd" class="form-input" placeholder="例如：密碼 229、綁帶 242...">
+        <label>備註 (選填)</label>
+        <input type="text" id="input-bag-pwd" class="form-input" placeholder="備註">
       </div>
       <div class="form-group">
         <label>包包類型 / 說明 (選填)</label>
@@ -2393,8 +2457,8 @@
         <input type="text" id="input-edit-bag-name" class="form-input" placeholder="例如：28吋銀色行李箱、大黑箱...">
       </div>
       <div class="form-group">
-        <label>密碼備忘 (選填)</label>
-        <input type="text" id="input-edit-bag-pwd" class="form-input" placeholder="例如：密碼 229、綁帶 242...">
+        <label>備註 (選填)</label>
+        <input type="text" id="input-edit-bag-pwd" class="form-input" placeholder="備註">
       </div>
       <div class="form-group">
         <label>包包類型 / 說明 (選填)</label>
@@ -2828,16 +2892,38 @@
 
     function toggleSound() {
       soundEnabled = !soundEnabled;
-      const btn = document.getElementById('sound-btn');
-      const icon = document.getElementById('sound-icon');
+      updateSoundUI();
       if (soundEnabled) {
-        btn.classList.add('on');
-        icon.textContent = '🔔';
         playCheckSound();
+        showToast('🔔 打包提示音效已開啟', 'success', 1500);
       } else {
-        btn.classList.remove('on');
-        icon.textContent = '🔕';
+        showToast('🔕 打包提示音效已靜音', 'info', 1500);
       }
+    }
+
+    function updateSoundUI() {
+      const toggleBtn = document.getElementById('setting-sound-toggle');
+      const soundDesc = document.getElementById('setting-sound-desc');
+      if (toggleBtn) {
+        if (soundEnabled) {
+          toggleBtn.className = 'btn-action on';
+          toggleBtn.textContent = '🔔 已開啟';
+          if (soundDesc) soundDesc.textContent = '勾選物品時播放輕脆提示音';
+        } else {
+          toggleBtn.className = 'btn-action off';
+          toggleBtn.textContent = '🔕 已靜音';
+          if (soundDesc) soundDesc.textContent = '目前為靜音無聲模式';
+        }
+      }
+    }
+
+    function openSettingsModal() {
+      updateSoundUI();
+      document.getElementById('settings-modal').classList.add('active');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').classList.remove('active');
     }
 
     function getItemLocs(item) {
@@ -3378,10 +3464,10 @@
             </div>
           </div>
 
-          <!-- 下層：密碼與備忘輸入框 (寬敞好點、清晰好看) -->
+          <!-- 下層：備註輸入框 (簡潔通用) -->
           <div class="manage-bag-bottom-row">
-            <span class="manage-bag-pwd-label">🔒 密碼備忘：</span>
-            <input type="text" class="manage-bag-pwd-input" placeholder="例如：密碼 229、綁帶 242" value="${escapeHtml(b.pwd || '')}" onchange="updateBagPwd('${b.id}', this.value)" title="輸入此箱開鎖密碼或綁帶密碼">
+            <span class="manage-bag-pwd-label">備註：</span>
+            <input type="text" class="manage-bag-pwd-input" placeholder="備註" value="${escapeHtml(b.pwd || '')}" onchange="updateBagPwd('${b.id}', this.value)" title="輸入備註或開鎖密碼">
           </div>
         </div>
       `).join('');
@@ -3964,6 +4050,8 @@
         renderBagFilterBar();
         if (currentView === 'BAGS') renderBagView();
         updateDashboard();
+        closeSettingsModal();
+        showToast('🔄 已成功重置所有勾選狀態！', 'success', 2000);
       }
     }
 
