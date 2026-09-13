@@ -554,54 +554,89 @@ const itineraryData = [
   {
     date: "9/22",
     weekday: "二",
-    title: "奧塞美術館 ➔ 聖母院內部 ➔ 先賢祠 ➔ 17:30 Polène樂蓬馬歇專櫃 ➔ 油封鴨晚餐",
-    tag: "印象派殿堂",
-    summary: "欣賞奧塞美術館莫內與梵谷名畫，走進聖母院內部，登上先賢祠遠眺，傍晚前往樂蓬馬歇專櫃免排長隊買 Polène 包包並合併退稅！",
+    title: "奧塞美術館 ➔ 杜樂麗 ➔ 橘園碰運氣 ➔ 15:00 海軍府 ➔ 大小皇宮 ➔ 鐵塔機位",
+    tag: "印象派殿堂・皇家海軍府・鐵塔",
+    summary: "08:50 奧塞美術館排隊（首批進場看梵谷名畫），杜樂麗花園漫步，橘園美術館碰運氣；15:00 準時進入海軍府（戴 Confident 中文 3D 耳機看皇家奢華寓所與協和廣場露台）；傍晚漫步大皇宮、亞歷山大三世橋與艾菲爾鐵塔私房拍照機位！",
     keynote: {
-      code: "博物館通票第2日",
-      codeLabel: "票券使用",
-      spot: "奧塞美術館 ➔ 聖母院 ➔ 先賢祠 ➔ Polène樂蓬馬歇",
+      code: "15:00 海軍府 (101385119883301)",
+      codeLabel: "海軍府PMP預約時段",
+      spot: "奧塞美術館 ➔ 杜樂麗花園 ➔ 海軍府 ➔ 亞歷山大三世橋 ➔ 鐵塔私房機位",
       hotel: "B&B HOTEL Paris Italie Porte de Choisy (第7晚)",
-      mapQuery: "Le Bon Marche Paris"
+      mapQuery: "Hotel de la Marine Paris"
     },
     items: [
       {
-        time: "09:30",
-        title: "⭐奧塞美術館 (Musée d'Orsay) 印象派大師真跡",
-        desc: "昔日舊火車站改建！直奔 5 樓印象派長廊：梵谷《自畫像》《羅納河上的星夜》、莫內《撐傘的女人》、雷諾瓦《煎餅磨坊的舞會》、米勒《拾穗》，在巨大時鐘後方拍照！",
-        badges: ["奧塞火車站", "梵谷星夜", "雷諾瓦舞會", "大時鐘窗景"],
+        time: "08:50",
+        title: "奧塞美術館門口排隊（Porte C 通道）",
+        desc: "08:20 飯店出發搭地鐵前往。奧塞美術館週二 09:30 開門，持 PMP 博物館通票請排在【Porte C（預約/通票專屬通道）】前排，09:30 開門首批進館。",
+        badges: ["08:50排隊卡位", "Porte C 通道", "首批進館"],
         map: "Musee d Orsay Paris"
       },
       {
-        time: "13:30",
-        title: "巴黎聖母院 (Cathédrale Notre-Dame de Paris) 內部參觀",
-        desc: "浴火重生後全新開放！仰望玫瑰花窗與莊嚴宏偉的中世紀石造中殿，感受奇蹟般的修復成果。（手機 Notre-Dame App 預約 14:35 場次）",
-        badges: ["2024全新開放", "玫瑰花窗", "哥德經典"],
-        map: "Notre-Dame de Paris"
+        time: "09:30",
+        title: "⭐ 奧塞美術館 (Musée d'Orsay) 印象派名作巡禮",
+        desc: "舊火車站改建藝術殿堂！持 PMP 入場，直奔 5 樓長廊欣賞梵谷《自畫像》、莫內、雷諾瓦《煎餅磨坊的舞會》、米勒《拾穗》，在巨大時鐘窗景前拍照，參觀約 2 小時。",
+        badges: ["持PMP進場", "梵谷自畫像", "大時鐘窗景", "參觀2小時"],
+        map: "Musee d Orsay Paris"
       },
       {
-        time: "15:30",
-        title: "先賢祠 (Panthéon) ＆ La Crèma 手工冰淇淋",
-        desc: "參觀傅科擺與地下陵墓（雨果、大仲馬、居里夫人安息處）。出門順道品嚐 2026 爆紅的 La Crèma 現烤甜筒全植物生巧克力 Gelato！",
-        badges: ["先賢祠", "傅科擺", "La Crèma手工冰淇淋"],
-        map: "Pantheon Paris"
+        time: "11:30",
+        title: "跨越協和橋 ➔ 杜樂麗花園漫步 ＆ 輕食午餐",
+        desc: "跨越塞納河協和橋進入杜樂麗花園，在花園綠蔭長椅稍作休息，於園內餐車買法式薄餅、可麗餅或三明治簡單用餐。",
+        badges: ["協和橋漫步", "杜樂麗花園", "戶外輕食午餐"],
+        map: "Jardin des Tuileries Paris"
+      },
+      {
+        time: "13:00",
+        title: "⭐ 橘園美術館 (Musée de l'Orangerie) 現場候補碰運氣",
+        desc: "橘園設有「無預約通道 (Sans réservation)」。持 PMP 排隊碰運氣，若人流順暢約等 15-25 分鐘可進館欣賞莫內《睡蓮》；若排隊過長可彈性在花園散步。",
+        badges: ["PMP無預約候補", "莫內睡蓮", "彈性參觀"],
+        map: "Musee de l Orangerie Paris"
+      },
+      {
+        time: "15:00",
+        title: "⭐ 海軍府 (Hôtel de la Marine) 預約入場參觀",
+        desc: "持預約憑證與 PMP 入場（訂單: 2625636951330402317・票號: 101385119883301/481）。領取 Confident 中文 3D 空間導覽耳機，參觀 18 世紀皇家家具保管處奢華寓所、金碧輝煌國事大廳，登上二樓柱廊露台俯瞰協和廣場。憑證存 data/0922_海軍府_雙人門票預約憑證.pdf。",
+        badges: ["✅已預約15:00", "Confident中文耳機", "皇家寓所", "協和廣場露台"],
+        map: "Hotel de la Marine Paris"
+      },
+      {
+        time: "16:30",
+        title: "大皇宮與小皇宮 (Grand Palais & Petit Palais) 建築漫步",
+        desc: "沿香榭麗舍花園漫步 800 公尺抵達大皇宮，欣賞巨大玻璃鋼鐵穹頂建築；走進對面小皇宮欣賞半圓形馬賽克中庭庭院與露天咖啡座。",
+        badges: ["大皇宮玻璃穹頂", "小皇宮免費庭院", "香榭花園"],
+        map: "Grand Palais Paris"
+      },
+      {
+        time: "17:00",
+        title: "亞歷山大三世橋 (Pont Alexandre III) 漫步遠眺鐵塔",
+        desc: "漫步塞納河上最華麗的金箔飛馬大橋，欣賞古典路燈與浮雕，從橋上遠眺塞納河畔與遠處的艾菲爾鐵塔，拍照光線極佳。",
+        badges: ["金箔飛馬雕像", "遠眺鐵塔", "拍照絕佳角度"],
+        map: "Pont Alexandre III Paris"
       },
       {
         time: "17:30",
-        title: "⭐Polène 左岸樂蓬馬歇專櫃（Le Bon Marché 0樓）",
-        desc: "全巴黎排隊時間最短的門市（通常 5-10 分鐘即可進櫃看包）！購買後可順道逛百年貴婦超市 (La Grande Épicerie)，並在百貨退稅服務台合併累計退稅（營業至 19:45）。",
-        badges: ["免大排長隊", "全系列包款", "百貨合併退稅"],
-        map: "Le Bon Marche Paris"
+        title: "📸 艾菲爾鐵塔周邊私房機位散步（參考私房名單）",
+        desc: "走訪私房名單經典機位：① 德比利行人天橋 (Passerelle Debilly) 木棧橋視角 ② 大學路 (Rue de l'Université) 經典公寓框景 ③ 夏樂宮平台 (Trocadéro) 正面全景。",
+        badges: ["德比利天橋", "大學路公寓夾景", "夏樂宮正景"],
+        map: "Passerelle Debilly Paris"
       },
       {
         time: "19:30",
-        title: "拉丁區巷弄小酒館享用高 CP 值傳統法式油封鴨晚餐",
-        desc: "外皮酥脆金黃、肉質軟嫩多汁的傳統油封鴨腿佐香煎馬鈴薯，漫步塞納河畔欣賞初秋巴黎夜景。",
-        badges: ["傳統油封鴨", "高 CP 值", "塞納河夜景"],
-        map: "Quartier Latin Paris"
+        title: "戰神廣場草坪散步 ＆ 觀賞 20:00 鐵塔整點閃燈",
+        desc: "傍晚在戰神廣場草坪散步，欣賞晚霞暮色中的鐵塔全景，並觀賞 20:00 整點的 5 分鐘金色閃燈秀。",
+        badges: ["戰神廣場草坪", "暮色鐵塔", "20:00整點閃燈"],
+        map: "Champ de Mars Paris"
+      },
+      {
+        time: "20:30",
+        title: "搭乘地鐵 6 號線直達返回飯店休息",
+        desc: "自 Bir-Hakeim 站搭乘地鐵 6 號線直達 Place d'Italie 站，返回 13 區 B&B 飯店休息，結束充實的一天。",
+        badges: ["地鐵6號線直達", "返回飯店"],
+        map: "B&B HOTEL Paris Italie Porte de Choisy"
       }
     ],
-    coverImage: "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800&auto=format&fit=crop&q=80"
+    coverImage: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&auto=format&fit=crop&q=80"
   },
   {
     date: "9/23",
