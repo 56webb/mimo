@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- 核心樣式 -->
-  <link rel="stylesheet" href="assets/styles/main.css?v=20260913_cdg_pmp_pantheon_pinkmamma">
+  <link rel="stylesheet" href="assets/styles/main.css?v=20260913_secure_local_key">
 </head>
 
 <body>
@@ -690,7 +690,26 @@
             <div class="ai-header-subtitle">已掌握 23 天完整行程 ＆ 90 處口袋好店</div>
           </div>
         </div>
-        <button class="btn-close-ai" id="btnCloseAi" aria-label="關閉">✕</button>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button class="btn-close-ai" id="btnAiKeySettings" aria-label="設定金鑰" title="設定個人專屬 Gemini API Key" style="font-size:0.95rem;">🔑</button>
+          <button class="btn-close-ai" id="btnCloseAi" aria-label="關閉">✕</button>
+        </div>
+      </div>
+
+      <!-- 專屬金鑰設定面板 (僅儲存於手機本地) -->
+      <div class="ai-key-banner" id="aiKeyBanner" style="display:none;background:rgba(212,163,89,0.12);border-bottom:1px solid var(--border-ochre);padding:10px 14px;font-size:0.82rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-weight:600;color:var(--accent-ochre);">🔑 個人專屬 Gemini API Key 設定</span>
+          <button id="btnCloseKeyBanner" style="background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:0.9rem;">✕</button>
+        </div>
+        <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:8px;line-height:1.4;">
+          🔒 此金鑰<strong>僅加密儲存於您的手機瀏覽器 (localStorage)</strong>，絕不上傳至 GitHub 或任何伺服器，完全杜絕外洩風險。
+        </div>
+        <div style="display:flex;gap:6px;">
+          <input type="password" id="inputUserApiKey" placeholder="貼上您的 AIzaSy... 金鑰" style="flex:1;background:rgba(0,0,0,0.4);border:1px solid var(--border-whisper);border-radius:6px;padding:7px 10px;font-size:0.8rem;color:#fff;outline:none;" />
+          <button id="btnSaveUserApiKey" style="background:var(--accent-ochre);color:#111;border:none;border-radius:6px;padding:7px 12px;font-weight:600;font-size:0.8rem;cursor:pointer;">儲存啟用</button>
+        </div>
+        <div id="keyStatusMsg" style="font-size:0.72rem;margin-top:5px;display:none;"></div>
       </div>
 
       <!-- 快捷問題標籤 (Quick Prompts) -->
@@ -724,7 +743,7 @@
   <div class="toast-notice" id="toastNotice">✅ 已複製到剪貼簿</div>
 
   <!-- 核心 JavaScript 腳本 -->
-  <script src="js/app.js?v=20260913_cdg_pmp_pantheon_pinkmamma"></script>
+  <script src="js/app.js?v=20260913_secure_local_key"></script>
 </body>
 
 </html>

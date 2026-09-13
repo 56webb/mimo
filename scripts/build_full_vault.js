@@ -1972,23 +1972,13 @@ console.log(`- 票券清單 (ticketsData): ${ticketsData.length} 筆憑證`);
 console.log(`- 私房口袋庫 (pocketPlacesData): ${pocketPlacesData.length} 處私房好店與百貨`);
 
 // ==========================================
-// 5. 進行 AES-256-CBC 加密
+// 5. 進行 AES-256-CBC 加密（API Key 已完全剔除，由客戶端本機 localStorage 安全管理）
 // ==========================================
-let geminiApiKey = process.env.GEMINI_API_KEY || "";
-const secretPath = path.join(ROOT_DIR, 'vault_secret.json');
-if (fs.existsSync(secretPath)) {
-  try {
-    const sJson = JSON.parse(fs.readFileSync(secretPath, 'utf8'));
-    geminiApiKey = sJson.geminiApiKey || geminiApiKey;
-  } catch (e) {}
-}
-
 const finalData = {
   itineraryData,
   hotelsData,
   ticketsData,
-  pocketPlacesData,
-  geminiApiKey
+  pocketPlacesData
 };
 
 function sanitizeTaiwanTerms(text) {
