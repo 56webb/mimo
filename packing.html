@@ -7,6 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Firebase 10.8.0 SDK (支援秒級即時雲端雙向同步) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
   <style>
     :root {
       --bg-dark: #faf8f5;
@@ -28,6 +33,51 @@
       --text-sub: #6b6b6b;
       --text-muted: #9a9a9a;
       --border-subtle: rgba(0, 0, 0, 0.08);
+
+    /* ☁️ 雲端即時連線狀態燈號 */
+    .cloud-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .cloud-status-badge.online {
+      background: rgba(46, 125, 50, 0.1);
+      color: #2e7d32;
+      border-color: rgba(46, 125, 50, 0.35);
+    }
+    .cloud-status-badge.connecting {
+      background: rgba(184, 134, 11, 0.1);
+      color: #b8860b;
+      border-color: rgba(184, 134, 11, 0.35);
+    }
+    .cloud-status-badge.offline {
+      background: rgba(198, 40, 40, 0.08);
+      color: #c62828;
+      border-color: rgba(198, 40, 40, 0.25);
+    }
+    .cloud-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .cloud-status-badge.online .cloud-dot {
+      box-shadow: 0 0 8px #2e7d32;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
       --border-active: rgba(184, 134, 11, 0.35);
       --radius-sm: 8px;
       --radius-md: 14px;
@@ -1545,6 +1595,10 @@
         </div>
       </div>
       <div class="header-controls">
+        <div class="cloud-status-badge connecting" id="cloudStatusBadge" onclick="showCloudSyncInfo()" title="點擊查看雲端連線狀態與設定">
+          <span class="cloud-dot"></span>
+          <span id="cloudStatusText">雲端連線中</span>
+        </div>
         <a href="index.html" class="sound-toggle-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px;color:var(--text-main);background:#fff;border:1px solid rgba(0,0,0,0.1);">
           <span>🇫🇷</span>
           <span>回主行程</span>
@@ -2152,6 +2206,140 @@
       }
     };
 
+    // 🔥 Firebase 即時雲端雙向同步系統 (Google 官方原廠・秒級推播)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD89r4geyKmKGymQYZ8dF1Vuihm9ExaGnc",
+      authDomain: "tainan-package-king.firebaseapp.com",
+      databaseURL: safeStorage.getItem('firebase_rtdb_url') || "https://tainan-package-king-default-rtdb.firebaseio.com",
+      projectId: "tainan-package-king",
+      storageBucket: "tainan-package-king.firebasestorage.app",
+      messagingSenderId: "961594589129",
+      appId: "1:961594589129:web:7cbb5742e558814ad67218",
+      measurementId: "G-QJDMXDRBC3"
+    };
+
+    let firebaseDb = null;
+    let isCloudOnline = false;
+    let lastCloudTimestamp = 0;
+    let cloudPushTimeout = null;
+
+    function updateCloudStatus(online, msg = '') {
+      isCloudOnline = online;
+      const badge = document.getElementById('cloudStatusBadge');
+      const text = document.getElementById('cloudStatusText');
+      if (!badge || !text) return;
+
+      badge.className = 'cloud-status-badge ' + (online ? 'online' : 'offline');
+      if (online) {
+        text.textContent = '🟢 雲端同步中';
+        badge.title = '✅ 雲端即時連線正常！手機與電腦已自動即時同步';
+      } else {
+        text.textContent = '⚪ 離線/未開通';
+        badge.title = msg ? '⚠️ 連線提示: ' + msg : '點擊查看雲端連線設定與開通引導';
+      }
+    }
+
+    function initFirebaseSync() {
+      if (typeof firebase === 'undefined') {
+        console.warn('Firebase SDK 未載入');
+        updateCloudStatus(false, 'SDK 未載入');
+        return;
+      }
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        firebaseDb = firebase.database();
+
+        // 監聽連線通道
+        firebaseDb.ref('.info/connected').on('value', snap => {
+          updateCloudStatus(snap.val() === true);
+        });
+
+        // 監聽雲端資料變更 (即時秒級推播)
+        firebaseDb.ref('packing_master').on('value', snapshot => {
+          const val = snapshot.val();
+          if (!val) {
+            // 雲端尚無資料，初次將本地完整清單推上雲端建立基底
+            pushToCloud(true);
+            return;
+          }
+          if (val.timestamp && val.timestamp <= lastCloudTimestamp) {
+            // 本地發出的更新，不重複渲染
+            return;
+          }
+          lastCloudTimestamp = val.timestamp || Date.now();
+
+          // 載入雲端最新資料
+          if (val.items && Array.isArray(val.items)) items = val.items;
+          if (val.bags && Array.isArray(val.bags)) bags = val.bags;
+          if (val.airtags && Array.isArray(val.airtags)) airtags = val.airtags;
+
+          saveData(false); // 存入本地但不重複觸發推播
+          renderItems();
+          renderAirtags();
+          renderBagFilterBar();
+          if (currentView === 'BAGS') renderBagView();
+          updateDashboard();
+          showToast('☁️ 雲端已即時同步最新進度！', 'success', 2000);
+        }, err => {
+          console.warn('Firebase 讀取受阻:', err.message);
+          updateCloudStatus(false, err.message);
+        });
+      } catch (err) {
+        console.warn('Firebase 初始化異常:', err);
+        updateCloudStatus(false, err.message);
+      }
+    }
+
+    // 將最新進度推送至 Firebase (含防抖機制)
+    function pushToCloud(immediate = false) {
+      if (!firebaseDb) return;
+      if (cloudPushTimeout) clearTimeout(cloudPushTimeout);
+
+      const doPush = () => {
+        const now = Date.now();
+        lastCloudTimestamp = now;
+        const payload = {
+          version: 6,
+          timestamp: now,
+          updatedAt: new Date().toISOString(),
+          items: items,
+          bags: bags,
+          airtags: airtags
+        };
+        firebaseDb.ref('packing_master').set(payload)
+          .then(() => {
+            updateCloudStatus(true);
+          })
+          .catch(err => {
+            console.warn('推送到雲端失敗:', err.message);
+            updateCloudStatus(false, err.message);
+          });
+      };
+
+      if (immediate) {
+        doPush();
+      } else {
+        cloudPushTimeout = setTimeout(doPush, 300); // 300ms 防抖，連打不卡頓
+      }
+    }
+
+    function showCloudSyncInfo() {
+      const currentUrl = firebaseConfig.databaseURL;
+      const statusText = isCloudOnline ? '🟢 已連線 (即時秒級同步正常)' : '⚪ 離線或尚未於 Firebase 開通 Realtime Database';
+      const promptMsg = `【☁️ Firebase 雲端雙向同步資訊】\n\n` +
+        `• 專案：${firebaseConfig.projectId}\n` +
+        `• 目前狀態：${statusText}\n` +
+        `• 資料庫網址：${currentUrl}\n\n` +
+        `💡 提示：若您在 Firebase Console 選擇了不同地區（如新加坡），可在此修改 Database URL：`;
+      const newUrl = prompt(promptMsg, currentUrl);
+      if (newUrl && newUrl.trim() && newUrl.trim() !== currentUrl) {
+        safeStorage.setItem('firebase_rtdb_url', newUrl.trim());
+        location.reload();
+      }
+    }
+
     let bags = JSON.parse(safeStorage.getItem('tainan_packing_bags_v9') || 'null') || DEFAULT_BAGS;
     let airtags = JSON.parse(safeStorage.getItem('tainan_packing_airtags_v9') || 'null') || DEFAULT_AIRTAGS;
     let items = JSON.parse(safeStorage.getItem('tainan_packing_items_v9') || 'null') || DEFAULT_ITEMS;
@@ -2251,13 +2439,16 @@
       item.loc = item.locs.join('、');
     }
 
-    function saveData() {
+    function saveData(shouldPushCloud = true) {
       try {
         safeStorage.setItem('tainan_packing_bags_v9', JSON.stringify(bags));
         safeStorage.setItem('tainan_packing_airtags_v9', JSON.stringify(airtags));
         safeStorage.setItem('tainan_packing_items_v9', JSON.stringify(items));
       } catch (e) {}
       updateDashboard();
+      if (shouldPushCloud) {
+        pushToCloud();
+      }
     }
 
     function toggleAirtagSection() {
@@ -3447,6 +3638,7 @@
       renderBagView();
       renderItems();
       updateDashboard();
+      initFirebaseSync(); // 🔥 啟動 Firebase 即時雲端雙向同步！
     });
   </script>
 </body>
