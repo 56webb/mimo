@@ -18,6 +18,9 @@ Icon*
 # Documents & Tickets (Private)
 *.pdf
 data/*.pdf
+data/*.png
+data/*.jpg
+data/*.jpeg
 data/encrypted_vault.json
 vault_secret.json
 
