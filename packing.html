@@ -140,41 +140,58 @@
       letter-spacing: 0.5px;
     }
 
-    .brand-badge {
-      background: linear-gradient(135deg, #b8860b 0%, #9a7209 100%);
-      color: #fff;
-      font-size: 0.8rem;
-      font-weight: 800;
-      padding: 3px 10px;
-      border-radius: 6px;
-      font-family: 'Outfit', sans-serif;
-    }
+
 
     .header-controls {
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-shrink: 0;
     }
 
-    .sound-toggle-btn {
-      background: rgba(0, 0, 0, 0.03);
+    .nav-pill-btn {
+      background: rgba(0, 0, 0, 0.04);
       border: 1px solid var(--border-subtle);
-      color: var(--text-sub);
-      padding: 8px 16px;
+      color: var(--text-main);
+      padding: 7px 14px;
       border-radius: var(--radius-sm);
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: all 0.2s;
     }
 
-    .sound-toggle-btn.on {
+    .nav-pill-btn:hover {
+      background: rgba(184, 134, 11, 0.08);
       color: var(--accent-gold);
       border-color: rgba(184, 134, 11, 0.3);
-      background: rgba(184, 134, 11, 0.06);
+    }
+
+    .nav-icon-btn {
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-sub);
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .nav-icon-btn.on {
+      color: var(--accent-gold);
+      border-color: rgba(184, 134, 11, 0.3);
+      background: rgba(184, 134, 11, 0.08);
     }
 
     /* 主容器 */
@@ -1096,28 +1113,66 @@
       transform: scale(1);
     }
 
-    .item-center {
+    .item-main-content {
       flex: 1;
+      min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      min-width: 0;
-      cursor: pointer;
+      gap: 8px;
     }
 
-    .item-name-line {
+    .item-header-line {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 8px;
+      width: 100%;
     }
 
     .item-name {
-      font-size: 1.08rem;
-      font-weight: 600;
+      font-size: 1.05rem;
+      font-weight: 700;
       color: var(--text-main);
       line-height: 1.35;
       word-break: break-word;
+      cursor: pointer;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-action-btns {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .btn-item-tool {
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 6px;
+      padding: 4px 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      line-height: 1;
+    }
+
+    .btn-item-tool:hover {
+      background: rgba(184, 134, 11, 0.15);
+      border-color: var(--accent-gold);
+    }
+
+    .btn-item-tool.del:hover {
+      background: rgba(192, 57, 43, 0.12);
+      border-color: var(--accent-red);
+    }
+
+    .item-footer-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .item-name.red-alert {
@@ -1177,11 +1232,7 @@
       opacity: 0.7;
     }
 
-    .item-right-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+
 
     /* 狀態標籤：已打包 */
     .status-badge {
@@ -1286,6 +1337,54 @@
     .btn-action.gold:hover {
       background: linear-gradient(135deg, #c79515 0%, #a87d0c 100%);
       transform: translateY(-1px);
+    }
+
+    .btn-bottom-sub {
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-bottom-sub:hover {
+      background: rgba(0, 0, 0, 0.08);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-bottom-main {
+      background: linear-gradient(135deg, #b8860b 0%, #9a7209 100%);
+      border: none;
+      color: #fff;
+      padding: 11px 24px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(184, 134, 11, 0.35);
+      transition: all 0.2s;
+      flex: 1;
+      max-width: 320px;
+    }
+
+    .btn-bottom-main:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(184, 134, 11, 0.45);
     }
 
     /* 彈出視窗 Modal */
@@ -1517,18 +1616,6 @@
       width: 130px;
     }
 
-    .export-textarea {
-      width: 100%;
-      height: 240px;
-      background: #faf8f5;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: var(--radius-sm);
-      color: var(--text-main);
-      padding: 14px;
-      font-family: monospace;
-      font-size: 0.88rem;
-      resize: vertical;
-    }
 
     /* 🍞 全域自製提示訊息 (Toast) - 完全相容手機 HTML Viewer 與 Webview */
     .toast-container {
@@ -1579,40 +1666,290 @@
       background: #b8860b;
       border-color: #f3c267;
     }
+    /* ============================================================
+       📱 手機端極致 UI / UX 專用最佳化 (Mobile First Optimization)
+       ============================================================ */
+    @media (max-width: 680px) {
+      body {
+        padding-bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* 頂部導航：緊湊精緻單行 */
+      header {
+        padding: 10px 14px;
+      }
+      .header-inner {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+      .brand-title {
+        font-size: 1.12rem !important;
+      }
+      .brand-badge {
+        display: none; /* 手機上隱藏副標籤以節省空間 */
+      }
+      .header-controls {
+        gap: 6px;
+      }
+      .cloud-status-badge {
+        padding: 4px 8px;
+        font-size: 0.72rem;
+      }
+      .sound-toggle-btn {
+        padding: 5px 8px;
+        font-size: 0.78rem;
+      }
+
+      /* 任務儀表板：緊湊大卡 */
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 0 12px;
+      }
+      .dash-card {
+        padding: 14px 16px;
+      }
+      .dash-stat-row {
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 0.8rem;
+      }
+      .quick-stat-box {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .stat-pill-item {
+        padding: 10px 6px;
+      }
+      .stat-pill-item .num {
+        font-size: 1.25rem;
+      }
+
+      /* 視角切換與搜尋列 */
+      .view-mode-bar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 12px;
+        margin: 14px 0;
+      }
+      .view-switcher {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      .view-btn {
+        justify-content: center;
+        padding: 9px 0;
+        font-size: 0.9rem;
+      }
+      .search-input-wrap {
+        width: 100%;
+      }
+      .search-input {
+        padding: 11px 14px 11px 38px;
+        font-size: 0.9rem;
+      }
+
+      /* 物品列表卡片：雙層排版、零折行、大拇指友善 */
+      .item-row {
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .item-row:active {
+        transform: scale(0.99);
+      }
+      .check-area {
+        min-width: 36px;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2px;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .custom-check {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        border-width: 2px;
+      }
+      .item-main-content {
+        flex: 1;
+        min-width: 0;
+        gap: 8px;
+      }
+      .item-header-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+      }
+      .item-header-line .item-name {
+        font-size: 0.98rem;
+        font-weight: 700;
+        line-height: 1.4;
+        word-break: break-word;
+      }
+      .item-action-btns {
+        display: flex;
+        gap: 4px;
+        flex-shrink: 0;
+      }
+      .btn-item-tool {
+        padding: 3px 6px;
+        font-size: 0.82rem;
+      }
+      .item-footer-line {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .btn-choose-bag {
+        padding: 4px 10px;
+        font-size: 0.78rem;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .status-badge {
+        font-size: 0.72rem;
+        padding: 3px 7px;
+        border-radius: 4px;
+        white-space: nowrap;
+      }
+      .note-tag {
+        font-size: 0.72rem;
+        padding: 3px 7px;
+        white-space: nowrap;
+      }
+
+      /* 📱 Mobile Bottom Sheet（自底向上抽屜視窗） */
+      .modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+      }
+      .modal-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 88vh;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border-top-left-radius: 24px !important;
+        border-top-right-radius: 24px !important;
+        padding: 18px 20px calc(24px + env(safe-area-inset-bottom)) 20px !important;
+        animation: sheetSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow-y: auto;
+      }
+      .modal-card::before {
+        content: '';
+        display: block;
+        width: 42px;
+        height: 5px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        margin: 0 auto 14px auto;
+      }
+      @keyframes sheetSlideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      .modal-actions {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .modal-actions .btn-action {
+        width: 100%;
+        height: 44px;
+        font-size: 0.95rem;
+        justify-content: center;
+      }
+
+      /* 📱 手機底部吸底懸浮導航列 (Thumb Zone 舒適操作) */
+      .bottom-bar {
+        padding: 8px 12px calc(8px + env(safe-area-inset-bottom)) 12px;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+      }
+      .bottom-inner {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn-bottom-sub {
+        flex: 0 0 36%;
+        height: 46px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        background: rgba(0, 0, 0, 0.05);
+        color: var(--text-main);
+        border: 1px solid var(--border-subtle);
+      }
+      .btn-bottom-main {
+        flex: 1;
+        height: 46px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        background: linear-gradient(135deg, var(--accent-gold) 0%, #9a7209 100%);
+        color: #fff;
+        box-shadow: 0 4px 14px rgba(184, 134, 11, 0.3);
+        border: none;
+        max-width: none;
+      }
+    }
   </style>
 </head>
 <body>
   <!-- 🍞 浮動提示訊息容器 -->
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- 頂部導航 -->
+  <!-- 頂部導航 (精簡優雅、嚴禁折行) -->
   <header>
     <div class="header-inner">
       <div class="brand-wrap">
-        <div class="brand-title">
-          <span>台南打包大王</span>
-          <span class="brand-badge">旗艦細項完整版</span>
-        </div>
+        <h1 class="brand-title">台南打包大王</h1>
       </div>
       <div class="header-controls">
-        <div class="cloud-status-badge connecting" id="cloudStatusBadge" onclick="showCloudSyncInfo()" title="點擊查看雲端連線狀態與設定">
+        <div class="cloud-status-badge connecting" id="cloudStatusBadge" onclick="showCloudSyncInfo()" title="點選查看雲端連線狀態與設定">
           <span class="cloud-dot"></span>
-          <span id="cloudStatusText">雲端連線中</span>
+          <span id="cloudStatusText">雲端</span>
         </div>
-        <a href="index.html" class="sound-toggle-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px;color:var(--text-main);background:#fff;border:1px solid rgba(0,0,0,0.1);">
-          <span>🇫🇷</span>
-          <span>回主行程</span>
+        <a href="index.html" class="nav-pill-btn" title="回法國旅行主行程">
+          <span>🇫🇷 主行程</span>
         </a>
-        <button class="sound-toggle-btn on" id="sound-btn" onclick="toggleSound()">
+        <button type="button" class="nav-icon-btn on" id="sound-btn" onclick="toggleSound()" title="切換音效">
           <span id="sound-icon">🔔</span>
-          <span>音效反饋</span>
         </button>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- 📊 任務數據儀表板 -->
+    <!-- 📊 打包進度儀表板 -->
     <div class="dashboard-grid">
       <div class="dash-card">
         <div class="dash-progress-title">
@@ -1636,7 +1973,7 @@
         </div>
         <div class="stat-pill-item">
           <div class="num" id="stat-airtag-count" style="color: var(--accent-cyan);">3</div>
-          <div class="label">AirTag 在線</div>
+          <div class="label">AirTag 連線中</div>
         </div>
         <div class="stat-pill-item">
           <div class="num" id="stat-sealed-count" style="color: var(--accent-green);">0</div>
@@ -1650,7 +1987,7 @@
       <div class="section-header" style="margin-bottom: 0; cursor: pointer; user-select: none;" onclick="toggleAirtagSection()">
         <div class="section-title">
           <span>🏷️ AirTag 定位追蹤管理</span>
-          <span class="tag">iPhone 雙向聯動</span>
+          <span class="tag">iPhone 雙向連動</span>
           <span id="airtag-toggle-arrow" style="font-size: 0.82rem; color: var(--accent-cyan); margin-left: 8px; font-weight: 600;">▼ 點此展開</span>
         </div>
         <div class="airtag-header-actions" onclick="event.stopPropagation()">
@@ -1704,25 +2041,15 @@
     </div>
   </main>
 
-  <!-- 底部操作列 -->
+  <!-- 📱 底部吸底操作列 (專屬手機大拇指極致清爽操作) -->
   <div class="bottom-bar">
     <div class="bottom-inner">
-      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <button class="btn-action gold" onclick="openAddModal()">
-          <span>＋ 新增物品</span>
-        </button>
-        <button class="btn-action" onclick="openManageBagsModal()">
-          <span>⚙️ 管理包包</span>
-        </button>
-        <button class="btn-action" onclick="openSyncModal()">
-          <span>🔄 匯出 / 匯入同步</span>
-        </button>
-      </div>
-      <div>
-        <button class="btn-action" onclick="resetAllChecks()" style="color: var(--text-muted); border-color: transparent;">
-          <span>重置勾選</span>
-        </button>
-      </div>
+      <button type="button" class="btn-bottom-sub" onclick="openManageBagsModal()">
+        <span>⚙️ 管理包包</span>
+      </button>
+      <button type="button" class="btn-bottom-main" onclick="openAddModal()">
+        <span>＋ 新增物品</span>
+      </button>
     </div>
   </div>
 
@@ -1740,9 +2067,12 @@
         <!-- 由 JS 動態生成包包管理項目 -->
       </div>
 
-      <div class="modal-actions" style="justify-content: space-between; margin-top: 20px;">
-        <button class="btn-action gold" onclick="openAddBagModal()">＋ 新增全新包包</button>
-        <button class="btn-action" onclick="closeManageBagsModal()">儲存並關閉</button>
+      <div class="modal-actions" style="justify-content: space-between; margin-top: 20px; flex-wrap: wrap; gap: 8px;">
+        <button type="button" class="btn-action danger" onclick="resetAllChecks()" style="color: var(--accent-red); border-color: rgba(192, 57, 43, 0.3);">🔄 重置全部勾選狀態</button>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-action gold" onclick="openAddBagModal()">＋ 新增包包</button>
+          <button type="button" class="btn-action" onclick="closeManageBagsModal()">關閉</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1783,8 +2113,8 @@
       </div>
       <div class="form-group">
         <label style="display: flex; justify-content: space-between; align-items: center;">
-          <span>收納於哪些包包？（可點擊複選多個）</span>
-          <span style="font-size: 0.76rem; color: var(--text-muted);">點擊標籤切換加入/移除</span>
+          <span>收納於哪些包包？（可點選複選多個）</span>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">點選標籤切換加入/移除</span>
         </label>
         <div id="edit-item-bags-chips" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;"></div>
       </div>
@@ -1816,9 +2146,12 @@
         <!-- 由 JS 動態生成所有可選包包卡片 -->
       </div>
 
-      <div class="modal-actions">
-        <button class="btn-action" onclick="closeBagPicker()">關閉</button>
-        <button class="btn-action gold" onclick="openAddBagFromPicker()">＋ 建立新包包</button>
+      <div class="modal-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; gap: 8px;">
+        <button type="button" class="btn-action" style="font-size: 0.85rem; padding: 8px 12px;" onclick="openAddBagFromPicker()">＋ 建立新包包</button>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-action" onclick="closeBagPicker()">取消</button>
+          <button type="button" class="btn-action gold" id="btn-confirm-bag-picker" onclick="confirmBagPickerSelection()">✓ 確認儲存</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1834,7 +2167,7 @@
         <input type="text" id="input-item-name" class="form-input" placeholder="例如：自拍棒、眼藥水...">
       </div>
       <div class="form-group">
-        <label>放入哪個包包？(點擊下方快速填入)</label>
+        <label>放入哪個包包？(點選下方快速填入)</label>
         <input type="text" id="input-item-loc" class="form-input" placeholder="例如：大黑箱、白色-藍色行李箱...">
         <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;" id="quick-bag-tags">
           <!-- 快捷標籤 -->
@@ -1949,72 +2282,7 @@
     </div>
   </div>
 
-  <!-- 🔄 夫妻同步與匯出/匯入 Modal -->
-  <div class="modal-overlay" id="sync-modal">
-    <div class="modal-card" style="max-width: 640px;">
-      <div class="modal-title">
-        <span>🔄 夫妻雙向同步與清單匯出</span>
-      </div>
-      
-      <!-- 分頁切換鈕 -->
-      <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">
-        <button type="button" id="tab-btn-sync" class="btn-action gold" style="padding: 6px 14px; font-size: 0.85rem;" onclick="switchSyncTab('SYNC')">
-          🔄 夫妻代碼同步 (雙向互通)
-        </button>
-        <button type="button" id="tab-btn-text" class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="switchSyncTab('TEXT')">
-          📝 LINE 純文字清單
-        </button>
-      </div>
 
-      <!-- 分頁 1：夫妻代碼雙向同步 -->
-      <div id="sync-tab-code">
-        <div style="background: rgba(184, 134, 11, 0.06); border: 1px solid rgba(184, 134, 11, 0.2); padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 0.82rem; color: var(--text-main); line-height: 1.5;">
-          💡 <strong>雙向同步超簡單</strong>：在您手機上點「一鍵複製我的進度代碼」，傳到 LINE 給老婆；老婆在她的手機打開本視窗，貼上並點「立即套用」，兩人進度即可瞬間同步！
-        </div>
-
-        <!-- 區塊 A：匯出我的進度 -->
-        <div style="margin-bottom: 16px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-            <label style="font-weight: 700; font-size: 0.88rem; color: var(--accent-navy);">📤 我的最新進度代碼：</label>
-            <div style="display: flex; gap: 6px;">
-              <button type="button" class="btn-action gold" style="padding: 5px 12px; font-size: 0.82rem;" onclick="copySyncCode()">一鍵複製進度代碼</button>
-              <button type="button" class="btn-action" style="padding: 5px 10px; font-size: 0.82rem;" onclick="downloadSyncFile()">💾 下載備份檔</button>
-            </div>
-          </div>
-          <textarea id="sync-export-code" class="export-textarea" style="height: 80px; font-size: 0.75rem;" readonly></textarea>
-        </div>
-
-        <!-- 區塊 B：匯入對方的進度 -->
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-            <label style="font-weight: 700; font-size: 0.88rem; color: var(--accent-navy);">📥 貼上同步代碼（或選擇備份檔）：</label>
-            <button type="button" class="btn-action" style="padding: 4px 10px; font-size: 0.8rem;" onclick="document.getElementById('sync-file-input').click()">📂 選擇備份檔匯入</button>
-            <input type="file" id="sync-file-input" accept=".json,text/plain" style="display:none;" onchange="handleSyncFileSelect(event)">
-          </div>
-          <textarea id="sync-import-code" class="form-input" style="height: 85px; font-size: 0.75rem; font-family: monospace;" placeholder="請在此處貼上對方傳來的同步代碼..." oninput="previewImportCode()"></textarea>
-          <div id="sync-import-status" style="margin-top: 6px; font-size: 0.82rem; font-weight: 600; min-height: 20px;"></div>
-          <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
-            <button type="button" class="btn-action" style="background: var(--accent-green); color: #fff; border: none; font-weight: 700; padding: 10px 20px; font-size: 0.95rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(46,125,50,0.3);" onclick="applyImportCode()">📥 立即套用並同步</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 分頁 2：LINE 純文字閱讀版 -->
-      <div id="sync-tab-text" style="display: none;">
-        <div style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 8px;">
-          格式化純文字清單，適合直接傳送至 LINE 群組或手機備忘錄檢視：
-        </div>
-        <textarea id="export-text" class="export-textarea" style="height: 220px;" readonly></textarea>
-        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-          <button class="btn-action gold" onclick="copyExportText()">一鍵複製 LINE 清單</button>
-        </div>
-      </div>
-
-      <div class="modal-actions" style="margin-top: 16px;">
-        <button class="btn-action" onclick="closeSyncModal()">關閉視窗</button>
-      </div>
-    </div>
-  </div>
 
   <script>
     // 🧳 預設包包清單 (含使用者特別指定的大藍箱密碼 229 與綁帶密碼 242)
@@ -2235,7 +2503,7 @@
         badge.title = '✅ 雲端即時連線正常！手機與電腦已自動即時同步';
       } else {
         text.textContent = '⚪ 離線/未開通';
-        badge.title = msg ? '⚠️ 連線提示: ' + msg : '點擊查看雲端連線設定與開通引導';
+        badge.title = msg ? '⚠️ 連線提示: ' + msg : '點選查看雲端連線設定與開通引導';
       }
     }
 
@@ -2586,7 +2854,7 @@
         return `
           <div class="bag-card ${isSealed ? 'sealed' : ''}">
             <div class="bag-card-top">
-              <div class="bag-card-title-group" style="cursor: pointer;" onclick="openEditBagModal('${bag.id}')" title="點擊編輯此包包名稱與設定">
+              <div class="bag-card-title-group" style="cursor: pointer;" onclick="openEditBagModal('${bag.id}')" title="點選編輯此包包名稱與設定">
                 <div class="bag-card-icon">${bag.icon}</div>
                 <div>
                   <div class="bag-card-name" style="display: flex; align-items: center; gap: 6px;">
@@ -2629,7 +2897,7 @@
                     <span>${escapeHtml(item.name)}</span>
                   </div>
                   <div class="bag-item-right">
-                    <span class="note-tag" onclick="event.stopPropagation(); openNoteModal(${item.id})" title="點擊編輯備註">${item.note ? escapeHtml(item.note) : '＋備註'}</span>
+                    <span class="note-tag" onclick="event.stopPropagation(); openNoteModal(${item.id})" title="點選編輯備註">${item.note ? escapeHtml(item.note) : '＋備註'}</span>
                     <button class="btn-edit-icon" onclick="event.stopPropagation(); openEditItemModal(${item.id})" title="編輯此物品" style="padding: 2px 4px; font-size: 0.85rem;">✏️</button>
                     <button class="btn-del-icon" onclick="event.stopPropagation(); deleteItem(${item.id})" title="刪除此物品" style="padding: 2px 5px; font-size: 0.85rem;">✕</button>
                   </div>
@@ -2920,7 +3188,7 @@
       const container = document.getElementById('manage-bag-list-container');
       container.innerHTML = bags.map(b => `
         <div class="manage-bag-card">
-          <div class="manage-bag-info" style="cursor: pointer;" onclick="openEditBagModal('${b.id}')" title="點擊編輯此包包">
+          <div class="manage-bag-info" style="cursor: pointer;" onclick="openEditBagModal('${b.id}')" title="點選編輯此包包">
             <span style="font-size: 1.6rem;">${b.icon}</span>
             <div>
               <div style="font-weight: 700; color: var(--accent-navy); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
@@ -3101,22 +3369,24 @@
                 </div>
               </div>
               
-              <div class="item-center" onclick="toggleItem(${item.id})">
-                <div class="item-name-line">
-                  <span class="item-name">${escapeHtml(item.name)}</span>
+              <div class="item-main-content">
+                <!-- 第一行：物品名稱 ＋ 編輯/刪除操作按鈕 -->
+                <div class="item-header-line">
+                  <span class="item-name" onclick="toggleItem(${item.id})">${escapeHtml(item.name)}</span>
+                  <div class="item-action-btns" onclick="event.stopPropagation()">
+                    <button type="button" class="btn-item-tool" onclick="openEditItemModal(${item.id})" title="編輯此物品">✏️</button>
+                    <button type="button" class="btn-item-tool del" onclick="deleteItem(${item.id})" title="刪除此物品">🗑️</button>
+                  </div>
                 </div>
-                <div class="item-meta-line">
-                  ${statusHtml}
-                  <span class="note-tag" onclick="event.stopPropagation(); openNoteModal(${item.id})" title="點擊編輯備註">${item.note ? '📝 ' + escapeHtml(item.note) : '＋備註'}</span>
-                </div>
-              </div>
 
-              <div class="item-right-actions">
-                <button class="${bagStyleClass}" onclick="event.stopPropagation(); openBagPicker(${item.id})" title="點擊選擇放到哪些包包 (可複選)">
-                  ${bagLabelHtml}
-                </button>
-                <button class="btn-edit-icon" onclick="event.stopPropagation(); openEditItemModal(${item.id})" title="編輯此物品">✏️</button>
-                <button class="btn-del-icon" onclick="event.stopPropagation(); deleteItem(${item.id})" title="刪除此物品">🗑️</button>
+                <!-- 第二行：包包歸屬標籤 ＋ 打包狀態 ＋ 備註 -->
+                <div class="item-footer-line" onclick="event.stopPropagation()">
+                  <button type="button" class="${bagStyleClass}" onclick="openBagPicker(${item.id})" title="點選選擇收納包包">
+                    ${bagLabelHtml}
+                  </button>
+                  ${statusHtml}
+                  <span class="note-tag" onclick="openNoteModal(${item.id})" title="點選編輯備註">${item.note ? '📝 ' + escapeHtml(item.note) : '＋備註'}</span>
+                </div>
               </div>
             </div>
           `;
@@ -3174,7 +3444,7 @@
             </div>
             <div class="bag-picker-right">
               <span style="font-size: 0.82rem; color: var(--text-muted);">${itemCount} 件</span>
-              ${isSelected ? '<span style="color: var(--accent-gold); font-weight: 700; font-size: 0.82rem;">已選入</span>' : '<span style="color: var(--text-muted); font-size: 0.82rem;">點擊加入</span>'}
+              ${isSelected ? '<span style="color: var(--accent-gold); font-weight: 700; font-size: 0.82rem;">已選入</span>' : '<span style="color: var(--text-muted); font-size: 0.82rem;">點選加入</span>'}
             </div>
           </div>
         `;
@@ -3210,6 +3480,8 @@
           renderItems();
           renderBagFilterBar();
           if (currentView === 'BAGS') renderBagView();
+          updateDashboard();
+          showToast(`✅ 已更新「${item.name}」的收納包包！`, 'success', 2500);
         }
       }
       closeBagPicker();
@@ -3362,61 +3634,6 @@
       updateDashboard();
     }
 
-    function switchSyncTab(tab) {
-      const codeTab = document.getElementById('sync-tab-code');
-      const textTab = document.getElementById('sync-tab-text');
-      const btnSync = document.getElementById('tab-btn-sync');
-      const btnText = document.getElementById('tab-btn-text');
-
-      if (tab === 'SYNC') {
-        codeTab.style.display = 'block';
-        textTab.style.display = 'none';
-        btnSync.className = 'btn-action gold';
-        btnText.className = 'btn-action';
-      } else {
-        codeTab.style.display = 'none';
-        textTab.style.display = 'block';
-        btnSync.className = 'btn-action';
-        btnText.className = 'btn-action gold';
-      }
-    }
-
-    function openSyncModal() {
-      // 1. 產生結構化同步代碼 (JSON)
-      const syncData = {
-        version: 5,
-        timestamp: new Date().toISOString(),
-        bags: bags,
-        airtags: airtags,
-        items: items
-      };
-      document.getElementById('sync-export-code').value = JSON.stringify(syncData);
-      document.getElementById('sync-import-code').value = '';
-
-      // 2. 產生 LINE 純文字清單
-      let text = '🇫🇷 【台南打包大王】即時核對清單\n';
-      text += `📅 產出時間：${new Date().toLocaleString('zh-TW')}\n`;
-      text += `📊 目前進度：${items.filter(i => i.checked).length} / ${items.length} 件已打包\n\n`;
-
-      bags.forEach(bag => {
-        const bagItems = items.filter(i => getItemLocs(i).includes(bag.name));
-        text += `🧳 ${bag.name} (${bagItems.filter(i => i.checked).length}/${bagItems.length}) ${bag.pwd ? ' [🔒 ' + bag.pwd + ']' : ''}\n`;
-        bagItems.forEach(i => {
-          text += `  ${i.checked ? '✅' : '⬜'} ${i.name} ${i.note ? '(' + i.note + ')' : ''}\n`;
-        });
-        text += '\n';
-      });
-      document.getElementById('export-text').value = text;
-
-      // 預設開啟 SYNC tab
-      switchSyncTab('SYNC');
-      document.getElementById('sync-modal').classList.add('active');
-    }
-
-    function closeSyncModal() {
-      document.getElementById('sync-modal').classList.remove('active');
-    }
-
     // 🍞 自製無阻礙 Toast 通知系統 (相容任何手機瀏覽器與 HTML Viewer)
     function showToast(msg, type = 'info', duration = 3000) {
       const container = document.getElementById('toast-container');
@@ -3430,162 +3647,6 @@
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);
       }, duration);
-    }
-
-    async function copySyncCode() {
-      const textarea = document.getElementById('sync-export-code');
-      const text = textarea.value;
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(text);
-        } else {
-          textarea.focus();
-          textarea.select();
-          textarea.setSelectionRange(0, 99999);
-          document.execCommand('copy');
-        }
-        showToast('✅ 已複製同步代碼！請傳給手機或老婆貼上套用', 'success', 3500);
-      } catch (err) {
-        textarea.focus();
-        textarea.select();
-        textarea.setSelectionRange(0, 99999);
-        document.execCommand('copy');
-        showToast('✅ 已選取代碼，請長按文字框複製', 'gold', 3000);
-      }
-    }
-
-    async function copyExportText() {
-      const textarea = document.getElementById('export-text');
-      const text = textarea.value;
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(text);
-        } else {
-          textarea.focus();
-          textarea.select();
-          textarea.setSelectionRange(0, 99999);
-          document.execCommand('copy');
-        }
-        showToast('✅ 已複製 LINE 清單文字！', 'success', 3000);
-      } catch (err) {
-        textarea.focus();
-        textarea.select();
-        textarea.setSelectionRange(0, 99999);
-        document.execCommand('copy');
-        showToast('✅ 已選取清單，請長按文字框複製', 'gold', 3000);
-      }
-    }
-
-    // 💾 下載備份 JSON 檔案 (手機與電腦皆適用)
-    function downloadSyncFile() {
-      const syncData = {
-        version: 5,
-        timestamp: new Date().toISOString(),
-        bags: bags,
-        airtags: airtags,
-        items: items
-      };
-      const blob = new Blob([JSON.stringify(syncData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `法國行李打包進度_${new Date().toISOString().slice(0, 10)}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('💾 已下載進度備份檔案！', 'success', 3000);
-    }
-
-    // 📂 從檔案選取器載入備份檔
-    function handleSyncFileSelect(e) {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const content = evt.target.result;
-        document.getElementById('sync-import-code').value = content;
-        previewImportCode();
-        applyImportCode(); // 選取檔案後自動直接套用！
-      };
-      reader.onerror = function() {
-        showToast('❌ 讀取檔案失敗，請確認檔案格式', 'error', 3000);
-      };
-      reader.readAsText(file);
-    }
-
-    // 🔍 即時解析貼上的同步代碼
-    function previewImportCode() {
-      const statusEl = document.getElementById('sync-import-status');
-      if (!statusEl) return;
-      let input = document.getElementById('sync-import-code').value.trim();
-      if (!input) {
-        statusEl.textContent = '';
-        return;
-      }
-      try {
-        // 去除可能的引號或包裹字元
-        if (input.startsWith('\"') && input.endsWith('\"')) {
-          try { input = JSON.parse(input); } catch(e){}
-        }
-        const data = (typeof input === 'object') ? input : JSON.parse(input);
-        if (data && Array.isArray(data.items)) {
-          const checkedCount = data.items.filter(i => i.checked).length;
-          statusEl.style.color = 'var(--accent-green)';
-          statusEl.textContent = `✅ 偵測到有效代碼：包含 ${data.items.length} 件物品 (${checkedCount} 件已打包)、${(data.bags || []).length} 個包包`;
-        } else {
-          statusEl.style.color = 'var(--accent-red)';
-          statusEl.textContent = '⚠️ 代碼中缺少物品清單資料，請確認複製完整';
-        }
-      } catch (err) {
-        statusEl.style.color = 'var(--accent-red)';
-        statusEl.textContent = '⏳ 代碼解析中或格式不完整...';
-      }
-    }
-
-    // 📥 立即套用代碼 (完全無阻塞、不使用 confirm/alert，相容各類 HTML Viewer)
-    function applyImportCode() {
-      let input = document.getElementById('sync-import-code').value.trim();
-      if (!input) {
-        showToast('⚠️ 請先貼上同步代碼或選擇備份檔！', 'gold', 3000);
-        return;
-      }
-      try {
-        if (input.startsWith('\"') && input.endsWith('\"')) {
-          try { input = JSON.parse(input); } catch(e){}
-        }
-        const data = (typeof input === 'object') ? input : JSON.parse(input);
-        if (!data.items || !Array.isArray(data.items)) {
-          throw new Error('缺少 items 物品清單陣列');
-        }
-
-        // 載入資料
-        if (data.bags && Array.isArray(data.bags) && data.bags.length > 0) {
-          bags = data.bags;
-        }
-        if (data.airtags && Array.isArray(data.airtags)) {
-          airtags = data.airtags;
-        }
-        items = data.items;
-
-        saveData();
-        renderItems();
-        renderAirtags();
-        renderBagFilterBar();
-        if (currentView === 'BAGS') renderBagView();
-        updateDashboard();
-
-        const checkedCount = items.filter(i => i.checked).length;
-        showToast(`🎉 同步成功！已載入 ${items.length} 件物品 (${checkedCount} 件已完成)`, 'success', 4000);
-        closeSyncModal();
-      } catch (err) {
-        showToast('❌ 同步失敗：代碼格式不正確，請確認複製完整！', 'error', 4500);
-        const statusEl = document.getElementById('sync-import-status');
-        if (statusEl) {
-          statusEl.style.color = 'var(--accent-red)';
-          statusEl.textContent = '❌ 錯誤：' + err.message;
-        }
-      }
     }
 
     function resetAllChecks() {
