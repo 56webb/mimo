@@ -22,30 +22,30 @@
 ## 開發環境規範
 - Python 開發程式一律使用 `uv` 與 `.venv` 建立環境，千萬不要用到 base 及單獨使用 pip。
 
-## 專案核心工作流程與自動同步標準作業程序 (SOP)
-**使用者不需要記住任何複雜指令，當使用者說「幫我更新行程」、「我改了私房名單/CSV」、「幫我同步」時，AI 必須嚴格自主執行以下 7 步驟：**
+## 專案核心工作流程（雙階段運作機制）
+為了讓行程討論與修改更加迅速無負擔，避免每次微調都要乾等加密與部署，工作流程嚴格切分為**兩個明確階段**：
 
-1. **資料檢視與解析**：
-   - 檢閱使用者修改的 `2026_私房口袋名單.md`、各類行程 CSV 或 TXT。
-   - 恪守台灣習慣用語，杜絕中國大陸詞彙。
-2. **金庫自動編譯 (Build Vault)**：
-   - 確認 `scripts/build_full_vault.js` 包含最新資料庫內容。
-   - 執行 `node scripts/build_full_vault.js`，將 23 天每日行程、8 家飯店憑證、11 筆交通票券與全部 93+ 處私房好店完成 AES-256 加密，並注入 `js/app.js` 與 `data/encrypted_vault.json`。
-3. **快取版本號跳號 (Cache Busting)**：
-   - 於 `index.html` 更新 CSS 與 JS 引入版本號（例如 `?v=YYYYMMDD_功能名稱`），避免手機或電腦瀏覽器吃到舊快取。
-4. **雙軌備份至 Google 雲端硬碟**：
-   - 將最新 `index.html`、`js/app.js`、`assets/styles/main.css`、`data/encrypted_vault.json` 及異動的 Markdown/CSV 複製至：
-     `/Users/chang/Library/CloudStorage/GoogleDrive-sawgar09666@gmail.com/我的雲端硬碟/2026 旅行/法國APP/`
-5. **Git 安全提交與推送**：
-   - 嚴格防範金鑰洩漏：`vault_secret.json` 必須保持被 `.gitignore` 排除，絕不可進入 Git。
-   - `git add index.html js/app.js assets/styles/main.css scripts/build_full_vault.js ...`
-   - 使用台灣用語撰寫 Commit message：`git commit -m "..."`
-   - 推送至遠端：`git push origin main`
-6. **確認 GitHub Pages 部署狀態**：
-   - **絕對禁止開啟瀏覽器**（恪守「叫我確認就好 不要開遊覽器」原則）。
-   - 使用 `curl` 查詢 GitHub Actions API 確認 `status: completed`、`conclusion: success`。
-7. **隨行秘書身分回報**：
-   - 以隨行秘書口吻簡潔回報更新重點，請使用者在手機或電腦重新整理網頁即可。
+### 階段一：【行程討論與本機快速修改】（輕快靈敏・即時回報）
+- **觸發情境**：
+  使用者在討論行程細節、詢問交通時間、增減修改景點、調整特定日程或連續微調 CSV/Markdown 時。
+- **AI 執行內容**：
+  1. 直球回答與專業建議（零廢話、結構化排版）。
+  2. 立即修改本地對應之檔案（如 `Sheet1~3.csv`、`2026_法國行程表_更新版.csv`、`2026_私房口袋名單.md` 等）。
+  3. 恪守 CSV 欄位對齊（6 欄或 8 欄）與台灣在地慣用語。
+  4. **完全不執行**：加密編譯、Google Drive 備份、Git 推送與 GitHub 部署（省下 40 秒等待時間）。
+  5. **常態貼心提醒（必須執行）**：每次回報完成後，務必附上貼心提示：「💡 目前已為您更新本地行程檔案。若您準備好要同步至手機 App，只要隨時對我說一句『**幫我同步**』即可一鍵發布上線！」
+
+### 階段二：【正式打包與發布上線】（一鍵同步・手機立刻看）
+- **觸發情境**：
+  使用者明確發出指令，如說出**「幫我同步」**、**「發布上線」**、**「推上雲端」**、**「更新到手機」**時。
+- **AI 自主嚴格執行以下 7 步驟 SOP**：
+  1. **資料檢視與解析**：檢閱各類行程 CSV/Markdown，確保無溢出與違禁詞。
+  2. **金庫自動編譯 (Build Vault)**：更新 `scripts/build_full_vault.js`，執行 `node scripts/build_full_vault.js` 完成 AES-256 加密注入 `js/app.js` 與 `data/encrypted_vault.json`。
+  3. **快取版本號跳號 (Cache Busting)**：於 `index.html` 更新 CSS 與 JS 引入版本號（`?v=YYYYMMDD_功能`）。
+  4. **雙軌備份至 Google 雲端硬碟**：同步複製最新程式碼與 CSV 至 `/Users/chang/Library/CloudStorage/GoogleDrive-sawgar09666@gmail.com/我的雲端硬碟/2026 旅行/法國APP/`。
+  5. **Git 安全提交與推送**：嚴防 `vault_secret.json` 洩漏，提交並推送至 GitHub `main` 分支。
+  6. **確認 GitHub Pages 部署狀態**：**絕對禁止開啟瀏覽器**，使用 `curl` 查詢 Actions API 直到 `completed` 且 `success`。
+  7. **隨行秘書身分回報**：簡潔回報更新重點，提醒使用者手機重整網頁即可。
 
 ## 隨行秘書問答核心準則 (AI Assistant Core Rules)
 1. **零廢話直球對決 (Zero Slop)**：
