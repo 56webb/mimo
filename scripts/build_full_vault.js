@@ -554,21 +554,35 @@ const itineraryData = [
   {
     date: "9/22",
     weekday: "二",
-    title: "奧塞美術館 ➔ 杜樂麗 ➔ 橘園碰運氣 ➔ 15:00 海軍府 ➔ 大小皇宮 ➔ 鐵塔機位",
-    tag: "印象派殿堂・皇家海軍府・鐵塔",
-    summary: "08:50 奧塞美術館排隊（首批進場看梵谷名畫），杜樂麗花園漫步，橘園美術館碰運氣；15:00 準時進入海軍府（戴 Confident 中文 3D 耳機看皇家奢華寓所與協和廣場露台）；傍晚漫步大皇宮、亞歷山大三世橋與艾菲爾鐵塔私房拍照機位！",
+    title: "奧塞 ➔ 裝飾藝術博物館 ➔ 14:00舒芙蕾午餐 ➔ 15:00海軍府 ➔ 羅丹美術館 ➔ 樂蓬馬歇逛街&Ritz甜點",
+    tag: "印象派殿堂・舒芙蕾・皇家海軍府・貴婦百貨",
+    summary: "08:40 奧塞旁外帶可頌咖啡、08:50 奧塞排隊（Porte C 首批進場看梵谷），12:00 漫步參觀巴黎裝飾藝術博物館 (MAD)；14:00 享用 Le Soufflé 舒芙蕾午餐（已預約・備案 Cafe de L'Empire）；15:00 準時進入海軍府（戴 Confident 中文 3D 耳機看皇家奢華寓所與協和廣場露台）；16:45 羅丹美術館玫瑰雕塑花園看《沉思者》；傍晚漫步左岸樂蓬馬歇貴婦百貨逛 Polène 專櫃與享用 Ritz 麗思飯店傳奇千層派！",
     keynote: {
-      code: "15:00 海軍府 (101385119883301)",
-      codeLabel: "海軍府PMP預約時段",
-      spot: "奧塞美術館 ➔ 杜樂麗花園 ➔ 海軍府 ➔ 亞歷山大三世橋 ➔ 鐵塔私房機位",
+      code: "14:00 舒芙蕾 / 15:00 海軍府 (101385119883301)",
+      codeLabel: "當日預約時段憑證",
+      spot: "奧塞美術館 ➔ 裝飾藝術博物館 ➔ Le Soufflé ➔ 海軍府 ➔ 羅丹美術館 ➔ 樂蓬馬歇",
       hotel: "B&B HOTEL Paris Italie Porte de Choisy (第7晚)",
       mapQuery: "Hotel de la Marine Paris"
     },
     items: [
       {
+        time: "08:15",
+        title: "飯店出發前往 7 區奧塞美術館（Rue du Bac 站）",
+        desc: "08:15 從 13 區出發搭乘地鐵 7 號轉 10/12 號線至 Rue du Bac 站，避開尖峰，車程約 25 分鐘，出站沿 Rue du Bac 漫步。",
+        badges: ["避開上班尖峰", "地鐵單程票 / Navigo", "步行至Rue du Bac"],
+        map: "Rue du Bac Paris"
+      },
+      {
+        time: "08:40",
+        title: "☕ 奧塞旁外帶法式早餐（Éric Kayser 或 Les Antiquaires）",
+        desc: "出站順路於烘焙名店 Éric Kayser 外帶剛出爐現烤可頌與熱咖啡（或對面口袋名單 Les Antiquaires），步行 3 分鐘直達奧塞美術館。",
+        badges: ["07:00已開", "現烤可頌", "熱拿鐵", "順路外帶"],
+        map: "Eric Kayser 8 Rue du Bac Paris"
+      },
+      {
         time: "08:50",
-        title: "奧塞美術館門口排隊（Porte C 通道）",
-        desc: "08:20 飯店出發搭地鐵前往。奧塞美術館週二 09:30 開門，持 PMP 博物館通票請排在【Porte C（預約/通票專屬通道）】前排，09:30 開門首批進館。",
+        title: "奧塞美術館門口排隊邊吃早餐（Porte C 通道）",
+        desc: "奧塞美術館週二 09:30 開門，持 PMP 博物館通票請排在【Porte C（預約/通票專屬通道）】前排卡位，邊排隊邊享用熱可頌，09:30 首批進館。",
         badges: ["08:50排隊卡位", "Porte C 通道", "首批進館"],
         map: "Musee d Orsay Paris"
       },
@@ -576,63 +590,56 @@ const itineraryData = [
         time: "09:30",
         title: "⭐ 奧塞美術館 (Musée d'Orsay) 印象派名作巡禮",
         desc: "舊火車站改建藝術殿堂！持 PMP 入場，直奔 5 樓長廊欣賞梵谷《自畫像》、莫內、雷諾瓦《煎餅磨坊的舞會》、米勒《拾穗》，在巨大時鐘窗景前拍照，參觀約 2 小時。",
-        badges: ["持PMP進場", "梵谷自畫像", "大時鐘窗景", "參觀2小時"],
+        badges: ["持PMP免預約", "梵谷自畫像", "莫內睡蓮", "大時鐘窗景"],
         map: "Musee d Orsay Paris"
       },
       {
-        time: "11:30",
-        title: "跨越協和橋 ➔ 杜樂麗花園漫步 ＆ 輕食午餐",
-        desc: "跨越塞納河協和橋進入杜樂麗花園，在花園綠蔭長椅稍作休息，於園內餐車買法式薄餅、可麗餅或三明治簡單用餐。",
-        badges: ["協和橋漫步", "杜樂麗花園", "戶外輕食午餐"],
-        map: "Jardin des Tuileries Paris"
+        time: "11:45",
+        title: "跨越塞納河皇家橋 ➔ 巴黎裝飾藝術博物館 (MAD)",
+        desc: "步出奧塞步行 10 分鐘跨過塞納河皇家橋直達羅浮宮西翼（107 Rue de Rivoli）。持 PMP 免預約直入，參觀頂級時裝展示廳、珠寶工藝、中世紀到現代法式室內裝潢與挑高中庭，參觀約 1.5 小時。（備案：若提早肚子餓，可改在奧塞旁 Cafe de L'Empire 吃午餐，11:00 前取消舒芙蕾）。",
+        badges: ["持PMP免預約", "皇家橋漫步", "時裝與珠寶展廳", "法式室內裝潢"],
+        map: "Musee des Arts Decoratifs Paris"
       },
       {
-        time: "13:00",
-        title: "⭐ 橘園美術館 (Musée de l'Orangerie) 現場候補碰運氣",
-        desc: "橘園設有「無預約通道 (Sans réservation)」。持 PMP 排隊碰運氣，若人流順暢約等 15-25 分鐘可進館欣賞莫內《睡蓮》；若排隊過長可彈性在花園散步。",
-        badges: ["PMP無預約候補", "莫內睡蓮", "彈性參觀"],
-        map: "Musee de l Orangerie Paris"
+        time: "13:50",
+        title: "步出裝飾博物館 ➔ 漫步前往 Le Soufflé",
+        desc: "沿里沃利路轉 Mont Thabor 街步行約 400 公尺（5 分鐘）抵達舒芙蕾名店門口，準備入座。",
+        badges: ["步行5分鐘", "杜樂麗北側"],
+        map: "Le Souffle 36 Rue du Mont Thabor Paris"
+      },
+      {
+        time: "14:00",
+        title: "🥞 Le Soufflé 正統法式舒芙蕾午餐（已預約 14:00 兩位）",
+        desc: "巴黎傳奇舒芙蕾專門店！享用現烤鹹舒芙蕾（起司/紅酒燉牛肉）與經典甜舒芙蕾（柑橘橙酒/黑巧克力）。入座請先告知服務員後續 15:00 有預約行程，用餐約 45 分鐘，14:48 步行前往海軍府。",
+        badges: ["✅已預約14:00", "鹹甜舒芙蕾全餐", "現點現烤", "後續海軍府"],
+        map: "Le Souffle 36 Rue du Mont Thabor Paris"
       },
       {
         time: "15:00",
         title: "⭐ 海軍府 (Hôtel de la Marine) 預約入場參觀",
         desc: "持預約憑證與 PMP 入場（訂單: 2625636951330402317・票號: 101385119883301/481）。領取 Confident 中文 3D 空間導覽耳機，參觀 18 世紀皇家家具保管處奢華寓所、金碧輝煌國事大廳，登上二樓柱廊露台俯瞰協和廣場。憑證存 data/0922_海軍府_雙人門票預約憑證.pdf。",
-        badges: ["✅已預約15:00", "Confident中文耳機", "皇家寓所", "協和廣場露台"],
+        badges: ["✅已預約15:00", "Confident中文耳機", "皇家奢華寓所", "協和廣場露台"],
         map: "Hotel de la Marine Paris"
       },
       {
-        time: "16:30",
-        title: "大皇宮與小皇宮 (Grand Palais & Petit Palais) 建築漫步",
-        desc: "沿香榭麗舍花園漫步 800 公尺抵達大皇宮，欣賞巨大玻璃鋼鐵穹頂建築；走進對面小皇宮欣賞半圓形馬賽克中庭庭院與露天咖啡座。",
-        badges: ["大皇宮玻璃穹頂", "小皇宮免費庭院", "香榭花園"],
-        map: "Grand Palais Paris"
+        time: "16:45",
+        title: "🌿 羅丹美術館 (Musée Rodin) 雕塑與玫瑰花園巡禮",
+        desc: "開放至 18:30（最後入場 17:45）。持 PMP 免預約直入，漫步戶外玫瑰雕塑花園欣賞《沉思者》、《吻》、《地獄之門》真跡與畢隆宅邸室內展廳，比傷兵院更從容優雅，夕陽下身心極放鬆好拍照。",
+        badges: ["持PMP免預約", "營業至18:30", "沉思者與吻", "玫瑰雕塑花園"],
+        map: "Musee Rodin Paris"
       },
       {
-        time: "17:00",
-        title: "亞歷山大三世橋 (Pont Alexandre III) 漫步遠眺鐵塔",
-        desc: "漫步塞納河上最華麗的金箔飛馬大橋，欣賞古典路燈與浮雕，從橋上遠眺塞納河畔與遠處的艾菲爾鐵塔，拍照光線極佳。",
-        badges: ["金箔飛馬雕像", "遠眺鐵塔", "拍照絕佳角度"],
-        map: "Pont Alexandre III Paris"
+        time: "18:15",
+        title: "🛍️ 樂蓬馬歇貴婦百貨逛街 ＆ 🍰 Ritz 麗思飯店傳奇甜點",
+        desc: "從羅丹美術館步行 10 分鐘（850 公尺）直達 Sèvres-Babylone：① Ritz Paris Le Comptoir Sèvres 享用傳奇千層派與夾心瑪德蓮（免排大隊） ② 樂蓬馬歇百貨 (Le Bon Marché) 逛街與 0 樓 Polène 專櫃試背 ③ 頂級超市 La Grande Épicerie 採買法式松露與伴手禮。",
+        badges: ["步行10分鐘", "Ritz千層派瑪德蓮", "樂蓬馬歇貴婦百貨", "Polene專櫃", "頂級超市"],
+        map: "24 Rue de Sevres Paris"
       },
       {
-        time: "17:30",
-        title: "📸 艾菲爾鐵塔周邊私房機位散步（參考私房名單）",
-        desc: "走訪私房名單經典機位：① 德比利行人天橋 (Passerelle Debilly) 木棧橋視角 ② 大學路 (Rue de l'Université) 經典公寓框景 ③ 夏樂宮平台 (Trocadéro) 正面全景。",
-        badges: ["德比利天橋", "大學路公寓夾景", "夏樂宮正景"],
-        map: "Passerelle Debilly Paris"
-      },
-      {
-        time: "19:30",
-        title: "戰神廣場草坪散步 ＆ 觀賞 20:00 鐵塔整點閃燈",
-        desc: "傍晚在戰神廣場草坪散步，欣賞晚霞暮色中的鐵塔全景，並觀賞 20:00 整點的 5 分鐘金色閃燈秀。",
-        badges: ["戰神廣場草坪", "暮色鐵塔", "20:00整點閃燈"],
-        map: "Champ de Mars Paris"
-      },
-      {
-        time: "20:30",
-        title: "搭乘地鐵 6 號線直達返回飯店休息",
-        desc: "自 Bir-Hakeim 站搭乘地鐵 6 號線直達 Place d'Italie 站，返回 13 區 B&B 飯店休息，結束充實的一天。",
-        badges: ["地鐵6號線直達", "返回飯店"],
+        time: "20:00",
+        title: "左岸特色晚餐 ➔ 搭車返回 13 區 B&B 飯店休息",
+        desc: "於左岸街區享用輕鬆晚餐，滿載戰利品於 Sèvres - Babylone 站搭乘地鐵 10 號轉 7 號返回 13 區 B&B 飯店休息。",
+        badges: ["左岸特色晚餐", "地鐵10號轉7號", "返回飯店休息"],
         map: "B&B HOTEL Paris Italie Porte de Choisy"
       }
     ],
