@@ -81,15 +81,22 @@ const itineraryData = [
       {
         time: "07:55",
         title: "長榮 BR87 平安抵達巴黎戴高樂機場 (CDG T1)",
-        desc: "下機後跟隨 Sortie / Baggage 標誌通過海關查驗，領取行李（預留約 60~90 分鐘）。",
+        desc: "長榮航空直飛班機降落於第一航廈 (Terminal 1)。下機後跟隨 Sortie / Baggage 標誌通過海關查驗並領取行李（出關約需 40~50 分鐘）。",
         badges: ["07:55抵達", "CDG T1", "海關通關"],
         map: "Charles de Gaulle Airport Terminal 1"
       },
       {
+        time: "08:40",
+        title: "T1 抵達大廳 4 號門「巴黎旅遊局」購買 PMP 實體票 ＆ 交通卡",
+        desc: "出關走進入境大廳，4 號門 (Gate 4) 旁即是「Point Information Tourisme (巴黎旅遊局遊客資訊處)」（07:15 起營業）。現場直接購買 PMP 實體四日券（105€/人，免付官網 3% 系統手續費現省 6.3€；實體卡不事先鎖死啟用日期，背面手寫日期即啟用）；並可同櫃檯順便購買 Navigo 交通卡及 RER B 機場快線單程火車票 (€11.80/人)。",
+        badges: ["PMP實體票(省6.3€)", "T1入境4號門", "Navigo交通卡", "RER B車票"],
+        map: "Charles de Gaulle Airport Terminal 1"
+      },
+      {
         time: "09:30",
-        title: "購買 Navigo 週卡 ＆ 搭乘 RER B 線直奔市區",
-        desc: "於機場車站購買實體 Navigo 週卡（儲值 1-5 圈週票約 30.75€，涵蓋 RER 機場線與後續楓丹白露火車），搭乘 RER B 線至市區轉地鐵 7 號線至 Porte de Choisy 站。",
-        badges: ["Navigo週卡", "RER B線", "地鐵7號線"],
+        title: "搭乘 RER B 線直奔市區 ➔ 轉地鐵 7 號線至飯店",
+        desc: "自機場搭乘 RER B 線直達市區轉地鐵 7 號線至 Porte de Choisy 站，準備前往 B&B HOTEL 寄放行李。",
+        badges: ["RER B線", "地鐵7號線", "市區接駁"],
         map: "Gare Aeroport Charles de Gaulle 1"
       },
       {
@@ -693,36 +700,57 @@ const itineraryData = [
   {
     date: "9/24",
     weekday: "四",
-    title: "聖心堂・Pink Mamma午餐・歌劇院導覽・外帶晚餐早睡",
+    title: "先賢祠・Pink Mamma午餐・奧斯曼老佛爺・歌劇院導覽",
     tag: "巴黎經典",
-    summary: "聖心堂俯瞰全城，12:00 Pink Mamma午餐，17:00 歌劇院夜導，外帶晚餐早睡迎明日高鐵！",
+    summary: "10:00 先賢祠巡禮（PMP免預約），12:00 Pink Mamma松露麵，奧斯曼老佛爺與Glasswalk，17:00 歌劇院夜間導覽，外帶晚餐早睡迎明日高鐵！",
     keynote: {
       code: "Pink Mamma: #8L5ME23WMRFA / 歌劇院: op07092026-932770962",
       codeLabel: "當日預約憑證號",
-      spot: "聖心堂 ➔ 12:00 Pink Mamma ➔ 17:00 歌劇院夜導 ➔ 外帶晚餐",
+      spot: "先賢祠 ➔ 12:00 Pink Mamma ➔ 奧斯曼老佛爺 ➔ 17:00 歌劇院夜導",
       hotel: "B&B HOTEL Paris Italie (市區最後1晚)",
       mapQuery: "Palais Garnier"
     },
     items: [
       {
-        time: "09:30",
-        title: "聖心堂 (Basilique du Sacré-Cœur) 俯瞰全巴黎天際線",
-        desc: "搭地鐵 12 號線前往蒙馬特高地，坐在白色大教堂前階梯俯瞰晨光下的巴黎全景，隨後下山至「愛牆 (Mur des Je t'aime)」打卡拍照。",
-        badges: ["聖心堂俯瞰", "蒙馬特高地", "愛牆拍照"],
-        map: "Basilique du Sacre-Coeur Paris"
+        time: "09:20",
+        title: "飯店出發前往 5 區拉丁區先賢祠 (Panthéon)",
+        desc: "自飯店搭乘地鐵 7 號線直達 Place Monge 站（車程約 15 分鐘），出站漫步 5 分鐘直達先賢祠宏偉石柱廣場。",
+        badges: ["地鐵7號線直達", "拉丁區", "車程15分"],
+        map: "Place du Pantheon 75005 Paris"
       },
       {
-        time: "11:45",
-        title: "⭐皮加勒超人氣餐廳：Pink Mamma 享用 12:00 午餐（已預約 2人席）",
-        desc: "自愛牆沿石階緩下坡步行 10 分鐘即達皮加勒區。已成功預約 12:00（訂單【#8L5ME23WMRFA】雙人席，桌位保留 15 分鐘）。四層樓復古玻璃花房餐廳，品嚐人氣招牌現刨黑松露手工寬麵與柴燒窯烤披薩！憑證已存 data/0924_Pink_Mamma_訂位確認憑證.png。",
+        time: "10:00",
+        title: "⭐ 先賢祠 / 萬神殿 (Panthéon) 巡禮（PMP 免預約直入）",
+        desc: "持 PMP 博物館通票 100% 免預約隨到隨進！仰望新古典主義巨型羅馬穹頂與中央擺動的【傅科擺】（證明地球自轉真理）；走入莊嚴地下石棺區，致敬伏爾泰、盧梭、雨果、左拉、大仲馬與居里夫婦等法蘭西偉人。參觀時間約 70 分鐘。",
+        badges: ["PMP免預約", "傅科擺", "雨果/居里夫婦石棺", "新古典主義穹頂"],
+        map: "Place du Pantheon 75005 Paris"
+      },
+      {
+        time: "11:20",
+        title: "步出先賢祠搭乘地鐵前往 9 區皮加勒商圈",
+        desc: "自 Cardinal Lemoine 站搭乘地鐵 10 號轉 12 號線至 Pigalle 站（車程約 25 分鐘），出站步行 2 分鐘直達餐廳門口。",
+        badges: ["地鐵10轉12號", "車程25分", "直達皮加勒"],
+        map: "20bis Rue de Douai 75009 Paris"
+      },
+      {
+        time: "12:00",
+        title: "⭐ 皮加勒超人氣餐廳：Pink Mamma 享用 12:00 午餐（已預約 2人席）",
+        desc: "已成功預約 12:00（訂單【#8L5ME23WMRFA】雙人席，桌位保留 15 分鐘）。四層樓復古玻璃花房餐廳，品嚐人氣招牌現刨黑松露手工寬麵、柴燒窯烤披薩與巨盆手作提拉米蘇！憑證已存 data/0924_Pink_Mamma_訂位確認憑證.png。",
         badges: ["✅ 12:00已訂位", "訂單#8L5ME23WMRFA", "招牌松露麵", "玻璃花房"],
         map: "20bis Rue de Douai 75009 Paris"
       },
       {
         time: "13:45",
-        title: "奧斯曼大道商圈漫步 ＆ 百貨巡禮 / 咖啡小憩",
-        desc: "午餐後沿 Rue Blanche 緩步逛街下坡（步行約 15-18 分鐘）抵達歌劇院與奧斯曼商圈，逛老佛爺百貨、春天百貨，悠閒喝咖啡休息。",
-        badges: ["奧斯曼大道", "老佛爺百貨", "午後咖啡休整"],
+        title: "沿 Rue Blanche 緩緩下坡漫步至奧斯曼大道商圈",
+        desc: "午餐後沿 Rue Blanche 往南悠閒下坡漫步（步行約 15 分鐘 / 1.2 公里）抵達歌劇院與奧斯曼大道商圈，沿途欣賞巴黎 9 區時髦街景。",
+        badges: ["漫步下坡", "車程免搭地鐵", "歌劇院商圈"],
+        map: "Galeries Lafayette Paris"
+      },
+      {
+        time: "14:15",
+        title: "🛍️ 奧斯曼老佛爺百貨巡禮 ＆ 體驗 Glasswalk 空中步道",
+        desc: "老佛爺百貨主館 3 樓體驗懸空 9 米【Glasswalk 空中玻璃步道】仰望新藝術彩繪穹頂；至 8 樓免費頂樓露台遠眺艾菲爾鐵塔與巴黎全景；至商場逛街採買伴手禮。",
+        badges: ["老佛爺百貨", "Glasswalk空中步道", "頂樓眺望鐵塔"],
         map: "Galeries Lafayette Paris"
       },
       {
@@ -734,7 +762,7 @@ const itineraryData = [
       },
       {
         time: "17:00",
-        title: "⭐巴黎加尼葉歌劇院閉館夜間導覽 (The Mysteries of the Palais Garnier)",
+        title: "⭐ 巴黎加尼葉歌劇院閉館夜間導覽 (The Mysteries of the Palais Garnier)",
         desc: "✅ 已購雙人票 84€！90 分鐘專屬英文閉館夜間導覽。避開白天擁擠散客，獨享金碧輝煌大階梯空景與大休息廳，走進專屬包廂仰望夏卡爾巨幅天頂畫！",
         badges: ["✅ 閉館導覽已付 84€", "Ref: op07092026-932770962", "夏卡爾天頂畫"],
         map: "Palais Garnier"
@@ -742,8 +770,8 @@ const itineraryData = [
       {
         time: "18:30",
         title: "外帶晚餐回飯店 ＆ 整理明日自駕行李 ＆ 預約計程車",
-        desc: "婚紗已於 9/21 順利歸還一身輕！今晚直接執行外帶晚餐：可順道至後方老佛爺美食館 (La Maison Le Gourmet) 外帶現烤烤雞＋馬鈴薯，或於 13 區買熱食便當。回飯店邊吃邊將 2 件大行李打包整齊，並利用 Uber 或 G7 App 預約明日清晨 05:35 飯店門口計程車，21:30 準時早睡！",
-        badges: ["婚紗已於9/21歸還", "外帶熟食回飯店", "預約明日05:35計程車", "21:30 早睡"],
+        desc: "今晚直接執行外帶晚餐：可順道至後方老佛爺美食館 (La Maison Le Gourmet) 外帶現烤烤雞＋馬鈴薯，或於 13 區買熱食便當。回飯店邊吃邊將 2 件大行李打包整齊，並利用 Uber 或 G7 App 預約明日清晨 05:35 飯店門口計程車，21:30 準時早睡迎戰明日 06:48 高鐵自駕！",
+        badges: ["外帶熟食回飯店", "預約明日05:35計程車", "整理行李", "21:30 早睡"],
         map: ""
       }
     ],
