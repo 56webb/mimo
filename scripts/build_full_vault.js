@@ -1721,6 +1721,26 @@ const ticketsData = [
     file: "",
     note: "訂位人：chin yu（2 位成人）。確認信已發送至 skunkqq@gmail.com。預約時間：2026/09/18 (五) 12:30。地址：Pl. du Général de Gaulle 77300 Fontainebleau（宮殿正門入口戴高樂將軍廣場旁）。電話：+33 1 72 66 10 49。享 TheFork 單點 -20% 折扣。【💡老闆指定點餐心法】：現場直接點兩份主廚招牌套餐！在花園景觀下享受典雅法式午餐。",
     mapQuery: "Pl du General de Gaulle 77300 Fontainebleau"
+  },
+  {
+    type: "🥞 傳奇法式餐廳",
+    title: "Le Soufflé 舒芙蕾專門店 (已預約 14:00 雙人席)",
+    datetime: "2026/09/22 (二) 14:00 準時入座",
+    status: "✅ 已預約確認 (雙人席 · 提前3小時可免費取消)",
+    code: "Google 預約 14:00 (2人)",
+    file: "0922_Le_Souffle_舒芙蕾預約確認.png",
+    note: "已存放 data/0922_Le_Souffle_舒芙蕾預約確認.png。地址：36 Rue du Mont Thabor, 75001 Paris（杜樂麗花園北側）。巴黎傳奇現烤舒芙蕾專門店！享用鹹甜舒芙蕾套餐。入座時請先告知服務員後續 15:00 有海軍府預約行程。備案：若上午在奧塞提早餓可改吃 Cafe de L'Empire，並於 11:00 前取消本預約。",
+    mapQuery: "Le Souffle 36 Rue du Mont Thabor Paris"
+  },
+  {
+    type: "🎨 藝術博物館 (備案保險票)",
+    title: "奧塞美術館 (Musée d'Orsay) PMP 時段預約憑證 (雙人備案)",
+    datetime: "2026/10/03 (六) 12:30 入場",
+    status: "✅ 備案預約憑證 (0€)",
+    code: "73304727784846 / 73302462447455",
+    file: "1003_奧塞美術館_雙人預約憑證_保險備案.pdf",
+    note: "已存放 data/1003_奧塞美術館_雙人預約憑證_保險備案.pdf。訂單ID: 200943493（chang chin yu）。走 ACCÈS 1 PAR LE QUAI 河畔碼頭入口。⚠️ 秘書重要提醒：此票為 9/22 未能入館時的後備保險票，因 PMP 4日券於 9/24 到期，若 10/3 使用需於現場補買門票。",
+    mapQuery: "Musee d Orsay Paris"
   }
 ];
 
