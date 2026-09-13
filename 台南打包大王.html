@@ -1603,16 +1603,16 @@
     }
 
     .manage-bag-card {
-      background: #faf8f5;
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       padding: 12px 14px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
       gap: 10px;
       transition: all 0.15s ease;
       user-select: none;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
     }
 
     .manage-bag-card.dragging {
@@ -1627,11 +1627,27 @@
       transform: translateY(-2px);
     }
 
+    .manage-bag-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .manage-bag-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+
     .drag-handle {
       cursor: grab;
       color: var(--text-muted);
       font-size: 1.25rem;
-      padding: 6px 6px;
+      padding: 4px 6px;
       touch-action: none;
       display: flex;
       align-items: center;
@@ -1648,6 +1664,41 @@
       cursor: grabbing;
     }
 
+    .manage-bag-icon {
+      font-size: 1.45rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .manage-bag-title-wrap {
+      flex: 1;
+      min-width: 0;
+      cursor: pointer;
+    }
+
+    .manage-bag-name-text {
+      font-weight: 800;
+      color: var(--accent-navy);
+      font-size: 1.02rem;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .manage-bag-desc-text {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+
+    .manage-bag-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
     .bag-order-btn-group {
       display: flex;
       flex-direction: column;
@@ -1659,8 +1710,8 @@
       background: rgba(0, 0, 0, 0.04);
       border: 1px solid rgba(0, 0, 0, 0.08);
       border-radius: 4px;
-      padding: 2px 5px;
-      font-size: 0.72rem;
+      padding: 2px 6px;
+      font-size: 0.7rem;
       color: var(--text-sub);
       cursor: pointer;
       line-height: 1;
@@ -1678,22 +1729,41 @@
       cursor: not-allowed;
     }
 
-    .manage-bag-info {
+    .manage-bag-bottom-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      flex: 1;
+      gap: 8px;
+      width: 100%;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(0, 0, 0, 0.08);
+    }
+
+    .manage-bag-pwd-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .manage-bag-pwd-input {
-      background: #ffffff;
-      border: 1px solid rgba(0, 0, 0, 0.15);
+      flex: 1;
+      min-width: 0;
+      background: #faf8f5;
+      border: 1px solid rgba(0, 0, 0, 0.12);
       border-radius: 6px;
       color: var(--accent-gold);
       padding: 6px 10px;
       font-size: 0.85rem;
       font-weight: 700;
-      width: 130px;
+      transition: all 0.2s;
+    }
+
+    .manage-bag-pwd-input:focus {
+      background: #ffffff;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 2px rgba(184, 134, 11, 0.15);
+      outline: none;
     }
 
 
@@ -3282,27 +3352,31 @@
           ondrop="handleBagDrop(event, ${index})"
           ondragend="handleBagDragEnd(event)">
           
-          <div class="drag-handle" title="按住拖曳調整順序" ontouchstart="handleBagTouchStart(event, ${index})">⋮⋮</div>
-
-          <div class="manage-bag-info" style="cursor: pointer;" onclick="openEditBagModal('${b.id}')" title="點選編輯此包包">
-            <span style="font-size: 1.6rem;">${b.icon}</span>
-            <div>
-              <div style="font-weight: 700; color: var(--accent-navy); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
-                <span>${escapeHtml(b.name)}</span>
-                <span style="font-size: 0.76rem; color: var(--accent-gold); font-weight: 600;">✏️ 編輯</span>
+          <!-- 上層：拖曳圖示 + 圖示 + 包包名稱 (100% 橫向展開) + 排序與操作 -->
+          <div class="manage-bag-top-row">
+            <div class="manage-bag-left">
+              <div class="drag-handle" title="按住拖曳調整順序" ontouchstart="handleBagTouchStart(event, ${index})">⋮⋮</div>
+              <span class="manage-bag-icon" onclick="openEditBagModal('${b.id}')" title="點選編輯">${b.icon}</span>
+              <div class="manage-bag-title-wrap" onclick="openEditBagModal('${b.id}')" title="點選編輯此包包">
+                <div class="manage-bag-name-text">${escapeHtml(b.name)}</div>
+                ${b.desc ? `<div class="manage-bag-desc-text">${escapeHtml(b.desc)}</div>` : ''}
               </div>
-              <div style="font-size: 0.76rem; color: var(--text-muted);">${escapeHtml(b.desc || '')}</div>
+            </div>
+
+            <div class="manage-bag-right-actions">
+              <div class="bag-order-btn-group">
+                <button type="button" class="btn-sort-arrow" onclick="moveBagOrder(${index}, -1)" ${index === 0 ? 'disabled' : ''} title="向上移動一位">▲</button>
+                <button type="button" class="btn-sort-arrow" onclick="moveBagOrder(${index}, 1)" ${index === bags.length - 1 ? 'disabled' : ''} title="向下移動一位">▼</button>
+              </div>
+              <button type="button" class="btn-item-tool" onclick="openEditBagModal('${b.id}')" title="編輯此包包">✏️</button>
+              <button type="button" class="btn-item-tool del" onclick="deleteBag('${b.id}')" title="刪除此包包">🗑️</button>
             </div>
           </div>
 
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <div class="bag-order-btn-group">
-              <button type="button" class="btn-sort-arrow" onclick="moveBagOrder(${index}, -1)" ${index === 0 ? 'disabled' : ''} title="向上移動一位">▲</button>
-              <button type="button" class="btn-sort-arrow" onclick="moveBagOrder(${index}, 1)" ${index === bags.length - 1 ? 'disabled' : ''} title="向下移動一位">▼</button>
-            </div>
-            <input type="text" class="manage-bag-pwd-input" placeholder="密碼/備忘" value="${escapeHtml(b.pwd || '')}" onchange="updateBagPwd('${b.id}', this.value)" title="輸入此箱開鎖密碼或綁帶密碼">
-            <button class="btn-edit-icon" onclick="openEditBagModal('${b.id}')" title="編輯此包包名稱與設定">✏️</button>
-            <button class="btn-del-icon" onclick="deleteBag('${b.id}')" title="刪除此包包">🗑️</button>
+          <!-- 下層：密碼與備忘輸入框 (寬敞好點、清晰好看) -->
+          <div class="manage-bag-bottom-row">
+            <span class="manage-bag-pwd-label">🔒 密碼備忘：</span>
+            <input type="text" class="manage-bag-pwd-input" placeholder="例如：密碼 229、綁帶 242" value="${escapeHtml(b.pwd || '')}" onchange="updateBagPwd('${b.id}', this.value)" title="輸入此箱開鎖密碼或綁帶密碼">
           </div>
         </div>
       `).join('');
