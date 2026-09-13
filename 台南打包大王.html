@@ -1,0 +1,3453 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>台南打包大王 · 頂級包包細項與 AirTag 戰情系統</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #faf8f5;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f5f2ee;
+      --accent-gold: #b8860b;
+      --accent-gold-glow: rgba(184, 134, 11, 0.18);
+      --accent-green: #2d8659;
+      --accent-green-glow: rgba(45, 134, 89, 0.18);
+      --accent-cyan: #1a6b7a;
+      --accent-cyan-glow: rgba(26, 107, 122, 0.15);
+      --accent-red: #c0392b;
+      --accent-red-glow: rgba(192, 57, 43, 0.15);
+      --accent-purple: #7c3aed;
+      --accent-orange: #d4760a;
+      --accent-navy: #1e3a5f;
+      --text-main: #2c2c2c;
+      --text-sub: #6b6b6b;
+      --text-muted: #9a9a9a;
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-active: rgba(184, 134, 11, 0.35);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-xl: 28px;
+      --radius-full: 9999px;
+      --shadow-card: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 110px;
+    }
+
+    /* 頂部主導航 */
+    header {
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      padding: 16px 32px;
+    }
+
+    .header-inner {
+      max-width: 1760px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: var(--accent-navy);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #b8860b 0%, #9a7209 100%);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sound-toggle-btn {
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-sub);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .sound-toggle-btn.on {
+      color: var(--accent-gold);
+      border-color: rgba(184, 134, 11, 0.3);
+      background: rgba(184, 134, 11, 0.06);
+    }
+
+    /* 主容器 */
+    main {
+      max-width: 1760px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 26px 32px;
+    }
+
+    /* 📊 儀表板總覽卡 */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      main { padding: 14px; }
+      header { padding: 12px 14px; }
+    }
+
+    .dash-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .dash-progress-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .dash-progress-title .value {
+      color: var(--accent-navy);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 12px;
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2d8659 0%, #48a975 70%, #b8860b 100%);
+      border-radius: var(--radius-full);
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dash-stat-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .dash-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dash-stat-item strong {
+      color: var(--accent-navy);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .safety-alert-badge {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(192, 57, 43, 0.06);
+      border: 1px solid rgba(192, 57, 43, 0.2);
+      color: var(--accent-red);
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      height: 100%;
+    }
+
+    .safety-alert-badge.safe {
+      background: rgba(45, 134, 89, 0.06);
+      border-color: rgba(45, 134, 89, 0.2);
+      color: var(--accent-green);
+    }
+
+    .quick-stat-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+
+    .stat-pill-item {
+      text-align: center;
+    }
+
+    .stat-pill-item .num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent-navy);
+    }
+
+    .stat-pill-item .label {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      margin-top: 3px;
+    }
+
+    /* 🏷️ AIRTAG 專區 */
+    .airtag-section {
+      background: #ffffff;
+      border: 1px solid rgba(26, 107, 122, 0.15);
+      border-radius: var(--radius-xl);
+      padding: 20px 24px;
+      margin-bottom: 26px;
+      box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent-navy);
+    }
+
+    .section-title span.tag {
+      font-size: 0.76rem;
+      background: rgba(26, 107, 122, 0.08);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(26, 107, 122, 0.2);
+      padding: 3px 9px;
+      border-radius: 5px;
+      font-weight: 600;
+    }
+
+    .airtag-header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-findmy {
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-findmy:hover {
+      background: rgba(26, 107, 122, 0.08);
+      border-color: var(--accent-cyan);
+    }
+
+    .airtag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 14px;
+    }
+
+    .airtag-card {
+      background: #faf8f5;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      transition: all 0.2s;
+      user-select: none;
+      position: relative;
+    }
+
+    .airtag-card:hover {
+      background: #f0ece6;
+      border-color: rgba(26, 107, 122, 0.3);
+    }
+
+    .airtag-card.checked {
+      background: rgba(45, 134, 89, 0.06);
+      border-color: rgba(45, 134, 89, 0.25);
+    }
+
+    .airtag-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .airtag-icon-bubble {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff 0%, #d1d5db 60%, #9ca3af 100%);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .airtag-apple-logo {
+      position: absolute;
+      font-size: 0.65rem;
+      font-weight: 900;
+      color: #374151;
+      bottom: 2px;
+    }
+
+    .airtag-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .airtag-target {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .airtag-status-text {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .airtag-status-text .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      display: inline-block;
+      box-shadow: 0 0 6px var(--accent-green);
+    }
+
+    .airtag-card:not(.checked) .airtag-status-text .dot {
+      background: var(--accent-orange);
+      box-shadow: 0 0 4px rgba(212, 118, 10, 0.3);
+    }
+
+    .airtag-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-sound-ping {
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--accent-cyan);
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-sound-ping:hover {
+      background: rgba(26, 107, 122, 0.08);
+    }
+
+    .btn-del-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .btn-del-icon:hover {
+      color: var(--accent-red);
+      background: rgba(248, 113, 113, 0.15);
+    }
+
+    .btn-edit-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .btn-edit-icon:hover {
+      color: var(--accent-gold);
+      background: rgba(184, 134, 11, 0.12);
+    }
+
+    /* 🔀 視角切換器與即時搜尋 */
+    .view-mode-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .view-switcher {
+      display: flex;
+      background: rgba(0, 0, 0, 0.04);
+      padding: 5px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .view-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      padding: 10px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .view-btn.active {
+      background: var(--accent-navy);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(30, 58, 95, 0.2);
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 460px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-md);
+      padding: 12px 16px 12px 42px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-navy);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      opacity: 0.5;
+    }
+
+    /* 🧳 模式一：【包包細項】網格完全平鋪 (不要滑框，大框框自適應展開) */
+    .bag-grid-view {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    @media (max-width: 600px) {
+      .bag-grid-view {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bag-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      box-shadow: var(--shadow-card);
+    }
+
+    .bag-card:hover {
+      border-color: rgba(184, 134, 11, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .bag-card.sealed {
+      border-color: rgba(45, 134, 89, 0.3);
+      background: linear-gradient(160deg, #f6faf8 0%, #edf5f0 100%);
+    }
+
+    .bag-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bag-card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .bag-card-icon {
+      font-size: 2.2rem;
+      width: 58px;
+      height: 58px;
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .bag-card-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--accent-navy);
+    }
+
+    .bag-card-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* 密碼醒目標籤 */
+    .bag-pwd-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(184, 134, 11, 0.06);
+      border: 1px solid rgba(184, 134, 11, 0.2);
+      color: var(--accent-gold);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .bag-card-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .seal-badge {
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.5px;
+    }
+
+    .seal-badge.sealed {
+      background: var(--accent-green);
+      color: #fff;
+    }
+
+    .seal-badge.unsealed {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--text-sub);
+    }
+
+    /* 物品大清單預覽區 */
+    .bag-card-items-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #faf8f5;
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      max-height: 480px;
+      min-height: 220px;
+      overflow-y: auto;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .bag-card-items-preview::-webkit-scrollbar {
+      width: 6px;
+    }
+    .bag-card-items-preview::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .bag-card-items-preview::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.12);
+      border-radius: 10px;
+    }
+
+    .bag-mini-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1.05rem;
+      color: var(--text-main);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s;
+    }
+
+    .bag-mini-item:hover {
+      background: #f7f4ef;
+      border-color: rgba(184, 134, 11, 0.2);
+    }
+
+    .bag-mini-item.checked {
+      text-decoration: line-through;
+      color: var(--text-muted);
+      background: rgba(45, 134, 89, 0.05);
+    }
+
+    .bag-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .mini-check-box {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .bag-mini-item.checked .mini-check-box {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+    }
+
+    .mini-check-box svg {
+      width: 14px;
+      height: 14px;
+      stroke: #fff;
+      stroke-width: 3;
+      fill: none;
+      opacity: 0;
+    }
+
+    .bag-mini-item.checked .mini-check-box svg {
+      opacity: 1;
+    }
+
+    .bag-item-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 備註微膠囊 */
+    .note-tag {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border-subtle);
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .note-tag:hover {
+      color: var(--accent-gold);
+      border-color: var(--accent-gold);
+    }
+
+    .bag-card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .btn-bag-action {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-bag-action:hover {
+      background: #f7f4ef;
+      color: var(--accent-navy);
+      border-color: rgba(184, 134, 11, 0.3);
+    }
+
+    .btn-bag-action.seal:hover {
+      background: rgba(45, 134, 89, 0.08);
+      color: var(--accent-green);
+      border-color: rgba(45, 134, 89, 0.3);
+    }
+
+    .btn-bag-action.add {
+      color: var(--accent-gold);
+      border-color: rgba(184, 134, 11, 0.25);
+    }
+    .btn-bag-action.add:hover {
+      background: rgba(184, 134, 11, 0.08);
+    }
+
+    /* 🧳 膠囊快速篩選列 */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .filter-bar::-webkit-scrollbar {
+      height: 6px;
+    }
+    .filter-bar::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.12);
+      border-radius: 10px;
+    }
+
+    .filter-pill {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-sub);
+      padding: 9px 18px;
+      border-radius: 20px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    }
+
+    .filter-pill:hover {
+      background: #f7f4ef;
+      color: var(--text-main);
+    }
+
+    .filter-pill.active {
+      background: var(--accent-navy);
+      color: #fff;
+      font-weight: 700;
+      border-color: var(--accent-navy);
+      box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
+    }
+
+    .filter-pill .count {
+      font-size: 0.78rem;
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--text-sub);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .filter-pill.active .count {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    /* 📋 模式二：物品清單 (按類別分組) */
+    .item-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* 分類區塊 */
+    .category-section {
+      margin-bottom: 28px;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(184, 134, 11, 0.2);
+      border-radius: var(--radius-md);
+      position: sticky;
+      top: 72px;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.04);
+    }
+
+    .category-icon {
+      font-size: 1.4rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(184, 134, 11, 0.1);
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .category-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent-navy);
+      letter-spacing: 0.3px;
+    }
+
+    .category-count {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.04);
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    .category-progress {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .category-progress .done {
+      color: var(--accent-green);
+    }
+
+    .category-progress .total {
+      color: var(--text-muted);
+    }
+
+    .category-progress-bar {
+      width: 60px;
+      height: 6px;
+      background: rgba(0, 0, 0, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .category-progress-fill {
+      height: 100%;
+      background: var(--accent-green);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .category-items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 620px) {
+      .category-items-grid { grid-template-columns: 1fr; }
+    }
+
+    .item-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      user-select: none;
+      transition: all 0.2s;
+      position: relative;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .item-row:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(184, 134, 11, 0.25);
+    }
+
+    .item-row.checked {
+      background: rgba(45, 134, 89, 0.04);
+      border-color: rgba(45, 134, 89, 0.2);
+    }
+
+    .item-row.checked .item-name {
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .item-row.has-danger {
+      border-color: rgba(192, 57, 43, 0.4);
+      background: rgba(192, 57, 43, 0.03);
+    }
+
+    .check-area {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .custom-check {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      border: 2px solid rgba(0, 0, 0, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background: #ffffff;
+    }
+
+    .checked .custom-check {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      box-shadow: 0 0 14px var(--accent-green-glow);
+    }
+
+    .custom-check svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      stroke-width: 3.2;
+      fill: none;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .checked .custom-check svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .item-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      cursor: pointer;
+    }
+
+    .item-name-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .item-name {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .item-name.red-alert {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .item-meta-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-choose-bag {
+      background: rgba(184, 134, 11, 0.08);
+      border: 1px solid rgba(184, 134, 11, 0.25);
+      color: #9a7209;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-choose-bag:hover {
+      background: rgba(184, 134, 11, 0.16);
+      border-color: var(--accent-gold);
+      transform: translateY(-1px);
+    }
+
+    .btn-choose-bag.box {
+      background: rgba(124, 58, 237, 0.08);
+      border-color: rgba(124, 58, 237, 0.25);
+      color: #7c3aed;
+    }
+
+    .btn-choose-bag.safe {
+      background: rgba(45, 134, 89, 0.08);
+      border-color: rgba(45, 134, 89, 0.25);
+      color: #2d8659;
+    }
+
+    .btn-choose-bag.cam {
+      background: rgba(26, 107, 122, 0.08);
+      border-color: rgba(26, 107, 122, 0.25);
+      color: #1a6b7a;
+    }
+
+    .btn-choose-bag .arrow {
+      font-size: 0.65rem;
+      opacity: 0.7;
+    }
+
+    .item-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 狀態標籤：已打包 */
+    .status-badge {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 4px;
+    }
+
+    .status-badge.red {
+      background: rgba(192, 57, 43, 0.08);
+      color: var(--accent-red);
+      border: 1px solid rgba(192, 57, 43, 0.25);
+    }
+
+    .status-badge.orange {
+      background: rgba(212, 118, 10, 0.08);
+      color: var(--accent-orange);
+      border: 1px solid rgba(212, 118, 10, 0.25);
+    }
+
+    .status-badge.blue {
+      background: rgba(30, 58, 95, 0.08);
+      color: var(--accent-navy);
+      border: 1px solid rgba(30, 58, 95, 0.25);
+    }
+
+    .status-badge.green {
+      background: rgba(45, 134, 89, 0.08);
+      color: var(--accent-green);
+      border: 1px solid rgba(45, 134, 89, 0.25);
+    }
+
+    .danger-tag {
+      background: var(--accent-red);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* 底部操作欄 */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 14px 32px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
+      z-index: 90;
+    }
+
+    .bottom-inner {
+      max-width: 1760px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-action {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: var(--text-main);
+      padding: 11px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-action:hover {
+      background: #f7f4ef;
+      border-color: rgba(184, 134, 11, 0.3);
+      color: var(--accent-navy);
+    }
+
+    .btn-action.gold {
+      background: linear-gradient(135deg, #b8860b 0%, #9a7209 100%);
+      color: #ffffff;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 3px 12px rgba(184, 134, 11, 0.25);
+    }
+
+    .btn-action.gold:hover {
+      background: linear-gradient(135deg, #c79515 0%, #a87d0c 100%);
+      transform: translateY(-1px);
+    }
+
+    /* 彈出視窗 Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 200;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--accent-navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Noto Serif TC', serif;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.86rem;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .form-input {
+      width: 100%;
+      background: #faf8f5;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: var(--radius-sm);
+      padding: 11px 16px;
+      color: var(--text-main);
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-navy);
+      background: #ffffff;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .bag-picker-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      max-height: 420px;
+      padding-right: 4px;
+    }
+
+    .bag-picker-item {
+      background: #faf8f5;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .bag-picker-item:hover {
+      background: #f3efe9;
+      border-color: var(--accent-navy);
+      transform: translateX(4px);
+    }
+
+    .bag-picker-item.current {
+      background: rgba(45, 134, 89, 0.08);
+      border-color: var(--accent-green);
+    }
+
+    .bag-picker-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .bag-picker-icon {
+      font-size: 1.5rem;
+    }
+
+    .bag-picker-name {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--accent-navy);
+    }
+
+    .bag-picker-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .bag-picker-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bag-picker-item.selected {
+      background: rgba(184, 134, 11, 0.08);
+      border-color: var(--accent-gold);
+      box-shadow: 0 2px 8px rgba(184, 134, 11, 0.12);
+    }
+
+    .bag-picker-item .picker-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 1.5px solid rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      background: #ffffff;
+      transition: all 0.2s;
+    }
+
+    .bag-picker-item.selected .picker-check {
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+      color: #ffffff;
+    }
+
+    .bag-chip-select {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 20px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: #ffffff;
+      color: var(--text-main);
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .bag-chip-select:hover {
+      border-color: var(--accent-gold);
+      background: #fdfbf7;
+    }
+
+    .bag-chip-select.active {
+      background: rgba(184, 134, 11, 0.12);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      font-weight: 700;
+      box-shadow: 0 1px 4px rgba(184, 134, 11, 0.15);
+    }
+
+    /* 管理包包專用卡片清單 */
+    .manage-bag-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      max-height: 420px;
+      padding-right: 4px;
+    }
+
+    .manage-bag-card {
+      background: #faf8f5;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .manage-bag-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .manage-bag-pwd-input {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
+      color: var(--accent-gold);
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: 130px;
+    }
+
+    .export-textarea {
+      width: 100%;
+      height: 240px;
+      background: #faf8f5;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      padding: 14px;
+      font-family: monospace;
+      font-size: 0.88rem;
+      resize: vertical;
+    }
+
+    /* 🍞 全域自製提示訊息 (Toast) - 完全相容手機 HTML Viewer 與 Webview */
+    .toast-container {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+      width: 90%;
+      max-width: 420px;
+    }
+
+    .toast-msg {
+      background: #1e3a5f;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast-msg.success {
+      background: #2e7d32;
+      border-color: #81c784;
+    }
+
+    .toast-msg.error {
+      background: #c62828;
+      border-color: #ef5350;
+    }
+
+    .toast-msg.gold {
+      background: #b8860b;
+      border-color: #f3c267;
+    }
+  </style>
+</head>
+<body>
+  <!-- 🍞 浮動提示訊息容器 -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- 頂部導航 -->
+  <header>
+    <div class="header-inner">
+      <div class="brand-wrap">
+        <div class="brand-title">
+          <span>台南打包大王</span>
+          <span class="brand-badge">旗艦細項完整版</span>
+        </div>
+      </div>
+      <div class="header-controls">
+        <a href="index.html" class="sound-toggle-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px;color:var(--text-main);background:#fff;border:1px solid rgba(0,0,0,0.1);">
+          <span>🇫🇷</span>
+          <span>回主行程</span>
+        </a>
+        <button class="sound-toggle-btn on" id="sound-btn" onclick="toggleSound()">
+          <span id="sound-icon">🔔</span>
+          <span>音效反饋</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 📊 任務數據儀表板 -->
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="dash-progress-title">
+          <span>✈️ 全局打包總進度</span>
+          <span class="value" id="stat-progress">0/0 (0%)</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="stat-progress-bar" style="width: 0%;"></div>
+        </div>
+        <div class="dash-stat-row">
+          <div class="dash-stat-item">已打包：<strong id="stat-done-count">0</strong> 件</div>
+          <div class="dash-stat-item">待打包：<strong id="stat-todo-count">0</strong> 件</div>
+          <div class="dash-stat-item">託運箱件數：<strong id="stat-box-count">0</strong> 件</div>
+        </div>
+      </div>
+
+      <div class="quick-stat-box">
+        <div class="stat-pill-item">
+          <div class="num" id="stat-bags-count" style="color: var(--accent-gold);">9</div>
+          <div class="label">啟用包包</div>
+        </div>
+        <div class="stat-pill-item">
+          <div class="num" id="stat-airtag-count" style="color: var(--accent-cyan);">3</div>
+          <div class="label">AirTag 在線</div>
+        </div>
+        <div class="stat-pill-item">
+          <div class="num" id="stat-sealed-count" style="color: var(--accent-green);">0</div>
+          <div class="label">已封箱數</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🏷️ AIRTAG 專屬管理專區 (預設收合) -->
+    <section class="airtag-section" id="airtag-section" style="padding: 14px 20px;">
+      <div class="section-header" style="margin-bottom: 0; cursor: pointer; user-select: none;" onclick="toggleAirtagSection()">
+        <div class="section-title">
+          <span>🏷️ AirTag 定位追蹤管理</span>
+          <span class="tag">iPhone 雙向聯動</span>
+          <span id="airtag-toggle-arrow" style="font-size: 0.82rem; color: var(--accent-cyan); margin-left: 8px; font-weight: 600;">▼ 點此展開</span>
+        </div>
+        <div class="airtag-header-actions" onclick="event.stopPropagation()">
+          <button class="btn-findmy" onclick="openFindMyApp()">
+            <span>📱 開啟 iPhone 尋找</span>
+          </button>
+          <button class="btn-findmy" style="background: rgba(184, 134, 11, 0.1); border-color: var(--accent-gold); color: var(--accent-gold);" onclick="openAddAirtagModal()">
+            <span>＋ 新增 AirTag</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="airtag-grid" id="airtag-grid" style="display: none; margin-top: 16px;">
+        <!-- 由 JS 動態生成 AirTag 狀態卡片 -->
+      </div>
+    </section>
+
+    <!-- 🔀 視角切換器與即時搜尋 -->
+    <div class="view-mode-bar">
+      <div class="view-switcher">
+        <button class="view-btn" id="btn-view-items" onclick="switchView('ITEMS')">
+          <span>📋 全部物品</span>
+        </button>
+        <button class="view-btn active" id="btn-view-bags" onclick="switchView('BAGS')">
+          <span>🧳 包包細項</span>
+        </button>
+      </div>
+
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-box" class="search-input" placeholder="即時搜尋物品、包包或備註..." oninput="handleSearch()">
+      </div>
+    </div>
+
+    <!-- 🧳 模式一：【包包細項】大框框平鋪展開 (不要滑框) -->
+    <div class="bag-grid-view" id="bag-view-container">
+      <!-- 由 JS 動態生成各包包細項平鋪大卡片 -->
+    </div>
+
+    <!-- 📋 模式二：全局物品清單模式 -->
+    <div id="items-view-container" style="display: none;">
+      <!-- 快速篩選膠囊列 -->
+      <div class="filter-bar" id="bag-filter-bar">
+        <!-- 由 JS 動態渲染包包篩選按鈕 -->
+      </div>
+
+      <!-- 物品清單 -->
+      <div class="item-list-container" id="item-list">
+        <!-- 由 JS 動態產生勾選項目 -->
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部操作列 -->
+  <div class="bottom-bar">
+    <div class="bottom-inner">
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button class="btn-action gold" onclick="openAddModal()">
+          <span>＋ 新增物品</span>
+        </button>
+        <button class="btn-action" onclick="openManageBagsModal()">
+          <span>⚙️ 管理包包</span>
+        </button>
+        <button class="btn-action" onclick="openSyncModal()">
+          <span>🔄 匯出 / 匯入同步</span>
+        </button>
+      </div>
+      <div>
+        <button class="btn-action" onclick="resetAllChecks()" style="color: var(--text-muted); border-color: transparent;">
+          <span>重置勾選</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⚙️ 管理包包彈出視窗 -->
+  <div class="modal-overlay" id="manage-bags-modal">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-title">
+        <span>⚙️ 管理包包清單與密碼備忘</span>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 12px;">
+        在此可直接為各個行李箱設定開鎖密碼，並隨時新增或移除包包：
+      </div>
+      
+      <div class="manage-bag-list" id="manage-bag-list-container">
+        <!-- 由 JS 動態生成包包管理項目 -->
+      </div>
+
+      <div class="modal-actions" style="justify-content: space-between; margin-top: 20px;">
+        <button class="btn-action gold" onclick="openAddBagModal()">＋ 新增全新包包</button>
+        <button class="btn-action" onclick="closeManageBagsModal()">儲存並關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📝 編輯物品備註 Modal -->
+  <div class="modal-overlay" id="note-modal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <span>📝 編輯物品備註</span>
+      </div>
+      <div style="font-size: 0.9rem; color: var(--accent-gold); margin-bottom: 12px;" id="note-item-title">
+        物品名稱
+      </div>
+      <div class="form-group">
+        <label>自訂備註說明</label>
+        <input type="text" id="input-edit-note" class="form-input" placeholder="例如：還沒完成、放內層、分兩包...">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action" onclick="closeNoteModal()">取消</button>
+        <button class="btn-action gold" onclick="submitEditNote()">確認儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✏️ 編輯物品 Modal -->
+  <div class="modal-overlay" id="edit-item-modal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <span>✏️ 編輯打包物品</span>
+      </div>
+      <div class="form-group">
+        <label>物品名稱</label>
+        <input type="text" id="input-edit-item-name" class="form-input" placeholder="請輸入物品名稱...">
+      </div>
+      <div class="form-group">
+        <label>所屬分類</label>
+        <select id="input-edit-item-cat" class="form-input"></select>
+      </div>
+      <div class="form-group">
+        <label style="display: flex; justify-content: space-between; align-items: center;">
+          <span>收納於哪些包包？（可點擊複選多個）</span>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">點擊標籤切換加入/移除</span>
+        </label>
+        <div id="edit-item-bags-chips" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;"></div>
+      </div>
+      <div class="form-group">
+        <label>備註說明 (選填)</label>
+        <input type="text" id="input-edit-item-note" class="form-input" placeholder="例如：還沒完成、放內層、分兩包...">
+      </div>
+      <div class="modal-actions" style="justify-content: space-between;">
+        <button class="btn-action" style="color: var(--accent-red); border-color: rgba(248, 113, 113, 0.35);" onclick="deleteItemFromEditModal()">🗑️ 刪除此物品</button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-action" onclick="closeEditItemModal()">取消</button>
+          <button class="btn-action gold" onclick="submitEditItem()">儲存修改</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🎒 包包選擇器彈出視窗 -->
+  <div class="modal-overlay" id="bag-picker-modal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <span>🎒 選擇此物品放入哪個包包？</span>
+      </div>
+      <div style="font-size: 0.9rem; color: var(--accent-gold); margin-bottom: 14px;" id="picker-item-title">
+        物品名稱
+      </div>
+      
+      <div class="bag-picker-grid" id="bag-picker-options">
+        <!-- 由 JS 動態生成所有可選包包卡片 -->
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-action" onclick="closeBagPicker()">關閉</button>
+        <button class="btn-action gold" onclick="openAddBagFromPicker()">＋ 建立新包包</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增自訂物品 Modal -->
+  <div class="modal-overlay" id="add-modal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <span>＋ 新增打包物品</span>
+      </div>
+      <div class="form-group">
+        <label>物品名稱</label>
+        <input type="text" id="input-item-name" class="form-input" placeholder="例如：自拍棒、眼藥水...">
+      </div>
+      <div class="form-group">
+        <label>放入哪個包包？(點擊下方快速填入)</label>
+        <input type="text" id="input-item-loc" class="form-input" placeholder="例如：大黑箱、白色-藍色行李箱...">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;" id="quick-bag-tags">
+          <!-- 快捷標籤 -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label>備註說明 / 狀態 (選填)</label>
+        <input type="text" id="input-item-note" class="form-input" placeholder="例如：還沒完成、封箱前再確認...">
+      </div>
+      <div class="form-group">
+        <label>物品分類</label>
+        <select id="input-item-cat" class="form-input" style="appearance: auto; padding: 10px 14px;">
+          <option value="docs">🪪 重要證件與金融</option>
+          <option value="health">💊 藥品與醫療</option>
+          <option value="hygiene">🧴 衛生清潔用品</option>
+          <option value="skincare">✨ 保養與洗沐</option>
+          <option value="makeup">💄 彩妝</option>
+          <option value="tech">🔌 3C 電子與充電</option>
+          <option value="clothes">👔 衣物穿搭</option>
+          <option value="outdoor">🏔️ 戶外糧食與防護</option>
+          <option value="wedding">💍 婚紗拍攝專區</option>
+          <option value="travel" selected>🧳 旅行裝備</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action" onclick="closeAddModal()">取消</button>
+        <button class="btn-action gold" onclick="submitAddItem()">加入清單</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增自訂包包 Modal -->
+  <div class="modal-overlay" id="bag-modal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <span>🧳 新增自訂包包 / 行李箱</span>
+      </div>
+      <div class="form-group">
+        <label>包包圖示 Emoji</label>
+        <input type="text" id="input-bag-icon" class="form-input" value="🧳" style="font-size: 1.5rem; width: 90px; text-align: center;">
+      </div>
+      <div class="form-group">
+        <label>包包名稱</label>
+        <input type="text" id="input-bag-name" class="form-input" placeholder="例如：28吋銀色行李箱、單眼相機包...">
+      </div>
+      <div class="form-group">
+        <label>密碼備忘 (選填)</label>
+        <input type="text" id="input-bag-pwd" class="form-input" placeholder="例如：密碼 229、綁帶 242...">
+      </div>
+      <div class="form-group">
+        <label>包包類型 / 說明 (選填)</label>
+        <input type="text" id="input-bag-desc" class="form-input" placeholder="例如：長途託運大箱、隨身登機、貼身防盜...">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action" onclick="closeAddBagModal()">取消</button>
+        <button class="btn-action gold" onclick="submitAddBag()">確認建立</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🧳 編輯包包 / 行李箱 Modal -->
+  <div class="modal-overlay" id="edit-bag-modal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <span>✏️ 編輯包包 / 行李箱</span>
+      </div>
+      <div class="form-group">
+        <label>包包圖示 Emoji</label>
+        <input type="text" id="input-edit-bag-icon" class="form-input" value="🧳"
+          style="font-size: 1.5rem; width: 90px; text-align: center;">
+      </div>
+      <div class="form-group">
+        <label>包包名稱</label>
+        <input type="text" id="input-edit-bag-name" class="form-input" placeholder="例如：28吋銀色行李箱、大黑箱...">
+      </div>
+      <div class="form-group">
+        <label>密碼備忘 (選填)</label>
+        <input type="text" id="input-edit-bag-pwd" class="form-input" placeholder="例如：密碼 229、綁帶 242...">
+      </div>
+      <div class="form-group">
+        <label>包包類型 / 說明 (選填)</label>
+        <input type="text" id="input-edit-bag-desc" class="form-input" placeholder="例如：長途託運大箱、隨身登機、貼身防盜...">
+      </div>
+      <div class="modal-actions" style="justify-content: space-between;">
+        <button class="btn-action" style="color: var(--accent-red); border-color: rgba(248, 113, 113, 0.35);" onclick="deleteBagFromEditModal()">🗑️ 刪除此包包</button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-action" onclick="closeEditBagModal()">取消</button>
+          <button class="btn-action gold" onclick="submitEditBag()">儲存變更</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增自訂 AirTag Modal -->
+  <div class="modal-overlay" id="airtag-modal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <span>🏷️ 新增 AirTag 追蹤</span>
+      </div>
+      <div class="form-group">
+        <label>綁定包包 / 行李箱名稱</label>
+        <input type="text" id="input-airtag-target" class="form-input" placeholder="例如：防盜護照包、白色-藍色行李箱...">
+      </div>
+      <div class="form-group">
+        <label>說明備註 (選填)</label>
+        <input type="text" id="input-airtag-label" class="form-input" placeholder="例如：重要證件、託運大箱...">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action" onclick="closeAddAirtagModal()">取消</button>
+        <button class="btn-action gold" onclick="submitAddAirtag()">確認新增</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔄 夫妻同步與匯出/匯入 Modal -->
+  <div class="modal-overlay" id="sync-modal">
+    <div class="modal-card" style="max-width: 640px;">
+      <div class="modal-title">
+        <span>🔄 夫妻雙向同步與清單匯出</span>
+      </div>
+      
+      <!-- 分頁切換鈕 -->
+      <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;">
+        <button type="button" id="tab-btn-sync" class="btn-action gold" style="padding: 6px 14px; font-size: 0.85rem;" onclick="switchSyncTab('SYNC')">
+          🔄 夫妻代碼同步 (雙向互通)
+        </button>
+        <button type="button" id="tab-btn-text" class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="switchSyncTab('TEXT')">
+          📝 LINE 純文字清單
+        </button>
+      </div>
+
+      <!-- 分頁 1：夫妻代碼雙向同步 -->
+      <div id="sync-tab-code">
+        <div style="background: rgba(184, 134, 11, 0.06); border: 1px solid rgba(184, 134, 11, 0.2); padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 0.82rem; color: var(--text-main); line-height: 1.5;">
+          💡 <strong>雙向同步超簡單</strong>：在您手機上點「一鍵複製我的進度代碼」，傳到 LINE 給老婆；老婆在她的手機打開本視窗，貼上並點「立即套用」，兩人進度即可瞬間同步！
+        </div>
+
+        <!-- 區塊 A：匯出我的進度 -->
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+            <label style="font-weight: 700; font-size: 0.88rem; color: var(--accent-navy);">📤 我的最新進度代碼：</label>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn-action gold" style="padding: 5px 12px; font-size: 0.82rem;" onclick="copySyncCode()">一鍵複製進度代碼</button>
+              <button type="button" class="btn-action" style="padding: 5px 10px; font-size: 0.82rem;" onclick="downloadSyncFile()">💾 下載備份檔</button>
+            </div>
+          </div>
+          <textarea id="sync-export-code" class="export-textarea" style="height: 80px; font-size: 0.75rem;" readonly></textarea>
+        </div>
+
+        <!-- 區塊 B：匯入對方的進度 -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+            <label style="font-weight: 700; font-size: 0.88rem; color: var(--accent-navy);">📥 貼上同步代碼（或選擇備份檔）：</label>
+            <button type="button" class="btn-action" style="padding: 4px 10px; font-size: 0.8rem;" onclick="document.getElementById('sync-file-input').click()">📂 選擇備份檔匯入</button>
+            <input type="file" id="sync-file-input" accept=".json,text/plain" style="display:none;" onchange="handleSyncFileSelect(event)">
+          </div>
+          <textarea id="sync-import-code" class="form-input" style="height: 85px; font-size: 0.75rem; font-family: monospace;" placeholder="請在此處貼上對方傳來的同步代碼..." oninput="previewImportCode()"></textarea>
+          <div id="sync-import-status" style="margin-top: 6px; font-size: 0.82rem; font-weight: 600; min-height: 20px;"></div>
+          <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+            <button type="button" class="btn-action" style="background: var(--accent-green); color: #fff; border: none; font-weight: 700; padding: 10px 20px; font-size: 0.95rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(46,125,50,0.3);" onclick="applyImportCode()">📥 立即套用並同步</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 分頁 2：LINE 純文字閱讀版 -->
+      <div id="sync-tab-text" style="display: none;">
+        <div style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 8px;">
+          格式化純文字清單，適合直接傳送至 LINE 群組或手機備忘錄檢視：
+        </div>
+        <textarea id="export-text" class="export-textarea" style="height: 220px;" readonly></textarea>
+        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+          <button class="btn-action gold" onclick="copyExportText()">一鍵複製 LINE 清單</button>
+        </div>
+      </div>
+
+      <div class="modal-actions" style="margin-top: 16px;">
+        <button class="btn-action" onclick="closeSyncModal()">關閉視窗</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 🧳 預設包包清單 (含使用者特別指定的大藍箱密碼 229 與綁帶密碼 242)
+    const DEFAULT_BAGS = [
+      { id: 'b-wb-box', name: '白色-藍色行李箱', icon: '🧳', desc: '長途託運大箱 (綁定 AirTag)', pwd: '箱密碼 229 ｜ 綁帶 242', sealed: false },
+      { id: 'b-black-box', name: '大黑箱', icon: '🧳', desc: '託運大箱 / 西裝防塵袋', pwd: '', sealed: false },
+      { id: 'b-safe-pass', name: '隨身貼身防盜包', icon: '🛡️', desc: '護照與婚紗尾款大額現金 (綁定 AirTag)', pwd: '', sealed: false },
+      { id: 'b-safe-green', name: '綠色-防盜小小包', icon: '💚', desc: '隨身貴重小包 (綁定 AirTag)', pwd: '', sealed: false },
+      { id: 'b-cam-bag', name: '相機包', icon: '📷', desc: '行動電源與充電配件', pwd: '', sealed: false },
+      { id: 'b-backpack', name: '隨身背包', icon: '🎒', desc: '機上過夜與隨身裝備', pwd: '', sealed: false },
+      { id: 'b-cosmetic', name: '化妝保養盥洗包', icon: '💄', desc: '洗沐卸妝、保養護膚與彩妝', pwd: '', sealed: false },
+      { id: 'b-wallet', name: '隨身錢包', icon: '👛', desc: '歐元現鈔與回饋信用卡', pwd: '', sealed: false },
+      { id: 'b-photo-bag', name: '拍攝日隨身大袋', icon: '👗', desc: '婚紗拍攝日轉場換裝', pwd: '', sealed: false },
+      { id: 'b-wear', name: '隨身穿戴', icon: '👔', desc: '穿在身上或隨身佩戴', pwd: '', sealed: false }
+    ];
+
+    const DEFAULT_AIRTAGS = [
+      { id: 'at-1', target: '防盜護照包', label: '重要證件與現金', checked: true },
+      { id: 'at-2', target: '綠色-防盜小小包', label: '隨身貴重品', checked: true },
+      { id: 'at-3', target: '白色-藍色行李箱', label: '長途託運大箱 (密碼229)', checked: true }
+    ];
+
+    // 📋 完整旗艦清單 (整併使用者原始 44 項 ＋ 本次全新擴充之隱眼、藥物、衛生、保養洗沐、糧食、電熱毯、穿搭組)
+    // 分類定義：順序、圖示、標題
+    const CATEGORY_ORDER = [
+      { key: 'docs',     icon: '🪪', label: '重要證件與金融' },
+      { key: 'health',   icon: '💊', label: '藥品與醫療' },
+      { key: 'hygiene',  icon: '🧴', label: '衛生清潔用品' },
+      { key: 'skincare', icon: '✨', label: '保養與洗沐' },
+      { key: 'makeup',   icon: '💄', label: '彩妝' },
+      { key: 'tech',     icon: '🔌', label: '3C 電子與充電' },
+      { key: 'clothes',  icon: '👔', label: '衣物穿搭' },
+      { key: 'outdoor',  icon: '🏔️', label: '戶外糧食與防護' },
+      { key: 'wedding',  icon: '💍', label: '婚紗拍攝專區' },
+      { key: 'travel',   icon: '🧳', label: '旅行裝備' },
+    ];
+
+    const DEFAULT_ITEMS = [
+      // 🪪 重要證件與金融
+      { id: 1, name: '護照正本', loc: '隨身貼身防盜包', note: '', isRed: false, checked: false, cat: 'docs' },
+      { id: 2, name: '護照彩色影本 ＋ 電子檔存手機', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'docs' },
+      { id: 3, name: '台灣實體駕照正本', loc: '隨身貼身防盜包', note: '', isRed: false, checked: false, cat: 'docs' },
+      { id: 4, name: '國際駕照正本 (A/B蓋章)', loc: '隨身貼身防盜包', note: '', isRed: false, checked: false, cat: 'docs' },
+      { id: 5, name: '海外高回饋信用卡 (已開通4位數PIN碼)', loc: '隨身錢包', note: '', isRed: false, checked: false, cat: 'docs' },
+      { id: 6, name: '婚紗尾款歐元現鈔 €2500', loc: '隨身錢包', note: '', isRed: false, checked: false, cat: 'docs' },
+      { id: 7, name: '歐元零錢與小面額現金', loc: '隨身錢包', note: '', isRed: false, checked: false, cat: 'docs' },
+      { id: 8, name: '1 吋大頭照 2 張', loc: '隨身貼身防盜包', note: '', isRed: false, checked: false, cat: 'docs' },
+      { id: 101, name: '悠遊卡', loc: '隨身錢包', note: '', isRed: false, checked: false, cat: 'docs' },
+
+      // 💊 藥品與醫療
+      { id: 106, name: '眼鏡', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 102, name: '隱形眼鏡 (隱眼)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 103, name: '隱眼水盒 (盒)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 104, name: '隱眼保養藥水', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 105, name: '隱眼小夾子', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 107, name: '綜合維他命 B群 ＋ 維他命 C (bc)', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 108, name: '感冒藥 (退燒解熱)', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 178, name: '止痛藥 (EVE / 普拿疼)', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 109, name: '胃藥 (胃乳/胃散)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 110, name: '止瀉藥', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 179, name: '便秘/瀉藥', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 111, name: '過敏藥 (抗組織胺)', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 36, name: '暈車藥', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 183, name: '防蚊液 / 蚊蟲叮咬膏', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 184, name: '立體透氣口罩 (備用組)', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'health' },
+      { id: 37, name: 'OK 繃 (防水貼布 ＋ 曼秀雷敦)', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'health' },
+
+      // 🧴 衛生清潔用品
+      { id: 112, name: '衛生棉', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 113, name: '衛生棉條', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 114, name: '生理褲 / 安睡褲', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 122, name: '棉花棒', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 123, name: '牙線棒', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 124, name: '化妝棉', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 125, name: '化妝海綿', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 126, name: '洗臉海綿', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 127, name: '隨身鏡子', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 128, name: '髮夾 / 髮圈', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 160, name: '維持器 ＋ 粉刺棒', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 180, name: '隨身純水濕紙巾', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 181, name: '隨身抽取式衛生紙 / 面紙', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 38, name: '個人牙刷 ＆ 牙膏', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'hygiene' },
+      { id: 174, name: '女士刮毛刀 / 除毛刀', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'hygiene' },
+
+      // ✨ 保養與洗沐
+      { id: 115, name: '卸妝棉', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 116, name: '洗面乳', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 117, name: '保濕面膜', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 118, name: '化妝水', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 119, name: '精華液', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 120, name: '保濕乳液 / 臉部面霜', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 161, name: '美容儀', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 162, name: '梳子', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 121, name: '洗髮精 ＆ 護髮乳 (洗護髮)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 163, name: '護髮油 (髮油)', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'skincare' },
+      { id: 173, name: '沐浴乳 / 旅行沐浴組', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'skincare' },
+
+      // 💄 彩妝
+      { id: 164, name: '妝前保養品', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 129, name: '臉部防曬', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 182, name: '臉跟身體防曬乳', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 130, name: '粉底液', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 165, name: '粉餅', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 166, name: '蜜粉 / 定妝蜜粉', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 131, name: '眼影盤', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 167, name: '眼線筆 / 眼線膠', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 132, name: '眉毛 (眉筆/眉粉)', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 168, name: '修容餅 / 陰影盤', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 169, name: '化妝刷具組', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 133, name: '腮紅', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 170, name: '睫毛刷 / 睫毛膏', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 171, name: '護唇膏 (透明/潤色)', loc: '綠色-防盜小小包', note: '', isRed: false, checked: false, cat: 'makeup' },
+      { id: 134, name: '唇彩 / 唇膏', loc: '化妝保養盥洗包', note: '', isRed: false, checked: false, cat: 'makeup' },
+
+      // 🔌 3C 電子與充電
+      { id: 135, name: '吹風機 (確認支援國際雙電壓)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 136, name: '望遠鏡', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 137, name: 'Apple Watch 手錶充電線', loc: '相機包', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 9, name: '小米 磁吸 LAPO (行動電源/行電)', loc: '相機包', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 10, name: '歐規雙圓孔轉接頭 (Type C/E)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 11, name: '磁吸手機支架', loc: '相機包', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 12, name: '車用點菸器快充頭 ＋ 充電線', loc: '相機包', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 13, name: '3.5mm 有線耳機 ＋ 轉接頭', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 14, name: '手機各款長充電線 ＋ 快充頭', loc: '綠色-防盜小小包', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 15, name: '手機背帶式斜背掛繩', loc: '隨身穿戴', note: '', isRed: false, checked: false, cat: 'tech' },
+      { id: 138, name: '相機？(相機機身、鏡頭、記憶卡)', loc: '相機包', note: '', isRed: false, checked: false, cat: 'tech' },
+
+      // 👔 衣物穿搭
+      { id: 147, name: '電熱毯 (輕便型)', loc: '大黑箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 148, name: '速乾擦頭巾 (頭髮毛巾)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 149, name: '毛巾', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 172, name: '枕巾 (衛生隔髒)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 150, name: '睡衣家居服', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 32, name: '貼身內褲 / 免洗內褲', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 185, name: '貼身內衣 / 無痕內衣', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 177, name: 'Bra top (內搭背心)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 186, name: '襪子組', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 21, name: '防水室內拖鞋', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 151, name: '保暖衣物 ＆ 圍巾', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 152, name: '（1）毛衣 ＋ 長褲套裝', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 153, name: '（2）氣質連身褲', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 154, name: '（3）保暖厚外套 ＆ 輕薄防風外套', loc: '隨身穿戴', note: '', isRed: false, checked: false, cat: 'clothes' },
+      { id: 31, name: '舒適好走球鞋 / 健走鞋', loc: '隨身穿戴', note: '', isRed: false, checked: false, cat: 'clothes' },
+
+      // 🏔️ 戶外糧食與防護
+      { id: 33, name: '太陽眼鏡 (兩副)', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'outdoor' },
+      { id: 139, name: '綜合堅果', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'outdoor' },
+      { id: 140, name: '泡麵 / 碗麵', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'outdoor' },
+      { id: 141, name: '保溫杯 (加水站使用)', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'outdoor' },
+      { id: 142, name: '環保餐具組', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'outdoor' },
+      { id: 143, name: '水果 / 乾糧餅乾', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'outdoor' },
+      { id: 144, name: '濾掛式咖啡包', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'outdoor' },
+      { id: 42, name: '加厚折疊保冷袋 ＋ 冰寶', loc: '大黑箱', note: '', isRed: false, checked: false, cat: 'outdoor' },
+      { id: 145, name: '暖暖包 (多片)', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'outdoor' },
+      { id: 146, name: '遮陽帽子', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'outdoor' },
+
+      // 💍 婚紗拍攝專區
+      { id: 24, name: 'NuBra 隱形胸罩 ＋ 膚色無痕內衣', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'wedding' },
+      { id: 25, name: '好走平底休閒鞋 / 拖鞋', loc: '拍攝日隨身大袋', note: '', isRed: false, checked: false, cat: 'wedding' },
+      { id: 26, name: '輕薄保暖防風外套 / 披肩', loc: '拍攝日隨身大袋', note: '', isRed: false, checked: false, cat: 'wedding' },
+      { id: 27, name: '男士西裝 白襯衫 鞋子', loc: '大黑箱', note: '', isRed: false, checked: false, cat: 'wedding' },
+
+      // 🧳 旅行裝備
+      { id: 175, name: '洗衣袋', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'travel' },
+      { id: 176, name: '汙衣袋 / 髒衣收納袋', loc: '白色-藍色行李箱', note: '', isRed: false, checked: false, cat: 'travel' },
+      { id: 41, name: '手提行李電子秤 (行李秤)', loc: '大黑箱', note: '', isRed: false, checked: false, cat: 'travel' },
+      { id: 43, name: '透明退稅單專用防水夾鏈袋', loc: '隨身背包', note: '', isRed: false, checked: false, cat: 'travel' },
+      { id: 44, name: '折疊大旅行袋 / 登機備用袋', loc: '大黑箱', note: '', isRed: false, checked: false, cat: 'travel' }
+    ];
+
+    // 🛡️ 安全本地儲存包裝 (相容限制 file:/// 協議的各類手機 HTML Viewer)
+    const memoryStorage = {};
+    const safeStorage = {
+      getItem(key) {
+        try {
+          if (typeof window !== 'undefined' && window.localStorage) {
+            return window.localStorage.getItem(key);
+          }
+        } catch (e) {}
+        return memoryStorage[key] || null;
+      },
+      setItem(key, val) {
+        try {
+          if (typeof window !== 'undefined' && window.localStorage) {
+            window.localStorage.setItem(key, val);
+          }
+        } catch (e) {}
+        memoryStorage[key] = val;
+      }
+    };
+
+    let bags = JSON.parse(safeStorage.getItem('tainan_packing_bags_v9') || 'null') || DEFAULT_BAGS;
+    let airtags = JSON.parse(safeStorage.getItem('tainan_packing_airtags_v9') || 'null') || DEFAULT_AIRTAGS;
+    let items = JSON.parse(safeStorage.getItem('tainan_packing_items_v9') || 'null') || DEFAULT_ITEMS;
+    let currentView = 'BAGS'; // 預設顯示【包包細項】平鋪大框框！
+    let currentFilterBag = 'ALL';
+    let searchQuery = '';
+    let soundEnabled = true;
+    let activeSelectingItemId = null;
+    let editingNoteItemId = null;
+
+    let audioCtx = null;
+    function playCheckSound() {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.12);
+      } catch (e) {}
+    }
+
+    function playDeleteSound() {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+      } catch (e) {}
+    }
+
+    function playPingSound() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        [0, 0.1, 0.2].forEach(delay => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(1760, now + delay);
+          gain.gain.setValueAtTime(0.2, now + delay);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.06);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + delay);
+          osc.stop(now + delay + 0.06);
+        });
+      } catch (e) {}
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('sound-btn');
+      const icon = document.getElementById('sound-icon');
+      if (soundEnabled) {
+        btn.classList.add('on');
+        icon.textContent = '🔔';
+        playCheckSound();
+      } else {
+        btn.classList.remove('on');
+        icon.textContent = '🔕';
+      }
+    }
+
+    function getItemLocs(item) {
+      if (!item) return [];
+      if (Array.isArray(item.locs)) return item.locs.filter(Boolean);
+      if (Array.isArray(item.loc)) return item.loc.filter(Boolean);
+      if (typeof item.loc === 'string' && item.loc.trim()) {
+        return item.loc.split(/[,、，]/).map(s => s.trim()).filter(Boolean);
+      }
+      return [];
+    }
+
+    function setItemLocs(item, locsArray) {
+      const cleanLocs = Array.from(new Set((locsArray || []).map(s => s.trim()).filter(Boolean)));
+      item.locs = cleanLocs.length > 0 ? cleanLocs : ['未指定包包'];
+      item.loc = item.locs.join('、');
+    }
+
+    function saveData() {
+      try {
+        safeStorage.setItem('tainan_packing_bags_v9', JSON.stringify(bags));
+        safeStorage.setItem('tainan_packing_airtags_v9', JSON.stringify(airtags));
+        safeStorage.setItem('tainan_packing_items_v9', JSON.stringify(items));
+      } catch (e) {}
+      updateDashboard();
+    }
+
+    function toggleAirtagSection() {
+      const grid = document.getElementById('airtag-grid');
+      const arrow = document.getElementById('airtag-toggle-arrow');
+      if (!grid) return;
+      const isHidden = grid.style.display === 'none' || !grid.style.display;
+      grid.style.display = isHidden ? 'grid' : 'none';
+      if (arrow) arrow.textContent = isHidden ? '▲ 點此收合' : '▼ 點此展開';
+    }
+
+    function checkAviationSafety() {
+      const dangerKeywords = ['行動電源', 'LAPO', '鋰電池', '打火機', '行電'];
+      const dangerousItems = items.filter(i => {
+        const locs = getItemLocs(i);
+        const isBox = locs.some(loc => loc.includes('大黑箱') || loc.includes('行李箱') || loc.includes('託運'));
+        if (!isBox) return false;
+        return dangerKeywords.some(kw => i.name.toUpperCase().includes(kw));
+      });
+
+      const banner = document.getElementById('safety-banner');
+      const desc = document.getElementById('safety-banner-desc');
+      if (!banner || !desc) return dangerousItems;
+
+      if (dangerousItems.length > 0) {
+        banner.className = 'safety-alert-badge';
+        desc.textContent = `🚨 警告！發現 ${dangerousItems.length} 件鋰電池物品被放置於託運大箱！請改放隨身包！`;
+      } else {
+        banner.className = 'safety-alert-badge safe';
+        desc.textContent = '行動電源與鋰電池全數隨身登機，符合長榮航空規範';
+      }
+
+      return dangerousItems;
+    }
+
+    function renderAirtags() {
+      const container = document.getElementById('airtag-grid');
+      container.innerHTML = airtags.map(at => {
+        const isChecked = at.checked;
+        return `
+          <div class="airtag-card ${isChecked ? 'checked' : ''}">
+            <div class="airtag-left" onclick="toggleAirtag('${at.id}')">
+              <div class="airtag-icon-bubble">
+                <span>🏷️</span>
+                <span class="airtag-apple-logo">AirTag</span>
+              </div>
+              <div class="airtag-info">
+                <div class="airtag-target">${escapeHtml(at.target)}</div>
+                <div class="airtag-status-text">
+                  <span class="dot"></span>
+                  <span>${isChecked ? '已放入箱中 · 定位啟用中' : '尚未放入 · 待放入確認'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="airtag-actions">
+              <button class="btn-sound-ping" onclick="pingAirtag('${escapeHtml(at.target)}')">🔊 呼叫</button>
+              <div class="custom-check" onclick="toggleAirtag('${at.id}')">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+              <button class="btn-del-icon" onclick="deleteAirtag('${at.id}')" title="刪除此 AirTag">🗑️</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleAirtag(id) {
+      const target = airtags.find(a => a.id === id);
+      if (target) {
+        target.checked = !target.checked;
+        if (target.checked) playCheckSound();
+        saveData();
+        renderAirtags();
+      }
+    }
+
+    function deleteAirtag(id) {
+      const at = airtags.find(a => a.id === id);
+      if (!at) return;
+      if (confirm(`確定要刪除【${at.target}】的 AirTag 嗎？`)) {
+        airtags = airtags.filter(a => a.id !== id);
+        playDeleteSound();
+        saveData();
+        renderAirtags();
+      }
+    }
+
+    function pingAirtag(name) {
+      playPingSound();
+      alert(`🔊 正在呼叫放置於【${name}】的 AirTag...\n（已發出定位模擬警報音，請注意周遭聲響！）`);
+    }
+
+    function openFindMyApp() {
+      window.location.href = "findmy://";
+      setTimeout(() => {
+        alert("💡 提示：系統已嘗試開啟 iPhone「尋找」App。\n您可直接在「尋找」中查看各包包 AirTag 最新定位！");
+      }, 500);
+    }
+
+    function switchView(mode) {
+      currentView = mode;
+      document.getElementById('btn-view-items').classList.toggle('active', mode === 'ITEMS');
+      document.getElementById('btn-view-bags').classList.toggle('active', mode === 'BAGS');
+
+      if (mode === 'ITEMS') {
+        document.getElementById('items-view-container').style.display = 'block';
+        document.getElementById('bag-view-container').style.display = 'none';
+        renderBagFilterBar();
+        renderItems();
+      } else {
+        document.getElementById('items-view-container').style.display = 'none';
+        document.getElementById('bag-view-container').style.display = 'grid';
+        renderBagView();
+      }
+    }
+
+    /* 🧳 模式一：【包包細項】完全平鋪大框框渲染 (不要滑框) */
+    function renderBagView() {
+      const container = document.getElementById('bag-view-container');
+      container.innerHTML = bags.map(bag => {
+        let bagItems = items.filter(i => getItemLocs(i).includes(bag.name));
+
+        if (searchQuery) {
+          bagItems = bagItems.filter(i => 
+            i.name.toUpperCase().includes(searchQuery) ||
+            (i.note && i.note.toUpperCase().includes(searchQuery))
+          );
+        }
+
+        const doneCount = bagItems.filter(i => i.checked).length;
+        const totalCount = bagItems.length;
+        const percent = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
+        const isSealed = bag.sealed;
+
+        return `
+          <div class="bag-card ${isSealed ? 'sealed' : ''}">
+            <div class="bag-card-top">
+              <div class="bag-card-title-group" style="cursor: pointer;" onclick="openEditBagModal('${bag.id}')" title="點擊編輯此包包名稱與設定">
+                <div class="bag-card-icon">${bag.icon}</div>
+                <div>
+                  <div class="bag-card-name" style="display: flex; align-items: center; gap: 6px;">
+                    <span>${escapeHtml(bag.name)}</span>
+                    <span style="font-size: 0.76rem; color: var(--accent-gold); font-weight: 600;">✏️</span>
+                  </div>
+                  <div class="bag-card-sub">${escapeHtml(bag.desc || '隨行收納')}</div>
+                  ${bag.pwd ? `<div class="bag-pwd-tag">🔒 ${escapeHtml(bag.pwd)}</div>` : ''}
+                </div>
+              </div>
+              <div class="bag-card-header-actions">
+                <span class="seal-badge ${isSealed ? 'sealed' : 'unsealed'}">
+                  ${isSealed ? '✓ 已封箱' : '開放中'}
+                </span>
+                <button class="btn-edit-icon" onclick="openEditBagModal('${bag.id}')" title="編輯此包包名稱與設定">✏️</button>
+                <button class="btn-del-icon" onclick="deleteBag('${bag.id}')" title="刪除此包包">🗑️</button>
+              </div>
+            </div>
+
+            <!-- 進度條 -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 6px;">
+                <span style="color: var(--text-sub);">收納進度</span>
+                <span style="color: var(--accent-gold); font-weight: 800;">${doneCount}/${totalCount} 件 (${percent}%)</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: ${percent}%;"></div>
+              </div>
+            </div>
+
+            <!-- 內部物品大清單區 -->
+            <div class="bag-card-items-preview">
+              ${bagItems.length === 0 ? '<div style="color: var(--text-muted); font-size: 0.95rem; text-align: center; padding: 24px;">目前尚無收納物品</div>' : ''}
+              ${bagItems.map(item => `
+                <div class="bag-mini-item ${item.checked ? 'checked' : ''}">
+                  <div class="bag-item-left" onclick="toggleItem(${item.id})">
+                    <div class="mini-check-box">
+                      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <span>${escapeHtml(item.name)}</span>
+                  </div>
+                  <div class="bag-item-right">
+                    <span class="note-tag" onclick="event.stopPropagation(); openNoteModal(${item.id})" title="點擊編輯備註">${item.note ? escapeHtml(item.note) : '＋備註'}</span>
+                    <button class="btn-edit-icon" onclick="event.stopPropagation(); openEditItemModal(${item.id})" title="編輯此物品" style="padding: 2px 4px; font-size: 0.85rem;">✏️</button>
+                    <button class="btn-del-icon" onclick="event.stopPropagation(); deleteItem(${item.id})" title="刪除此物品" style="padding: 2px 5px; font-size: 0.85rem;">✕</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- 卡片底列操作 -->
+            <div class="bag-card-bottom">
+              <button class="btn-bag-action seal" onclick="toggleSealBag('${bag.id}')">
+                ${isSealed ? '🔓 解除封箱' : '🔒 一鍵封箱'}
+              </button>
+              <button class="btn-bag-action add" onclick="openAddModal('${escapeHtml(bag.name)}')">
+                ＋ 塞入新物品
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleSealBag(bagId) {
+      const bag = bags.find(b => b.id === bagId);
+      if (bag) {
+        bag.sealed = !bag.sealed;
+        if (bag.sealed) {
+          playCheckSound();
+          alert(`🔒 已完成【${bag.name}】封箱標記！請妥善拉好拉鍊。`);
+        }
+        saveData();
+        renderBagView();
+        updateDashboard();
+      }
+    }
+
+    function deleteBag(bagId) {
+      const bag = bags.find(b => b.id === bagId);
+      if (!bag) return;
+
+      const bagItemCount = items.filter(i => getItemLocs(i).includes(bag.name)).length;
+      let msg = `確定要刪除包包【${bag.name}】嗎？`;
+      if (bagItemCount > 0) {
+        msg += `\n該包包內的 ${bagItemCount} 件物品將會自此包包移除（若無其他包包則移至「未指定包包」），不會遺失。`;
+      }
+
+      if (confirm(msg)) {
+        items.forEach(i => {
+          let locs = getItemLocs(i);
+          if (locs.includes(bag.name)) {
+            locs = locs.filter(loc => loc !== bag.name);
+            setItemLocs(i, locs);
+          }
+        });
+        bags = bags.filter(b => b.id !== bagId);
+        playDeleteSound();
+        saveData();
+        renderBagView();
+        renderBagFilterBar();
+        renderItems();
+        updateDashboard();
+        renderManageBagsList();
+      }
+    }
+
+    function deleteItem(itemId) {
+      const item = items.find(i => i.id === itemId);
+      if (!item) return;
+
+      if (confirm(`確定要刪除物品「${item.name}」嗎？`)) {
+        items = items.filter(i => i.id !== itemId);
+        playDeleteSound();
+        saveData();
+        renderItems();
+        renderBagFilterBar();
+        if (currentView === 'BAGS') renderBagView();
+        updateDashboard();
+      }
+    }
+
+    // 📝 編輯物品備註
+    function openNoteModal(itemId) {
+      editingNoteItemId = itemId;
+      const item = items.find(i => i.id === itemId);
+      if (!item) return;
+
+      document.getElementById('note-item-title').textContent = `正在編輯「${item.name}」的備註：`;
+      document.getElementById('input-edit-note').value = item.note || '';
+      document.getElementById('note-modal').classList.add('active');
+      document.getElementById('input-edit-note').focus();
+    }
+    function closeNoteModal() {
+      document.getElementById('note-modal').classList.remove('active');
+      editingNoteItemId = null;
+    }
+    function submitEditNote() {
+      if (editingNoteItemId !== null) {
+        const item = items.find(i => i.id === editingNoteItemId);
+        if (item) {
+          item.note = document.getElementById('input-edit-note').value.trim();
+          playCheckSound();
+          saveData();
+          renderItems();
+          if (currentView === 'BAGS') renderBagView();
+        }
+      }
+      closeNoteModal();
+    }
+
+    // ✏️ 完整編輯物品功能
+    let editingItemId = null;
+    let selectedEditItemBags = [];
+
+    function openEditItemModal(itemId) {
+      editingItemId = itemId;
+      const item = items.find(i => i.id === itemId);
+      if (!item) return;
+
+      document.getElementById('input-edit-item-name').value = item.name || '';
+      document.getElementById('input-edit-item-note').value = item.note || '';
+
+      // 填充分類選單
+      const catSelect = document.getElementById('input-edit-item-cat');
+      catSelect.innerHTML = CATEGORY_ORDER.map(cat => `
+        <option value="${cat.key}" ${item.cat === cat.key ? 'selected' : ''}>${cat.icon} ${cat.label}</option>
+      `).join('');
+
+      // 初始化當前所選包包列表 (支援複選)
+      selectedEditItemBags = [...getItemLocs(item)];
+      renderEditItemBagChips();
+
+      document.getElementById('edit-item-modal').classList.add('active');
+      document.getElementById('input-edit-item-name').focus();
+    }
+
+    function renderEditItemBagChips() {
+      const container = document.getElementById('edit-item-bags-chips');
+      if (!container) return;
+      container.innerHTML = bags.map(b => {
+        const isSelected = selectedEditItemBags.includes(b.name);
+        return `
+          <button type="button" class="bag-chip-select ${isSelected ? 'active' : ''}" onclick="toggleEditItemBagChip('${escapeHtml(b.name)}')">
+            <span>${isSelected ? '✓' : '＋'}</span>
+            <span>${b.icon} ${escapeHtml(b.name)}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function toggleEditItemBagChip(bagName) {
+      if (selectedEditItemBags.includes(bagName)) {
+        selectedEditItemBags = selectedEditItemBags.filter(b => b !== bagName);
+      } else {
+        selectedEditItemBags.push(bagName);
+      }
+      renderEditItemBagChips();
+    }
+
+    function closeEditItemModal() {
+      document.getElementById('edit-item-modal').classList.remove('active');
+      editingItemId = null;
+      selectedEditItemBags = [];
+    }
+
+    function submitEditItem() {
+      if (editingItemId === null) return;
+      const item = items.find(i => i.id === editingItemId);
+      if (!item) return;
+
+      const newName = document.getElementById('input-edit-item-name').value.trim();
+      if (!newName) {
+        alert('物品名稱不能為空白！');
+        return;
+      }
+
+      item.name = newName;
+      item.cat = document.getElementById('input-edit-item-cat').value;
+      item.note = document.getElementById('input-edit-item-note').value.trim();
+      setItemLocs(item, selectedEditItemBags);
+
+      playCheckSound();
+      saveData();
+      renderItems();
+      renderBagFilterBar();
+      if (currentView === 'BAGS') renderBagView();
+      updateDashboard();
+      closeEditItemModal();
+    }
+
+    function deleteItemFromEditModal() {
+      if (editingItemId === null) return;
+      const idToDelete = editingItemId;
+      closeEditItemModal();
+      deleteItem(idToDelete);
+    }
+
+    // ⚙️ 管理包包功能
+    function openManageBagsModal() {
+      renderManageBagsList();
+      document.getElementById('manage-bags-modal').classList.add('active');
+    }
+    function closeManageBagsModal() {
+      document.getElementById('manage-bags-modal').classList.remove('active');
+      renderBagView();
+      renderBagFilterBar();
+      updateDashboard();
+    }
+    // 🧳 完整編輯包包功能
+    let editingBagId = null;
+
+    function openEditBagModal(bagId) {
+      editingBagId = bagId;
+      const bag = bags.find(b => b.id === bagId);
+      if (!bag) return;
+
+      document.getElementById('input-edit-bag-icon').value = bag.icon || '🧳';
+      document.getElementById('input-edit-bag-name').value = bag.name || '';
+      document.getElementById('input-edit-bag-pwd').value = bag.pwd || '';
+      document.getElementById('input-edit-bag-desc').value = bag.desc || '';
+
+      document.getElementById('edit-bag-modal').classList.add('active');
+      document.getElementById('input-edit-bag-name').focus();
+    }
+
+    function closeEditBagModal() {
+      document.getElementById('edit-bag-modal').classList.remove('active');
+      editingBagId = null;
+    }
+
+    function submitEditBag() {
+      if (!editingBagId) return;
+      const bag = bags.find(b => b.id === editingBagId);
+      if (!bag) return;
+
+      const newName = document.getElementById('input-edit-bag-name').value.trim();
+      const newIcon = document.getElementById('input-edit-bag-icon').value.trim() || '🧳';
+      const newPwd = document.getElementById('input-edit-bag-pwd').value.trim();
+      const newDesc = document.getElementById('input-edit-bag-desc').value.trim();
+
+      if (!newName) {
+        alert('請輸入包包名稱！');
+        return;
+      }
+
+      if (newName !== bag.name && bags.some(b => b.id !== editingBagId && b.name === newName)) {
+        alert('已有相同名稱的包包！');
+        return;
+      }
+
+      const oldName = bag.name;
+      bag.name = newName;
+      bag.icon = newIcon;
+      bag.pwd = newPwd;
+      bag.desc = newDesc;
+
+      // 連動更新：包包更名時，自動將物品與 AirTag 的綁定一併更新
+      if (oldName !== newName) {
+        items.forEach(i => {
+          const locs = getItemLocs(i);
+          if (locs.includes(oldName)) {
+            const updated = locs.map(l => l === oldName ? newName : l);
+            setItemLocs(i, updated);
+          }
+        });
+        airtags.forEach(at => {
+          if (at.target === oldName) at.target = newName;
+        });
+      }
+
+      playCheckSound();
+      saveData();
+      closeEditBagModal();
+      renderBagFilterBar();
+      renderItems();
+      if (currentView === 'BAGS') renderBagView();
+      updateDashboard();
+      renderManageBagsList();
+      renderAirtags();
+    }
+
+    function deleteBagFromEditModal() {
+      if (!editingBagId) return;
+      const idToDelete = editingBagId;
+      closeEditBagModal();
+      deleteBag(idToDelete);
+    }
+
+    function renderManageBagsList() {
+      const container = document.getElementById('manage-bag-list-container');
+      container.innerHTML = bags.map(b => `
+        <div class="manage-bag-card">
+          <div class="manage-bag-info" style="cursor: pointer;" onclick="openEditBagModal('${b.id}')" title="點擊編輯此包包">
+            <span style="font-size: 1.6rem;">${b.icon}</span>
+            <div>
+              <div style="font-weight: 700; color: var(--accent-navy); font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                <span>${escapeHtml(b.name)}</span>
+                <span style="font-size: 0.76rem; color: var(--accent-gold); font-weight: 600;">✏️ 編輯</span>
+              </div>
+              <div style="font-size: 0.76rem; color: var(--text-muted);">${escapeHtml(b.desc || '')}</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="text" class="manage-bag-pwd-input" placeholder="密碼/備忘" value="${escapeHtml(b.pwd || '')}" onchange="updateBagPwd('${b.id}', this.value)" title="輸入此箱開鎖密碼或綁帶密碼">
+            <button class="btn-edit-icon" onclick="openEditBagModal('${b.id}')" title="編輯此包包名稱與設定">✏️</button>
+            <button class="btn-del-icon" onclick="deleteBag('${b.id}')" title="刪除此包包">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    function updateBagPwd(bagId, newPwd) {
+      const bag = bags.find(b => b.id === bagId);
+      if (bag) {
+        bag.pwd = newPwd.trim();
+        saveData();
+      }
+    }
+
+    function renderBagFilterBar() {
+      const bar = document.getElementById('bag-filter-bar');
+      const allCount = items.length;
+      const todoCount = items.filter(i => !i.checked).length;
+      
+      let html = `
+        <button class="filter-pill ${currentFilterBag === 'ALL' ? 'active' : ''}" onclick="setBagFilter('ALL')">
+          <span>全部物品</span>
+          <span class="count">${allCount}</span>
+        </button>
+        <button class="filter-pill ${currentFilterBag === 'TODO' ? 'active' : ''}" onclick="setBagFilter('TODO')">
+          <span>⚠️ 待打包</span>
+          <span class="count">${todoCount}</span>
+        </button>
+      `;
+
+      bags.forEach(b => {
+        const count = items.filter(i => getItemLocs(i).includes(b.name)).length;
+        const isActive = currentFilterBag === b.name;
+        html += `
+          <button class="filter-pill ${isActive ? 'active' : ''}" onclick="setBagFilter('${escapeHtml(b.name)}')">
+            <span>${b.icon} ${escapeHtml(b.name)}</span>
+            <span class="count">${count}</span>
+          </button>
+        `;
+      });
+
+      bar.innerHTML = html;
+    }
+
+    function setBagFilter(filterName) {
+      currentFilterBag = filterName;
+      renderBagFilterBar();
+      renderItems();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('search-box').value.trim().toUpperCase();
+      if (currentView === 'BAGS') {
+        renderBagView();
+      } else {
+        renderItems();
+      }
+    }
+
+    // 📋 模式二：全局物品清單渲染
+    function renderItems() {
+      const container = document.getElementById('item-list');
+      const dangerList = checkAviationSafety();
+
+      const filtered = items.filter(item => {
+        if (searchQuery) {
+          const matchName = item.name.toUpperCase().includes(searchQuery);
+          const matchLoc = getItemLocs(item).some(l => l.toUpperCase().includes(searchQuery));
+          const matchNote = item.note && item.note.toUpperCase().includes(searchQuery);
+          if (!matchName && !matchLoc && !matchNote) return false;
+        }
+
+        if (currentFilterBag === 'ALL') return true;
+        if (currentFilterBag === 'TODO') return !item.checked;
+        return getItemLocs(item).includes(currentFilterBag);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 50px; color: var(--text-sub);">
+            <div style="font-size: 2.2rem; margin-bottom: 8px;">✨</div>
+            <div>查無符合條件的打包物品</div>
+            <button class="btn-action gold" style="margin-top: 14px;" onclick="openAddModal('${currentFilterBag !== 'ALL' && currentFilterBag !== 'TODO' ? currentFilterBag : ''}')">
+              ＋ 新增物品到此包包
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      // 按分類分組
+      const grouped = {};
+      filtered.forEach(item => {
+        const cat = item.cat || 'travel';
+        if (!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push(item);
+      });
+
+      let html = '';
+      CATEGORY_ORDER.forEach(catDef => {
+        const catItems = grouped[catDef.key];
+        if (!catItems || catItems.length === 0) return;
+
+        const doneCount = catItems.filter(i => i.checked).length;
+        const totalCount = catItems.length;
+        const pct = Math.round((doneCount / totalCount) * 100);
+
+        html += `<div class="category-section">`;
+        html += `<div class="category-header">`;
+        html += `  <div class="category-icon">${catDef.icon}</div>`;
+        html += `  <span class="category-title">${catDef.label}</span>`;
+        html += `  <span class="category-count">${totalCount} 件</span>`;
+        html += `  <div class="category-progress">`;
+        html += `    <div class="category-progress-bar"><div class="category-progress-fill" style="width:${pct}%"></div></div>`;
+        html += `    <span class="done">${doneCount}</span><span class="total">/ ${totalCount}</span>`;
+        html += `  </div>`;
+        html += `</div>`;
+        html += `<div class="category-items-grid">`;
+
+        catItems.forEach(item => {
+          const isDanger = dangerList.some(d => d.id === item.id);
+          const itemLocs = getItemLocs(item);
+
+          let bagStyleClass = 'btn-choose-bag';
+          let bagLabelHtml = '';
+
+          if (itemLocs.length === 0) {
+            bagLabelHtml = `<span>📍 未指定包包</span><span class="arrow">▼</span>`;
+          } else if (itemLocs.length === 1) {
+            const bName = itemLocs[0];
+            const bagObj = bags.find(b => b.name === bName);
+            const bagIcon = bagObj ? bagObj.icon : '📍';
+            if (bName.includes('大黑箱') || bName.includes('行李箱')) bagStyleClass += ' box';
+            else if (bName.includes('防盜') || bName.includes('錢包')) bagStyleClass += ' safe';
+            else if (bName.includes('相機')) bagStyleClass += ' cam';
+            bagLabelHtml = `<span>${bagIcon}</span><span>${escapeHtml(bName)}</span><span class="arrow">▼</span>`;
+          } else {
+            // 複選多個包包
+            const icons = itemLocs.map(l => {
+              const bg = bags.find(b => b.name === l);
+              return bg ? bg.icon : '🧳';
+            }).slice(0, 2).join('');
+            bagStyleClass += ' safe';
+            bagLabelHtml = `<span>${icons}</span><span>${escapeHtml(itemLocs[0])} 等 ${itemLocs.length} 包</span><span class="arrow">▼</span>`;
+          }
+
+          let statusHtml = '';
+          if (isDanger) {
+            statusHtml = `<span class="danger-tag">🚨 禁託運！必須隨身</span>`;
+          } else if (item.checked) {
+            statusHtml = `<span class="status-badge green">✓ 已打包</span>`;
+          } else if (item.note === '還沒完成') {
+            statusHtml = `<span class="status-badge red">⚠️ 還沒完成</span>`;
+          } else if (item.note === '完成一半') {
+            statusHtml = `<span class="status-badge blue">⏳ 完成一半</span>`;
+          } else if (item.note === '封箱前要再確認') {
+            statusHtml = `<span class="status-badge orange">🔍 封箱前確認</span>`;
+          } else {
+            statusHtml = `<span class="status-badge red">⚠️ 待打包</span>`;
+          }
+
+          html += `
+            <div class="item-row ${item.checked ? 'checked' : ''} ${isDanger ? 'has-danger' : ''}">
+              <div class="check-area" onclick="toggleItem(${item.id})">
+                <div class="custom-check">
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+              </div>
+              
+              <div class="item-center" onclick="toggleItem(${item.id})">
+                <div class="item-name-line">
+                  <span class="item-name">${escapeHtml(item.name)}</span>
+                </div>
+                <div class="item-meta-line">
+                  ${statusHtml}
+                  <span class="note-tag" onclick="event.stopPropagation(); openNoteModal(${item.id})" title="點擊編輯備註">${item.note ? '📝 ' + escapeHtml(item.note) : '＋備註'}</span>
+                </div>
+              </div>
+
+              <div class="item-right-actions">
+                <button class="${bagStyleClass}" onclick="event.stopPropagation(); openBagPicker(${item.id})" title="點擊選擇放到哪些包包 (可複選)">
+                  ${bagLabelHtml}
+                </button>
+                <button class="btn-edit-icon" onclick="event.stopPropagation(); openEditItemModal(${item.id})" title="編輯此物品">✏️</button>
+                <button class="btn-del-icon" onclick="event.stopPropagation(); deleteItem(${item.id})" title="刪除此物品">🗑️</button>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `</div></div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function toggleItem(id) {
+      const item = items.find(i => i.id === id);
+      if (item) {
+        item.checked = !item.checked;
+        if (item.checked) playCheckSound();
+        saveData();
+        renderItems();
+        renderBagFilterBar();
+        if (currentView === 'BAGS') renderBagView();
+      }
+    }
+
+        let tempPickerBagNames = [];
+
+    function openBagPicker(itemId) {
+      activeSelectingItemId = itemId;
+      const item = items.find(i => i.id === itemId);
+      if (!item) return;
+
+      tempPickerBagNames = [...getItemLocs(item)];
+      document.getElementById('picker-item-title').textContent = `正在為「${item.name}」選擇收納包包：`;
+      renderBagPickerOptions();
+      document.getElementById('bag-picker-modal').classList.add('active');
+    }
+
+    function renderBagPickerOptions() {
+      const container = document.getElementById('bag-picker-options');
+      const confirmBtn = document.getElementById('btn-confirm-bag-picker');
+      if (confirmBtn) {
+        confirmBtn.textContent = `確認儲存 (${tempPickerBagNames.length} 個包包)`;
+      }
+
+      container.innerHTML = bags.map(b => {
+        const isSelected = tempPickerBagNames.includes(b.name);
+        const itemCount = items.filter(i => getItemLocs(i).includes(b.name)).length;
+        return `
+          <div class="bag-picker-item ${isSelected ? 'selected' : ''}" onclick="toggleBagPickerSelection('${escapeHtml(b.name)}')">
+            <div class="bag-picker-left">
+              <div class="picker-check">${isSelected ? '✓' : ''}</div>
+              <span class="bag-picker-icon">${b.icon}</span>
+              <div>
+                <div class="bag-picker-name">${escapeHtml(b.name)}</div>
+              </div>
+            </div>
+            <div class="bag-picker-right">
+              <span style="font-size: 0.82rem; color: var(--text-muted);">${itemCount} 件</span>
+              ${isSelected ? '<span style="color: var(--accent-gold); font-weight: 700; font-size: 0.82rem;">已選入</span>' : '<span style="color: var(--text-muted); font-size: 0.82rem;">點擊加入</span>'}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleBagPickerSelection(bagName) {
+      if (tempPickerBagNames.includes(bagName)) {
+        tempPickerBagNames = tempPickerBagNames.filter(b => b !== bagName);
+      } else {
+        tempPickerBagNames.push(bagName);
+      }
+      renderBagPickerOptions();
+    }
+
+    function selectAllPickerBags() {
+      tempPickerBagNames = bags.map(b => b.name);
+      renderBagPickerOptions();
+    }
+
+    function clearAllPickerBags() {
+      tempPickerBagNames = [];
+      renderBagPickerOptions();
+    }
+
+    function confirmBagPickerSelection() {
+      if (activeSelectingItemId !== null) {
+        const item = items.find(i => i.id === activeSelectingItemId);
+        if (item) {
+          setItemLocs(item, tempPickerBagNames);
+          playCheckSound();
+          saveData();
+          renderItems();
+          renderBagFilterBar();
+          if (currentView === 'BAGS') renderBagView();
+        }
+      }
+      closeBagPicker();
+    }
+
+    function closeBagPicker() {
+      document.getElementById('bag-picker-modal').classList.remove('active');
+      activeSelectingItemId = null;
+      tempPickerBagNames = [];
+    }
+
+    function openAddBagFromPicker() {
+      closeBagPicker();
+      openAddBagModal();
+    }
+
+    function openAddBagModal() {
+      document.getElementById('bag-modal').classList.add('active');
+      document.getElementById('input-bag-name').focus();
+    }
+    function closeAddBagModal() {
+      document.getElementById('bag-modal').classList.remove('active');
+      document.getElementById('input-bag-name').value = '';
+      document.getElementById('input-bag-pwd').value = '';
+      document.getElementById('input-bag-desc').value = '';
+    }
+    function submitAddBag() {
+      const name = document.getElementById('input-bag-name').value.trim();
+      const icon = document.getElementById('input-bag-icon').value.trim() || '🧳';
+      const pwd = document.getElementById('input-bag-pwd').value.trim();
+      const desc = document.getElementById('input-bag-desc').value.trim();
+      if (!name) {
+        alert('請輸入包包名稱！');
+        return;
+      }
+      if (bags.some(b => b.name === name)) {
+        alert('此包包名稱已存在！');
+        return;
+      }
+      bags.push({
+        id: 'b-' + Date.now(),
+        name: name,
+        icon: icon,
+        desc: desc,
+        pwd: pwd,
+        sealed: false
+      });
+      saveData();
+      closeAddBagModal();
+      renderBagFilterBar();
+      renderItems();
+      if (currentView === 'BAGS') renderBagView();
+      updateDashboard();
+      renderManageBagsList();
+    }
+
+    function openAddAirtagModal() {
+      document.getElementById('airtag-modal').classList.add('active');
+      document.getElementById('input-airtag-target').focus();
+    }
+    function closeAddAirtagModal() {
+      document.getElementById('airtag-modal').classList.remove('active');
+      document.getElementById('input-airtag-target').value = '';
+      document.getElementById('input-airtag-label').value = '';
+    }
+    function submitAddAirtag() {
+      const target = document.getElementById('input-airtag-target').value.trim();
+      const label = document.getElementById('input-airtag-label').value.trim() || '自訂位置';
+      if (!target) {
+        alert('請輸入要放置的包包名稱！');
+        return;
+      }
+      airtags.push({
+        id: 'at-' + Date.now(),
+        target: target,
+        label: label,
+        checked: true
+      });
+      saveData();
+      closeAddAirtagModal();
+      renderAirtags();
+      updateDashboard();
+    }
+
+    function openAddModal(defaultLoc = '') {
+      document.getElementById('add-modal').classList.add('active');
+      document.getElementById('input-item-name').focus();
+      document.getElementById('input-item-loc').value = defaultLoc;
+      renderQuickBagTags();
+    }
+
+    function renderQuickBagTags() {
+      const input = document.getElementById('input-item-loc');
+      const currentLocs = (input.value || '').split(/[,、，]/).map(s => s.trim()).filter(Boolean);
+      const tagContainer = document.getElementById('quick-bag-tags');
+      tagContainer.innerHTML = bags.map(b => {
+        const isSelected = currentLocs.includes(b.name);
+        return `
+          <button type="button" class="btn-choose-bag ${isSelected ? 'safe' : ''}" style="font-size: 0.78rem; padding: 5px 10px;" onclick="toggleAddModalBag('${escapeHtml(b.name)}')">
+            <span>${isSelected ? '✓ ' : ''}${b.icon} ${escapeHtml(b.name)}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function toggleAddModalBag(bagName) {
+      const input = document.getElementById('input-item-loc');
+      let current = (input.value || '').split(/[,、，]/).map(s => s.trim()).filter(Boolean);
+      if (current.includes(bagName)) {
+        current = current.filter(b => b !== bagName);
+      } else {
+        current.push(bagName);
+      }
+      input.value = current.join('、');
+      renderQuickBagTags();
+    }
+
+    function closeAddModal() {
+      document.getElementById('add-modal').classList.remove('active');
+      document.getElementById('input-item-name').value = '';
+      document.getElementById('input-item-loc').value = '';
+      document.getElementById('input-item-note').value = '';
+    }
+
+    function submitAddItem() {
+      const name = document.getElementById('input-item-name').value.trim();
+      let loc = document.getElementById('input-item-loc').value.trim();
+      const note = document.getElementById('input-item-note').value.trim();
+      const cat = document.getElementById('input-item-cat').value || 'travel';
+      if (!name) {
+        alert('請輸入物品名稱！');
+        return;
+      }
+      const rawLocs = loc ? loc.split(/[,、，]/) : (bags.length > 0 ? [bags[0].name] : ['大黑箱']);
+      const newItem = {
+        id: Date.now(),
+        name: name,
+        note: note,
+        isRed: false,
+        checked: false,
+        cat: cat
+      };
+      setItemLocs(newItem, rawLocs);
+      items.unshift(newItem);
+      saveData();
+      closeAddModal();
+      renderBagFilterBar();
+      renderItems();
+      if (currentView === 'BAGS') renderBagView();
+      updateDashboard();
+    }
+
+    function switchSyncTab(tab) {
+      const codeTab = document.getElementById('sync-tab-code');
+      const textTab = document.getElementById('sync-tab-text');
+      const btnSync = document.getElementById('tab-btn-sync');
+      const btnText = document.getElementById('tab-btn-text');
+
+      if (tab === 'SYNC') {
+        codeTab.style.display = 'block';
+        textTab.style.display = 'none';
+        btnSync.className = 'btn-action gold';
+        btnText.className = 'btn-action';
+      } else {
+        codeTab.style.display = 'none';
+        textTab.style.display = 'block';
+        btnSync.className = 'btn-action';
+        btnText.className = 'btn-action gold';
+      }
+    }
+
+    function openSyncModal() {
+      // 1. 產生結構化同步代碼 (JSON)
+      const syncData = {
+        version: 5,
+        timestamp: new Date().toISOString(),
+        bags: bags,
+        airtags: airtags,
+        items: items
+      };
+      document.getElementById('sync-export-code').value = JSON.stringify(syncData);
+      document.getElementById('sync-import-code').value = '';
+
+      // 2. 產生 LINE 純文字清單
+      let text = '🇫🇷 【台南打包大王】即時核對清單\n';
+      text += `📅 產出時間：${new Date().toLocaleString('zh-TW')}\n`;
+      text += `📊 目前進度：${items.filter(i => i.checked).length} / ${items.length} 件已打包\n\n`;
+
+      bags.forEach(bag => {
+        const bagItems = items.filter(i => getItemLocs(i).includes(bag.name));
+        text += `🧳 ${bag.name} (${bagItems.filter(i => i.checked).length}/${bagItems.length}) ${bag.pwd ? ' [🔒 ' + bag.pwd + ']' : ''}\n`;
+        bagItems.forEach(i => {
+          text += `  ${i.checked ? '✅' : '⬜'} ${i.name} ${i.note ? '(' + i.note + ')' : ''}\n`;
+        });
+        text += '\n';
+      });
+      document.getElementById('export-text').value = text;
+
+      // 預設開啟 SYNC tab
+      switchSyncTab('SYNC');
+      document.getElementById('sync-modal').classList.add('active');
+    }
+
+    function closeSyncModal() {
+      document.getElementById('sync-modal').classList.remove('active');
+    }
+
+    // 🍞 自製無阻礙 Toast 通知系統 (相容任何手機瀏覽器與 HTML Viewer)
+    function showToast(msg, type = 'info', duration = 3000) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = `toast-msg ${type}`;
+      toast.textContent = msg;
+      container.appendChild(toast);
+      requestAnimationFrame(() => toast.classList.add('show'));
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
+    async function copySyncCode() {
+      const textarea = document.getElementById('sync-export-code');
+      const text = textarea.value;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          textarea.focus();
+          textarea.select();
+          textarea.setSelectionRange(0, 99999);
+          document.execCommand('copy');
+        }
+        showToast('✅ 已複製同步代碼！請傳給手機或老婆貼上套用', 'success', 3500);
+      } catch (err) {
+        textarea.focus();
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        showToast('✅ 已選取代碼，請長按文字框複製', 'gold', 3000);
+      }
+    }
+
+    async function copyExportText() {
+      const textarea = document.getElementById('export-text');
+      const text = textarea.value;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          textarea.focus();
+          textarea.select();
+          textarea.setSelectionRange(0, 99999);
+          document.execCommand('copy');
+        }
+        showToast('✅ 已複製 LINE 清單文字！', 'success', 3000);
+      } catch (err) {
+        textarea.focus();
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        showToast('✅ 已選取清單，請長按文字框複製', 'gold', 3000);
+      }
+    }
+
+    // 💾 下載備份 JSON 檔案 (手機與電腦皆適用)
+    function downloadSyncFile() {
+      const syncData = {
+        version: 5,
+        timestamp: new Date().toISOString(),
+        bags: bags,
+        airtags: airtags,
+        items: items
+      };
+      const blob = new Blob([JSON.stringify(syncData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `法國行李打包進度_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('💾 已下載進度備份檔案！', 'success', 3000);
+    }
+
+    // 📂 從檔案選取器載入備份檔
+    function handleSyncFileSelect(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const content = evt.target.result;
+        document.getElementById('sync-import-code').value = content;
+        previewImportCode();
+        applyImportCode(); // 選取檔案後自動直接套用！
+      };
+      reader.onerror = function() {
+        showToast('❌ 讀取檔案失敗，請確認檔案格式', 'error', 3000);
+      };
+      reader.readAsText(file);
+    }
+
+    // 🔍 即時解析貼上的同步代碼
+    function previewImportCode() {
+      const statusEl = document.getElementById('sync-import-status');
+      if (!statusEl) return;
+      let input = document.getElementById('sync-import-code').value.trim();
+      if (!input) {
+        statusEl.textContent = '';
+        return;
+      }
+      try {
+        // 去除可能的引號或包裹字元
+        if (input.startsWith('\"') && input.endsWith('\"')) {
+          try { input = JSON.parse(input); } catch(e){}
+        }
+        const data = (typeof input === 'object') ? input : JSON.parse(input);
+        if (data && Array.isArray(data.items)) {
+          const checkedCount = data.items.filter(i => i.checked).length;
+          statusEl.style.color = 'var(--accent-green)';
+          statusEl.textContent = `✅ 偵測到有效代碼：包含 ${data.items.length} 件物品 (${checkedCount} 件已打包)、${(data.bags || []).length} 個包包`;
+        } else {
+          statusEl.style.color = 'var(--accent-red)';
+          statusEl.textContent = '⚠️ 代碼中缺少物品清單資料，請確認複製完整';
+        }
+      } catch (err) {
+        statusEl.style.color = 'var(--accent-red)';
+        statusEl.textContent = '⏳ 代碼解析中或格式不完整...';
+      }
+    }
+
+    // 📥 立即套用代碼 (完全無阻塞、不使用 confirm/alert，相容各類 HTML Viewer)
+    function applyImportCode() {
+      let input = document.getElementById('sync-import-code').value.trim();
+      if (!input) {
+        showToast('⚠️ 請先貼上同步代碼或選擇備份檔！', 'gold', 3000);
+        return;
+      }
+      try {
+        if (input.startsWith('\"') && input.endsWith('\"')) {
+          try { input = JSON.parse(input); } catch(e){}
+        }
+        const data = (typeof input === 'object') ? input : JSON.parse(input);
+        if (!data.items || !Array.isArray(data.items)) {
+          throw new Error('缺少 items 物品清單陣列');
+        }
+
+        // 載入資料
+        if (data.bags && Array.isArray(data.bags) && data.bags.length > 0) {
+          bags = data.bags;
+        }
+        if (data.airtags && Array.isArray(data.airtags)) {
+          airtags = data.airtags;
+        }
+        items = data.items;
+
+        saveData();
+        renderItems();
+        renderAirtags();
+        renderBagFilterBar();
+        if (currentView === 'BAGS') renderBagView();
+        updateDashboard();
+
+        const checkedCount = items.filter(i => i.checked).length;
+        showToast(`🎉 同步成功！已載入 ${items.length} 件物品 (${checkedCount} 件已完成)`, 'success', 4000);
+        closeSyncModal();
+      } catch (err) {
+        showToast('❌ 同步失敗：代碼格式不正確，請確認複製完整！', 'error', 4500);
+        const statusEl = document.getElementById('sync-import-status');
+        if (statusEl) {
+          statusEl.style.color = 'var(--accent-red)';
+          statusEl.textContent = '❌ 錯誤：' + err.message;
+        }
+      }
+    }
+
+    function resetAllChecks() {
+      if (confirm('確定要將所有勾選進度重置為未勾選嗎？')) {
+        items.forEach(i => i.checked = false);
+        airtags.forEach(a => a.checked = false);
+        bags.forEach(b => b.sealed = false);
+        saveData();
+        renderItems();
+        renderAirtags();
+        renderBagFilterBar();
+        if (currentView === 'BAGS') renderBagView();
+        updateDashboard();
+      }
+    }
+
+    function updateDashboard() {
+      const total = items.length;
+      const checkedCount = items.filter(i => i.checked).length;
+      const todoCount = total - checkedCount;
+      const percent = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
+      const boxCount = items.filter(i => getItemLocs(i).some(l => l.includes('大黑箱') || l.includes('行李箱'))).length;
+      const sealedCount = bags.filter(b => b.sealed).length;
+
+      document.getElementById('stat-progress').textContent = `${checkedCount}/${total} (${percent}%)`;
+      document.getElementById('stat-progress-bar').style.width = `${percent}%`;
+      document.getElementById('stat-done-count').textContent = checkedCount;
+      document.getElementById('stat-todo-count').textContent = todoCount;
+      document.getElementById('stat-box-count').textContent = boxCount;
+      document.getElementById('stat-bags-count').textContent = bags.length;
+      document.getElementById('stat-airtag-count').textContent = airtags.length;
+      document.getElementById('stat-sealed-count').textContent = sealedCount;
+
+      checkAviationSafety();
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAirtags();
+      renderBagFilterBar();
+      renderBagView();
+      renderItems();
+      updateDashboard();
+    });
+  </script>
+</body>
+</html>
