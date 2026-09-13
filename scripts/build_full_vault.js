@@ -234,13 +234,13 @@ const itineraryData = [
   {
     date: "9/18",
     weekday: "五",
-    title: "楓丹白露宮（Château de Fontainebleau）宮殿與大花園漫步",
-    tag: "皇家宮殿",
-    summary: "搭火車走訪拿破崙深愛的楓丹白露宮，漫步馬蹄大階梯與幽靜大花園！",
+    title: "👑 楓丹白露宮大套房 ➔ 12:30 Monument Café 景觀午餐 ➔ 皇家花園 ➔ 藍色列車",
+    tag: "皇家宮殿＋花園午餐",
+    summary: "搭乘火車走訪拿破崙深愛的楓丹白露宮，參觀馬蹄階梯與大套房。12:30 已預約宮殿正門旁 Monument Café 享用 8 折午餐（老闆指定點兩份套餐！），午後漫步皇家花園與鯉魚池，傍晚返回巴黎里昂車站凡爾賽宮級古蹟餐廳藍色列車！",
     keynote: {
-      code: "Transilien R (Navigo包)",
-      codeLabel: "交通指南 (里昂車站直達)",
-      spot: "楓丹白露宮 ➔ 鯉魚池 ➔ 第安娜花園",
+      code: "12:30 Monument Café / Transilien R",
+      codeLabel: "訂位代號與交通指南",
+      spot: "楓丹白露宮大套房 ➔ Monument Café ➔ 皇家花園 ➔ 里昂車站藍色列車",
       hotel: "B&B HOTEL Paris Italie Porte de Choisy (第3晚)",
       mapQuery: "Chateau de Fontainebleau"
     },
@@ -248,30 +248,51 @@ const itineraryData = [
       {
         time: "09:30",
         title: "搭乘 Transilien R 線直達 Fontainebleau-Avon",
-        desc: "自巴黎里昂車站 (Gare de Lyon) 出發直達 Fontainebleau-Avon 站（約 40 分鐘，Navigo 1-5 圈週卡全包免購票），出站搭 1 號公車直達宮殿大門。",
+        desc: "自巴黎里昂車站 (Gare de Lyon) 出發直達 Fontainebleau-Avon 站（約 40 分鐘，Navigo 1-5 圈週卡全包免購票），出站直走於公車站轉乘 1 號公車 (Ligne 1) 直達宮殿正門口 (Château 站)。",
         badges: ["Transilien R線", "Navigo免費", "車程40分"],
         map: "Gare de Lyon Paris"
       },
       {
-        time: "10:30",
+        time: "10:45",
         title: "⭐楓丹白露宮大套房參觀（拿破崙告別馬蹄階梯）",
-        desc: "門票約 €14。參觀弗朗索瓦一世文藝復興長廊、奢華舞廳、拿破崙一世博物館與教宗套房，感受跨越八百年的法國君主風華。",
+        desc: "現場購票約 €14。參觀弗朗索瓦一世文藝復興長廊、奢華舞廳、拿破崙一世博物館與教宗套房，感受跨越八百年的法國君主風華。",
         badges: ["馬蹄階梯", "拿破崙大套房", "文藝復興長廊"],
         map: "Chateau de Fontainebleau"
       },
       {
-        time: "13:30",
-        title: "楓丹白露大花園、鯉魚池與森林步道漫步",
-        desc: "宮殿花園完全免費開放，相較凡爾賽宮更加寧靜典雅。沿著巨大鯉魚池與第安娜花園野餐散步，享受午後清新微風。",
-        badges: ["鯉魚池", "第安娜花園", "免費大公園"],
+        time: "12:30",
+        title: "⭐【Monument Café Fontainebleau】宮殿花園景觀午餐（已預約 雙人席！）",
+        desc: "已透過 TheFork 成功預約 12:30 雙人席（確認信寄至 skunkqq@gmail.com，訂位人：chin yu）！享單點 -20% 折扣。地址：Pl. du Général de Gaulle 77300 Fontainebleau（宮殿正門旁）。電話：+33 1 72 66 10 49。【💡老闆指定用餐心法】：現場直接點兩份主廚招牌套餐！在宮殿花園景觀下享受精緻法式午餐。",
+        badges: ["✅已預約12:30", "TheFork 8折", "指定兩份套餐", "宮殿正門旁"],
+        map: "Pl du General de Gaulle 77300 Fontainebleau"
+      },
+      {
+        time: "14:00",
+        title: "楓丹白露大花園、鯉魚池與狄安娜花園漫步",
+        desc: "宮殿花園完全免費開放，相較凡爾賽宮更加寧靜典雅。沿著巨大鯉魚池與狄安娜花園散步，欣賞綠樹倒影與悠游大鯉魚，享受午後清新微風。",
+        badges: ["鯉魚池", "狄安娜花園", "免費大花園"],
         map: "Jardin de Diane Fontainebleau"
       },
       {
+        time: "15:30",
+        title: "搭乘公車返回車站 ➔ 搭火車返回巴黎里昂車站",
+        desc: "搭乘 1 號公車返回車站，搭乘 Transilien R 線直達巴黎里昂車站 (約 40 分鐘，Navigo 全包)，約 16:30 返回里昂車站大廳。",
+        badges: ["Transilien R線", "Navigo全包", "回里昂車站"],
+        map: "Gare de Lyon Paris"
+      },
+      {
         time: "17:00",
-        title: "搭火車返抵巴黎市區 ＆ 13 區越式河粉晚餐",
-        desc: "搭乘 R 線返回市區，於 13 區品嚐熱騰騰道地牛肉河粉 (Pho)，溫暖飽足。",
-        badges: ["13區越式河粉", "悠閒晚間"],
-        map: ""
+        title: "⭐藍色列車餐廳 (Le Train Bleu) 凡爾賽宮古蹟體驗",
+        desc: "里昂車站 1 樓大廳，1900 年萬國博覽會歷史古蹟！挑高 11 米、41 幅壁畫與金箔水晶燈宛如凡爾賽宮鏡廳，必嚐傳統魚湯與橙酒舒芙蕾 (需 Smart Casual)。",
+        badges: ["歷史古蹟餐廳", "金箔水晶燈", "凡爾賽宮鏡廳感"],
+        map: "Le Train Bleu Paris"
+      },
+      {
+        time: "20:30",
+        title: "搭地鐵返回飯店休息 ＆ 整理明日拍攝裝備",
+        desc: "地鐵直達回 13 區 B&B 飯店，放鬆泡澡消除疲勞，早點休息迎接明日休整與後天婚紗拍攝日！",
+        badges: ["地鐵直達", "Navigo全包", "早睡養膚"],
+        map: "B&B HOTEL Paris Italie Porte de Choisy"
       }
     ],
     coverImage: "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800&auto=format&fit=crop&q=80"
@@ -1557,6 +1578,16 @@ const ticketsData = [
     file: "0930_凡爾賽宮_全通票與大運河午餐憑證.pdf",
     note: "集合地點：大運河畔租船處對面 (point de location de la Petite Venise, au bord du Grand Canal)。雙人點法：一人前菜+主菜、一人主菜+甜點+咖啡！推：紅酒燉牛頰肉寬麵、松露披薩、提拉米蘇 (票號: 1315255964, 1641052700)。",
     mapQuery: "La Petite Venise Versailles France"
+  },
+  {
+    type: "🍽️ 宮殿景觀午餐",
+    title: "Monument Café 楓丹白露宮景觀餐廳 (已預約 12:30 雙人席)",
+    datetime: "2026/09/18 (五) 12:30 準時入座",
+    status: "✅ 已預約確認 (雙人席 · TheFork -20%)",
+    code: "TheFork 12:30 (skunkqq@gmail.com)",
+    file: "",
+    note: "訂位人：chin yu（2 位成人）。確認信已發送至 skunkqq@gmail.com。預約時間：2026/09/18 (五) 12:30。地址：Pl. du Général de Gaulle 77300 Fontainebleau（宮殿正門入口戴高樂將軍廣場旁）。電話：+33 1 72 66 10 49。享 TheFork 單點 -20% 折扣。【💡老闆指定點餐心法】：現場直接點兩份主廚招牌套餐！在花園景觀下享受典雅法式午餐。",
+    mapQuery: "Pl du General de Gaulle 77300 Fontainebleau"
   }
 ];
 
