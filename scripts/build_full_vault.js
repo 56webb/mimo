@@ -425,58 +425,128 @@ const itineraryData = [
   {
     date: "9/21",
     weekday: "一",
-    title: "08:30 還婚紗 ➔ 左岸晨光咖啡 ➔ 聖禮拜堂 ➔ 橘園 ➔ 16:00 Chez Janou",
-    tag: "婚紗歸還・文藝巴黎",
-    summary: "08:30 準時還婚紗一身輕！聖日耳曼左岸享用可頌咖啡，沉浸聖禮拜堂與橘園睡蓮，晚間大啖 Chez Janou 巨盆巧克力！",
+    title: "聖禮拜堂 ➔ 古監獄 ➔ 聖母院 ➔ 還婚紗 ➔ 16:00 Chez Janou ➔ 凱旋門 ➔ 老佛爺香榭店",
+    tag: "西堤島三古蹟・瑪黑美食・凱旋門",
+    summary: "08:15 聖米歇爾寄放禮服防塵袋，08:30 排聖禮拜堂（開通 PMP），深度參觀古監獄與巴黎聖母院；14:45 還婚紗一身輕，15:20 搭公車 96 號直達瑪黑區享用 16:00 Chez Janou 烤蝸牛；晚間地鐵 1 號線直達凱旋門登頂俯瞰夜景，漫步老佛爺香榭麗舍旗艦店！",
     keynote: {
-      code: "08:30 還婚紗 / 16:00 Chez Janou",
-      codeLabel: "重要預約時段",
-      spot: "The Bride Paris ➔ 聖日耳曼左岸 ➔ 聖禮拜堂 ➔ 橘園 ➔ Chez Janou",
+      code: "16:00 Chez Janou (已訂位)",
+      codeLabel: "晚餐訂位與PMP開通日",
+      spot: "聖米歇爾 ➔ 聖禮拜堂 ➔ 聖母院 ➔ The Bride ➔ Chez Janou ➔ 凱旋門 ➔ 老佛爺香榭店",
       hotel: "B&B HOTEL Paris Italie Porte de Choisy (第6晚)",
       mapQuery: "Chez Janou Paris"
     },
     items: [
       {
+        time: "08:15",
+        title: "聖米歇爾橋頭特約店寄放禮服防塵袋",
+        desc: "07:45 攜帶禮服從飯店搭地鐵至 Odéon/Cluny 站。聖禮拜堂嚴禁攜帶大件行李進入，至聖米歇爾橋頭特約店（Nannybag / Bounce）寄放禮服袋，兩手空空過橋前往西堤島。",
+        badges: ["線上預約€5-6", "聖米歇爾橋頭", "免帶大行李"],
+        map: "Place Saint-Michel Paris"
+      },
+      {
+        time: "08:20",
+        title: "外帶早餐與熱咖啡（3 家備選名單供現場挑選）",
+        desc: "① Boulangerie Panis (21 Rue du Petit Pont・07:00 開・現烤可頌與熱拿鐵) ② PAUL Place Saint-Michel (07:00 開・快速外帶套餐) ③ Pret A Manger (07:30 開・熱烤起司火腿可頌卷)。",
+        badges: ["Panis手作可頌", "PAUL快速外帶", "Pret熱起司卷"],
+        map: "21 Rue du Petit Pont Paris"
+      },
+      {
         time: "08:30",
-        title: "⭐The Bride Paris 準時歸還婚紗（卸下重裝一身輕！）",
-        desc: "07:45 攜帶婚紗禮服從 13 區 B&B HOTEL 出發搭地鐵至 Odéon 站，08:30 準時點交歸還至工作室（22 Rue de l'Odéon，門禁: 2734 / 電梯: 1869）。點交完成一身輕鬆！",
-        badges: ["08:30已約定", "門禁2734", "電梯1869", "卸裝一身輕"],
-        map: "22 Rue de l'Odeon Paris"
+        title: "⭐ 聖禮拜堂 (Sainte-Chapelle) 現場無預約排隊",
+        desc: "因未預約時段，於 08:30 準時排在【無預約通道 (Sans réservation)】前排。邊吃早餐邊等 09:00 開門，避開上午排隊人潮。",
+        badges: ["08:30排隊卡位", "無預約通道首批", "司法宮入口"],
+        map: "8 Boulevard du Palais Paris"
       },
       {
         time: "09:00",
-        title: "聖日耳曼德佩左岸晨光咖啡與悠閒早餐",
-        desc: "歸還婚紗後步行 5 分鐘至雙叟咖啡館 (Les Deux Magots) 或花神咖啡館 (Café de Flore) 露天座，在初秋巴黎晨光中享用法式現烤可頌與熱拿鐵，享受完全放鬆的悠閒時光。",
-        badges: ["左岸咖啡館", "現烤可頌", "晨光放鬆"],
-        map: "Les Deux Magots Paris"
-      },
-      {
-        time: "11:00",
-        title: "⭐聖禮拜堂 (Sainte-Chapelle) 極致彩繪玻璃",
-        desc: "博物館通票開通！登二樓仰望 15 扇高達 15 米的 13 世紀中世紀彩繪玻璃窗，陽光穿透如身處巨型萬花筒珠寶盒。（建議預約 11:00 或 11:30 場次）",
-        badges: ["博物館通票首日", "中世紀彩繪玻璃", "陽光透射"],
+        title: "⭐ 聖禮拜堂內部參觀 ＆ 開通博物館通票 (PMP)",
+        desc: "首批入場，持 PMP 開通進場。登上 2 樓大殿欣賞 15 面高達 15 米的彩繪玻璃窗，細細觀賞 1,113 幅聖經故事彩繪畫卷，參觀時間約 90 分鐘。",
+        badges: ["PMP開通首日", "15面彩繪玻璃", "參觀90分鐘"],
         map: "Sainte-Chapelle Paris"
       },
       {
-        time: "12:00",
-        title: "巴黎古監獄 (Conciergerie) 瑪麗王后囚室",
-        desc: "順道參觀隔壁古監獄，中世紀壯觀哥德式衛兵大廳，走訪法國大革命瑪麗安東尼王后最後囚禁處。",
-        badges: ["古監獄", "瑪麗王后囚室", "哥德衛兵大廳"],
+        time: "10:30",
+        title: "⭐ 巴黎古監獄 (Conciergerie) 內部參觀",
+        desc: "自聖禮拜堂步行 30 秒直達。持 PMP 免預約通關，參觀中世紀哥德式挑高衛兵大廳、法國大革命展廳與瑪麗王后生前最後囚室，參觀時間約 75 分鐘。",
+        badges: ["持PMP免預約", "哥德衛兵大廳", "瑪麗王后囚室"],
         map: "Conciergerie Paris"
       },
       {
-        time: "14:00",
-        title: "橘園美術館 (Musée de l'Orangerie) 莫內睡蓮",
-        desc: "走進兩間橢圓形純白展廳，360 度沉浸在莫內八幅巨大《睡蓮 (Nymphéas)》全景畫的平靜光影中。（官網需預約 14:00 場次）",
-        badges: ["360度睡蓮", "橢圓展廳", "莫內巨作", "需預約14:00"],
-        map: "Musee de l Orangerie Paris"
+        time: "11:45",
+        title: "西堤島花市 (Marché aux Fleurs) 散步與小憩",
+        desc: "漫步西堤島百年植物花市，在綠蔭長椅稍作休息喝水，享受西堤島上午後微風，或漫步至太子廣場欣賞古典建築。",
+        badges: ["西堤島百年花市", "樹蔭休息", "太子廣場"],
+        map: "Marche aux fleurs Reine Elizabeth II Paris"
+      },
+      {
+        time: "12:30",
+        title: "⭐ 巴黎聖母院 (Notre-Dame) 內部深度參觀",
+        desc: "自花市步行 5 分鐘抵達聖母院正門。出示官方 App 免費預約碼（⚠️ 9/18 官方 App 預約 12:30 入場），參觀修復完成的中央大殿、玫瑰花窗與祭壇，門口廣場尋找「巴黎原點 (Point Zéro)」石碑。",
+        badges: ["⚠️9/18App預約", "修復後全新開放", "玫瑰花窗", "巴黎原點石碑"],
+        map: "Cathedrale Notre-Dame de Paris"
+      },
+      {
+        time: "14:15",
+        title: "取回禮服防塵袋 ➔ 步行前往 6 區婚紗工作室",
+        desc: "跨過聖小橋回到聖米歇爾特約店提取禮服防塵袋，沿 Boulevard Saint-Germain 悠閒漫步至 22 Rue de l'Odéon。",
+        badges: ["提取禮服袋", "步行8分鐘", "聖日耳曼大道"],
+        map: "22 Rue de l'Odeon Paris"
+      },
+      {
+        time: "14:45",
+        title: "⭐ The Bride Paris 歸還婚紗（卸下重裝換穿平底鞋）",
+        desc: "工作室（門禁: 2734 / 電梯: 1869）點交白紗與配件無損，換回平底鞋正式卸下所有裝備，一身輕鬆！",
+        badges: ["點交歸還", "門禁2734", "電梯1869", "換穿平底鞋"],
+        map: "22 Rue de l'Odeon Paris"
+      },
+      {
+        time: "15:20",
+        title: "搭乘公車 96 號（或地鐵）直達瑪黑區餐廳",
+        desc: "在 Odéon 站搭乘公車 96 號直達 Saint-Paul 站（車程約 18-20 分鐘・免爬地鐵樓梯・欣賞塞納河與市政廳街景），下車步行 4 分鐘抵達餐廳。",
+        badges: ["公車96號直達", "車程約20分", "免爬地鐵階梯"],
+        map: "Chez Janou Paris"
       },
       {
         time: "16:00",
-        title: "⭐Chez Janou 瑪黑區南法小酒館（已預訂 16:00 專屬席）",
-        desc: "品嚐人氣招牌：香煎干貝牛肝菌燉飯、普羅旺斯焗蝸牛、油封鴨肉，最後店員送上整盆無限挖的招牌「巨盆巧克力慕斯 (Mousse au Chocolat)」！",
-        badges: ["✅ 16:00已訂位", "焗烤蝸牛", "無限挖巧克力慕斯"],
+        title: "⭐ 🔴 Chez Janou 經典南法小酒館（已訂位 16:00）",
+        desc: "瑪黑區經典南法小酒館。必點：法式蒜香焗烤蝸牛、紅酒燉牛肉、普羅旺斯燉菜，以及招牌手工巧克力慕斯吃到飽，用餐時間約 90 分鐘。",
+        badges: ["✅16:00已訂位", "法式焗烤蝸牛", "招牌手工巧克力慕斯"],
         map: "Chez Janou Paris"
+      },
+      {
+        time: "17:45",
+        title: "步行至 Saint-Paul 站 ➔ 搭地鐵 1 號線前往凱旋門",
+        desc: "步行至 Saint-Paul 站，搭乘地鐵 1 號線直達 Charles de Gaulle - Étoile 站（車程約 18 分鐘，免轉車），出站走地下連通道直達凱旋門正下方。",
+        badges: ["地鐵1號線直達", "車程18分鐘", "免轉車直達"],
+        map: "Arc de Triomphe Paris"
+      },
+      {
+        time: "18:05",
+        title: "👑 ⭐ 凱旋門頂樓登頂 (Arc de Triomphe)",
+        desc: "持 PMP 通票走專屬通道入場（營業至 23:00）。登上 50 米頂端俯瞰 12 條放射狀大道晚霞車流，正面遠眺艾菲爾鐵塔。",
+        badges: ["持PMP免費通關", "營業至23:00", "12條大道晚霞", "遠眺鐵塔"],
+        map: "Arc de Triomphe Paris"
+      },
+      {
+        time: "19:30",
+        title: "香榭麗舍大道漫步前往老佛爺百貨",
+        desc: "自凱旋門沿香榭麗舍大道下坡漫步 700 公尺（約 8-10 分鐘），欣賞香榭大道黃昏街景。",
+        badges: ["香榭大道散步", "步行700公尺", "欣賞街景"],
+        map: "Avenue des Champs-Elysees Paris"
+      },
+      {
+        time: "19:40",
+        title: "🛍️ 老佛爺百貨香榭麗舍旗艦店 (Galeries Lafayette Champs-Élysées)",
+        desc: "丹麥 BIG 建築事務所設計。欣賞挑高中庭 6 個懸空幾何玻璃浮島與發光光之隧道入口，悠閒逛設計師選品、精品與香氛，每天營業至 21:00。",
+        badges: ["免預約", "營業至21:00", "懸空玻璃浮島", "光之隧道"],
+        map: "Galeries Lafayette Champs-Elysees Paris"
+      },
+      {
+        time: "21:00",
+        title: "搭車返回 13 區 B&B 飯店休息",
+        desc: "於百貨門口 Franklin D. Roosevelt 站搭車返回飯店休息，整理今日收穫。",
+        badges: ["地鐵返程", "飯店休整"],
+        map: "B&B HOTEL Paris Italie Porte de Choisy"
       }
     ],
     coverImage: "https://images.unsplash.com/photo-1543349689-9a4d426bee8e?w=800&auto=format&fit=crop&q=80"
