@@ -343,47 +343,62 @@
     }
 
     .section-title {
-      font-size: 1.18rem;
-      font-weight: 700;
+      font-size: 1.15rem;
+      font-weight: 800;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
       color: var(--accent-navy);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .section-title span.tag {
-      font-size: 0.76rem;
-      background: rgba(26, 107, 122, 0.08);
+    .airtag-arrow {
+      font-size: 0.72rem;
       color: var(--accent-cyan);
-      border: 1px solid rgba(26, 107, 122, 0.2);
-      padding: 3px 9px;
-      border-radius: 5px;
-      font-weight: 600;
+      margin-left: 2px;
+      transition: transform 0.2s;
     }
 
     .airtag-header-actions {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
     .btn-findmy {
       background: rgba(0, 0, 0, 0.03);
       border: 1px solid var(--border-subtle);
       color: var(--text-main);
-      font-size: 0.86rem;
-      font-weight: 600;
-      padding: 8px 16px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 6px 12px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: all 0.2s;
     }
 
     .btn-findmy:hover {
       background: rgba(26, 107, 122, 0.08);
       border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .btn-findmy.gold {
+      background: rgba(184, 134, 11, 0.08);
+      border-color: rgba(184, 134, 11, 0.25);
+      color: var(--accent-gold);
+    }
+
+    .btn-findmy.gold:hover {
+      background: rgba(184, 134, 11, 0.16);
+      border-color: var(--accent-gold);
     }
 
     .airtag-grid {
@@ -1591,11 +1606,76 @@
       background: #faf8f5;
       border: 1px solid rgba(0, 0, 0, 0.08);
       border-radius: var(--radius-md);
-      padding: 14px 16px;
+      padding: 12px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .manage-bag-card.dragging {
+      opacity: 0.4;
+      transform: scale(0.98);
+      border: 2px dashed var(--accent-gold);
+      background: rgba(184, 134, 11, 0.08);
+    }
+
+    .manage-bag-card.drag-over {
+      border-top: 3px solid var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    .drag-handle {
+      cursor: grab;
+      color: var(--text-muted);
+      font-size: 1.25rem;
+      padding: 6px 6px;
+      touch-action: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      line-height: 1;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .drag-handle:hover, .drag-handle:active {
+      color: var(--accent-gold);
+      background: rgba(184, 134, 11, 0.12);
+      cursor: grabbing;
+    }
+
+    .bag-order-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .btn-sort-arrow {
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 4px;
+      padding: 2px 5px;
+      font-size: 0.72rem;
+      color: var(--text-sub);
+      cursor: pointer;
+      line-height: 1;
+      transition: all 0.15s;
+    }
+
+    .btn-sort-arrow:hover:not(:disabled) {
+      background: rgba(184, 134, 11, 0.15);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    .btn-sort-arrow:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
     }
 
     .manage-bag-info {
@@ -1983,19 +2063,18 @@
     </div>
 
     <!-- 🏷️ AIRTAG 專屬管理專區 (預設收合) -->
-    <section class="airtag-section" id="airtag-section" style="padding: 14px 20px;">
+    <section class="airtag-section" id="airtag-section" style="padding: 12px 18px;">
       <div class="section-header" style="margin-bottom: 0; cursor: pointer; user-select: none;" onclick="toggleAirtagSection()">
         <div class="section-title">
-          <span>🏷️ AirTag 定位追蹤管理</span>
-          <span class="tag">iPhone 雙向連動</span>
-          <span id="airtag-toggle-arrow" style="font-size: 0.82rem; color: var(--accent-cyan); margin-left: 8px; font-weight: 600;">▼ 點此展開</span>
+          <span>🏷️ AirTag</span>
+          <span id="airtag-toggle-arrow" class="airtag-arrow">▼</span>
         </div>
         <div class="airtag-header-actions" onclick="event.stopPropagation()">
-          <button class="btn-findmy" onclick="openFindMyApp()">
-            <span>📱 開啟 iPhone 尋找</span>
+          <button type="button" class="btn-findmy" onclick="openFindMyApp()" title="開啟 iPhone 尋找 App">
+            <span>📱 尋找</span>
           </button>
-          <button class="btn-findmy" style="background: rgba(184, 134, 11, 0.1); border-color: var(--accent-gold); color: var(--accent-gold);" onclick="openAddAirtagModal()">
-            <span>＋ 新增 AirTag</span>
+          <button type="button" class="btn-findmy gold" onclick="openAddAirtagModal()" title="新增 AirTag">
+            <span>＋ 新增</span>
           </button>
         </div>
       </div>
@@ -2060,10 +2139,10 @@
         <span>⚙️ 管理包包清單與密碼備忘</span>
       </div>
       <div style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 12px;">
-        在此可直接為各個行李箱設定開鎖密碼，並隨時新增或移除包包：
+        💡 可按住左側「⋮⋮」拖曳調整順序，或點「▲ / ▼」微調，亦可在此設定行李箱密碼：
       </div>
       
-      <div class="manage-bag-list" id="manage-bag-list-container">
+      <div class="manage-bag-list" id="manage-bag-list-container" ontouchmove="handleBagTouchMove(event)" ontouchend="handleBagTouchEnd(event)">
         <!-- 由 JS 動態生成包包管理項目 -->
       </div>
 
@@ -2725,7 +2804,7 @@
       if (!grid) return;
       const isHidden = grid.style.display === 'none' || !grid.style.display;
       grid.style.display = isHidden ? 'grid' : 'none';
-      if (arrow) arrow.textContent = isHidden ? '▲ 點此收合' : '▼ 點此展開';
+      if (arrow) arrow.textContent = isHidden ? '▲' : '▼';
     }
 
     function checkAviationSafety() {
@@ -2845,6 +2924,9 @@
             (i.note && i.note.toUpperCase().includes(searchQuery))
           );
         }
+
+        // 🔤 依字首排列（英文字母 A~Z 與繁體中文在地標準排序）
+        bagItems.sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant-TW', { numeric: true, sensitivity: 'base' }));
 
         const doneCount = bagItems.filter(i => i.checked).length;
         const totalCount = bagItems.length;
@@ -3184,10 +3266,24 @@
       deleteBag(idToDelete);
     }
 
+    let draggedBagIndex = null;
+    let touchDragIdx = null;
+    let touchCardEl = null;
+
     function renderManageBagsList() {
       const container = document.getElementById('manage-bag-list-container');
-      container.innerHTML = bags.map(b => `
-        <div class="manage-bag-card">
+      if (!container) return;
+
+      container.innerHTML = bags.map((b, index) => `
+        <div class="manage-bag-card" id="bag-card-${b.id}" data-index="${index}" draggable="true"
+          ondragstart="handleBagDragStart(event, ${index})"
+          ondragover="handleBagDragOver(event, ${index})"
+          ondragleave="handleBagDragLeave(event)"
+          ondrop="handleBagDrop(event, ${index})"
+          ondragend="handleBagDragEnd(event)">
+          
+          <div class="drag-handle" title="按住拖曳調整順序" ontouchstart="handleBagTouchStart(event, ${index})">⋮⋮</div>
+
           <div class="manage-bag-info" style="cursor: pointer;" onclick="openEditBagModal('${b.id}')" title="點選編輯此包包">
             <span style="font-size: 1.6rem;">${b.icon}</span>
             <div>
@@ -3198,13 +3294,121 @@
               <div style="font-size: 0.76rem; color: var(--text-muted);">${escapeHtml(b.desc || '')}</div>
             </div>
           </div>
+
           <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="bag-order-btn-group">
+              <button type="button" class="btn-sort-arrow" onclick="moveBagOrder(${index}, -1)" ${index === 0 ? 'disabled' : ''} title="向上移動一位">▲</button>
+              <button type="button" class="btn-sort-arrow" onclick="moveBagOrder(${index}, 1)" ${index === bags.length - 1 ? 'disabled' : ''} title="向下移動一位">▼</button>
+            </div>
             <input type="text" class="manage-bag-pwd-input" placeholder="密碼/備忘" value="${escapeHtml(b.pwd || '')}" onchange="updateBagPwd('${b.id}', this.value)" title="輸入此箱開鎖密碼或綁帶密碼">
             <button class="btn-edit-icon" onclick="openEditBagModal('${b.id}')" title="編輯此包包名稱與設定">✏️</button>
             <button class="btn-del-icon" onclick="deleteBag('${b.id}')" title="刪除此包包">🗑️</button>
           </div>
         </div>
       `).join('');
+    }
+
+    function moveBagOrder(index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= bags.length) return;
+      const movedBag = bags.splice(index, 1)[0];
+      bags.splice(newIndex, 0, movedBag);
+      saveData();
+      renderManageBagsList();
+      renderBagFilterBar();
+      if (currentView === 'BAGS') renderBagView();
+      showToast(`✅ 已將【${movedBag.name}】移至第 ${newIndex + 1} 位！`, 'success', 2000);
+    }
+
+    function handleBagDragStart(e, index) {
+      draggedBagIndex = index;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', index);
+      const card = e.currentTarget;
+      setTimeout(() => {
+        if (card) card.classList.add('dragging');
+      }, 0);
+    }
+
+    function handleBagDragOver(e, index) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const card = e.currentTarget;
+      if (card && !card.classList.contains('dragging')) {
+        card.classList.add('drag-over');
+      }
+    }
+
+    function handleBagDragLeave(e) {
+      const card = e.currentTarget;
+      if (card) card.classList.remove('drag-over');
+    }
+
+    function handleBagDrop(e, targetIndex) {
+      e.preventDefault();
+      const card = e.currentTarget;
+      if (card) card.classList.remove('drag-over');
+
+      if (draggedBagIndex === null || draggedBagIndex === targetIndex) return;
+      const movedBag = bags.splice(draggedBagIndex, 1)[0];
+      bags.splice(targetIndex, 0, movedBag);
+      saveData();
+      renderManageBagsList();
+      renderBagFilterBar();
+      if (currentView === 'BAGS') renderBagView();
+      showToast(`✅ 已將【${movedBag.name}】調整至第 ${targetIndex + 1} 位！`, 'success', 2000);
+      draggedBagIndex = null;
+    }
+
+    function handleBagDragEnd(e) {
+      document.querySelectorAll('.manage-bag-card').forEach(c => {
+        c.classList.remove('dragging');
+        c.classList.remove('drag-over');
+      });
+      draggedBagIndex = null;
+    }
+
+    // 📱 手機觸控拖曳支援
+    function handleBagTouchStart(e, index) {
+      touchDragIdx = index;
+      touchCardEl = document.getElementById(`bag-card-${bags[index].id}`);
+      if (touchCardEl) touchCardEl.classList.add('dragging');
+    }
+
+    function handleBagTouchMove(e) {
+      if (touchDragIdx === null) return;
+      const touch = e.touches[0];
+      const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+      const targetCard = elem ? elem.closest('.manage-bag-card') : null;
+      document.querySelectorAll('.manage-bag-card').forEach(c => c.classList.remove('drag-over'));
+      if (targetCard && targetCard !== touchCardEl) {
+        targetCard.classList.add('drag-over');
+      }
+    }
+
+    function handleBagTouchEnd(e) {
+      if (touchDragIdx === null) return;
+      const touch = e.changedTouches[0];
+      const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+      const targetCard = elem ? elem.closest('.manage-bag-card') : null;
+      document.querySelectorAll('.manage-bag-card').forEach(c => {
+        c.classList.remove('dragging');
+        c.classList.remove('drag-over');
+      });
+      if (targetCard) {
+        const targetIdx = parseInt(targetCard.getAttribute('data-index'), 10);
+        if (!isNaN(targetIdx) && targetIdx !== touchDragIdx) {
+          const moved = bags.splice(touchDragIdx, 1)[0];
+          bags.splice(targetIdx, 0, moved);
+          saveData();
+          renderManageBagsList();
+          renderBagFilterBar();
+          if (currentView === 'BAGS') renderBagView();
+          showToast(`✅ 已將【${moved.name}】調整至第 ${targetIdx + 1} 位！`, 'success', 2000);
+        }
+      }
+      touchDragIdx = null;
+      touchCardEl = null;
     }
     function updateBagPwd(bagId, newPwd) {
       const bag = bags.find(b => b.id === bagId);
@@ -3302,6 +3506,9 @@
       CATEGORY_ORDER.forEach(catDef => {
         const catItems = grouped[catDef.key];
         if (!catItems || catItems.length === 0) return;
+
+        // 🔤 依字首排列（英文字母 A~Z 與繁體中文在地標準排序）
+        catItems.sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant-TW', { numeric: true, sensitivity: 'base' }));
 
         const doneCount = catItems.filter(i => i.checked).length;
         const totalCount = catItems.length;
