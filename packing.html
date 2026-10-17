@@ -2498,24 +2498,24 @@
 
 
   <script>
-    // 🧳 預設包包清單 (含使用者特別指定的大藍箱密碼 229 與綁帶密碼 242)
+    // 🧳 預設包包清單（密碼與現金等私人資訊請勿寫在程式裡，自行記在手機）
     const DEFAULT_BAGS = [
-      { id: 'b-wb-box', name: '白色-藍色行李箱', icon: '🧳', desc: '長途託運大箱 (綁定 AirTag)', pwd: '箱密碼 229 ｜ 綁帶 242', sealed: false },
+      { id: 'b-wb-box', name: '白色-藍色行李箱', icon: '🧳', desc: '長途託運大箱 (綁定 AirTag)', pwd: '密碼（自行記在手機）', sealed: false },
       { id: 'b-black-box', name: '大黑箱', icon: '🧳', desc: '託運大箱 / 西裝防塵袋', pwd: '', sealed: false },
-      { id: 'b-safe-pass', name: '隨身貼身防盜包', icon: '🛡️', desc: '護照與婚紗尾款大額現金 (綁定 AirTag)', pwd: '', sealed: false },
+      { id: 'b-safe-pass', name: '隨身貼身防盜包', icon: '🛡️', desc: '護照與重要證件 (綁定 AirTag)', pwd: '', sealed: false },
       { id: 'b-safe-green', name: '綠色-防盜小小包', icon: '💚', desc: '隨身貴重小包 (綁定 AirTag)', pwd: '', sealed: false },
       { id: 'b-cam-bag', name: '相機包', icon: '📷', desc: '行動電源與充電配件', pwd: '', sealed: false },
       { id: 'b-backpack', name: '隨身背包', icon: '🎒', desc: '機上過夜與隨身裝備', pwd: '', sealed: false },
       { id: 'b-cosmetic', name: '化妝保養盥洗包', icon: '💄', desc: '洗沐卸妝、保養護膚與彩妝', pwd: '', sealed: false },
-      { id: 'b-wallet', name: '隨身錢包', icon: '👛', desc: '歐元現鈔與回饋信用卡', pwd: '', sealed: false },
+      { id: 'b-wallet', name: '隨身錢包', icon: '👛', desc: '零錢與信用卡', pwd: '', sealed: false },
       { id: 'b-photo-bag', name: '拍攝日隨身大袋', icon: '👗', desc: '婚紗拍攝日轉場換裝', pwd: '', sealed: false },
       { id: 'b-wear', name: '隨身穿戴', icon: '👔', desc: '穿在身上或隨身佩戴', pwd: '', sealed: false }
     ];
 
     const DEFAULT_AIRTAGS = [
-      { id: 'at-1', target: '防盜護照包', label: '重要證件與現金', checked: true },
+      { id: 'at-1', target: '防盜護照包', label: '重要證件', checked: true },
       { id: 'at-2', target: '綠色-防盜小小包', label: '隨身貴重品', checked: true },
-      { id: 'at-3', target: '白色-藍色行李箱', label: '長途託運大箱 (密碼229)', checked: true }
+      { id: 'at-3', target: '白色-藍色行李箱', label: '長途託運大箱', checked: true }
     ];
 
     // 📋 完整旗艦清單 (整併使用者原始 44 項 ＋ 本次全新擴充之隱眼、藥物、衛生、保養洗沐、糧食、電熱毯、穿搭組)
@@ -2540,7 +2540,7 @@
       { id: 3, name: '台灣實體駕照正本', loc: '隨身貼身防盜包', note: '', isRed: false, checked: false, cat: 'docs' },
       { id: 4, name: '國際駕照正本 (A/B蓋章)', loc: '隨身貼身防盜包', note: '', isRed: false, checked: false, cat: 'docs' },
       { id: 5, name: '海外高回饋信用卡 (已開通4位數PIN碼)', loc: '隨身錢包', note: '', isRed: false, checked: false, cat: 'docs' },
-      { id: 6, name: '婚紗尾款歐元現鈔 €2500', loc: '隨身錢包', note: '', isRed: false, checked: false, cat: 'docs' },
+      { id: 6, name: '婚紗尾款現金（金額自行記在手機）', loc: '隨身錢包', note: '', isRed: false, checked: false, cat: 'docs' },
       { id: 7, name: '歐元零錢與小面額現金', loc: '隨身錢包', note: '', isRed: false, checked: false, cat: 'docs' },
       { id: 8, name: '1 吋大頭照 2 張', loc: '隨身貼身防盜包', note: '', isRed: false, checked: false, cat: 'docs' },
       { id: 101, name: '悠遊卡', loc: '隨身錢包', note: '', isRed: false, checked: false, cat: 'docs' },
@@ -2691,7 +2691,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyD89r4geyKmKGymQYZ8dF1Vuihm9ExaGnc",
       authDomain: "tainan-package-king.firebaseapp.com",
-      databaseURL: safeStorage.getItem('firebase_rtdb_url') || "https://tainan-package-king-default-rtdb.firebaseio.com",
+      databaseURL: "https://tainan-package-king-default-rtdb.firebaseio.com", // 🔒 固定網址，不再允許從瀏覽器修改
       projectId: "tainan-package-king",
       storageBucket: "tainan-package-king.firebasestorage.app",
       messagingSenderId: "961594589129",
@@ -2752,9 +2752,13 @@
           lastCloudTimestamp = val.timestamp || Date.now();
 
           // 載入雲端最新資料
-          if (val.items && Array.isArray(val.items)) items = val.items;
-          if (val.bags && Array.isArray(val.bags)) bags = val.bags;
-          if (val.airtags && Array.isArray(val.airtags)) airtags = val.airtags;
+          // 🛡️ 雲端資料也要先檢查格式再使用
+          const cloudItems = sanitizeItems(val.items);
+          const cloudBags = sanitizeBags(val.bags);
+          const cloudAirtags = sanitizeAirtags(val.airtags);
+          if (cloudItems) items = cloudItems;
+          if (cloudBags) bags = cloudBags;
+          if (cloudAirtags) airtags = cloudAirtags;
 
           saveData(false); // 存入本地但不重複觸發推播
           renderItems();
@@ -2806,24 +2810,66 @@
       }
     }
 
+    // 🔒 以前可以在這裡修改資料庫網址，已移除（避免被惡意程式把資料導到別人的資料庫）
+    try { window.localStorage && window.localStorage.removeItem('firebase_rtdb_url'); } catch (e) {}
+
     function showCloudSyncInfo() {
-      const currentUrl = firebaseConfig.databaseURL;
       const statusText = isCloudOnline ? '🟢 已連線 (即時秒級同步正常)' : '⚪ 離線或尚未於 Firebase 開通 Realtime Database';
-      const promptMsg = `【☁️ Firebase 雲端雙向同步資訊】\n\n` +
+      alert(`【☁️ Firebase 雲端雙向同步資訊】\n\n` +
         `• 專案：${firebaseConfig.projectId}\n` +
         `• 目前狀態：${statusText}\n` +
-        `• 資料庫網址：${currentUrl}\n\n` +
-        `💡 提示：若您在 Firebase Console 選擇了不同地區（如新加坡），可在此修改 Database URL：`;
-      const newUrl = prompt(promptMsg, currentUrl);
-      if (newUrl && newUrl.trim() && newUrl.trim() !== currentUrl) {
-        safeStorage.setItem('firebase_rtdb_url', newUrl.trim());
-        location.reload();
-      }
+        `• 資料庫網址：${firebaseConfig.databaseURL}`);
     }
 
-    let bags = JSON.parse(safeStorage.getItem('tainan_packing_bags_v9') || 'null') || DEFAULT_BAGS;
-    let airtags = JSON.parse(safeStorage.getItem('tainan_packing_airtags_v9') || 'null') || DEFAULT_AIRTAGS;
-    let items = JSON.parse(safeStorage.getItem('tainan_packing_items_v9') || 'null') || DEFAULT_ITEMS;
+    // 🛡️ 資料檢查：從瀏覽器或雲端讀回來的資料，一律先檢查格式、修正 id，避免被塞入惡意程式
+    const SAFE_ID_RE = /^[A-Za-z0-9_-]{1,64}$/;
+    let sanitizeSeq = 0;
+    function toStr(v, fallback = '') {
+      if (v === null || v === undefined) return fallback;
+      return (typeof v === 'string') ? v : String(v);
+    }
+    function sanitizeBags(arr) {
+      if (!Array.isArray(arr)) return null;
+      const seen = new Set();
+      return arr.filter(b => b && typeof b === 'object').map(b => {
+        let id = toStr(b.id);
+        if (!SAFE_ID_RE.test(id) || seen.has(id)) id = 'b-fix-' + Date.now() + '-' + (sanitizeSeq++);
+        seen.add(id);
+        return { ...b, id, name: toStr(b.name, '未命名包包'), icon: toStr(b.icon, '🧳'), desc: toStr(b.desc), pwd: toStr(b.pwd), sealed: b.sealed === true };
+      });
+    }
+    function sanitizeAirtags(arr) {
+      if (!Array.isArray(arr)) return null;
+      const seen = new Set();
+      return arr.filter(a => a && typeof a === 'object').map(a => {
+        let id = toStr(a.id);
+        if (!SAFE_ID_RE.test(id) || seen.has(id)) id = 'at-fix-' + Date.now() + '-' + (sanitizeSeq++);
+        seen.add(id);
+        return { ...a, id, target: toStr(a.target), label: toStr(a.label), checked: a.checked === true };
+      });
+    }
+    function sanitizeItems(arr) {
+      if (!Array.isArray(arr)) return null;
+      const seen = new Set();
+      return arr.filter(i => i && typeof i === 'object').map(i => {
+        let id = i.id;
+        if (typeof id === 'string' && /^\d{1,16}$/.test(id)) id = Number(id);
+        if (typeof id !== 'number' || !Number.isSafeInteger(id) || id < 0 || seen.has(id)) id = Date.now() * 1000 + (sanitizeSeq++);
+        seen.add(id);
+        const clean = { ...i, id, name: toStr(i.name, '未命名物品'), note: toStr(i.note), cat: toStr(i.cat, 'travel'), checked: i.checked === true };
+        if (Array.isArray(i.locs)) clean.locs = i.locs.map(l => toStr(l)).filter(Boolean);
+        if (Array.isArray(i.loc)) clean.loc = i.loc.map(l => toStr(l)).filter(Boolean);
+        else if (i.loc !== undefined) clean.loc = toStr(i.loc);
+        return clean;
+      });
+    }
+    function loadLocal(key) {
+      try { return JSON.parse(safeStorage.getItem(key) || 'null'); } catch (e) { return null; }
+    }
+
+    let bags = sanitizeBags(loadLocal('tainan_packing_bags_v9')) || DEFAULT_BAGS;
+    let airtags = sanitizeAirtags(loadLocal('tainan_packing_airtags_v9')) || DEFAULT_AIRTAGS;
+    let items = sanitizeItems(loadLocal('tainan_packing_items_v9')) || DEFAULT_ITEMS;
     let currentView = 'BAGS'; // 預設顯示【包包細項】平鋪大框框！
     let currentFilterBag = 'ALL';
     let searchQuery = '';
@@ -2993,7 +3039,7 @@
         const isChecked = at.checked;
         return `
           <div class="airtag-card ${isChecked ? 'checked' : ''}">
-            <div class="airtag-left" onclick="toggleAirtag('${at.id}')">
+            <div class="airtag-left" onclick="toggleAirtag('${escapeHtml(at.id)}')">
               <div class="airtag-icon-bubble">
                 <span>🏷️</span>
                 <span class="airtag-apple-logo">AirTag</span>
@@ -3007,11 +3053,11 @@
               </div>
             </div>
             <div class="airtag-actions">
-              <button class="btn-sound-ping" onclick="pingAirtag('${escapeHtml(at.target)}')">🔊 呼叫</button>
-              <div class="custom-check" onclick="toggleAirtag('${at.id}')">
+              <button class="btn-sound-ping" data-target="${escapeHtml(at.target)}" onclick="pingAirtag(this.dataset.target)">🔊 呼叫</button>
+              <div class="custom-check" onclick="toggleAirtag('${escapeHtml(at.id)}')">
                 <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
               </div>
-              <button class="btn-del-icon" onclick="deleteAirtag('${at.id}')" title="刪除此 AirTag">🗑️</button>
+              <button class="btn-del-icon" onclick="deleteAirtag('${escapeHtml(at.id)}')" title="刪除此 AirTag">🗑️</button>
             </div>
           </div>
         `;
@@ -3092,8 +3138,8 @@
         return `
           <div class="bag-card ${isSealed ? 'sealed' : ''}">
             <div class="bag-card-top">
-              <div class="bag-card-title-group" style="cursor: pointer;" onclick="openEditBagModal('${bag.id}')" title="點選編輯此包包名稱與設定">
-                <div class="bag-card-icon">${bag.icon}</div>
+              <div class="bag-card-title-group" style="cursor: pointer;" onclick="openEditBagModal('${escapeHtml(bag.id)}')" title="點選編輯此包包名稱與設定">
+                <div class="bag-card-icon">${escapeHtml(bag.icon)}</div>
                 <div>
                   <div class="bag-card-name" style="display: flex; align-items: center; gap: 6px;">
                     <span>${escapeHtml(bag.name)}</span>
@@ -3107,8 +3153,8 @@
                 <span class="seal-badge ${isSealed ? 'sealed' : 'unsealed'}">
                   ${isSealed ? '✓ 已封箱' : '開放中'}
                 </span>
-                <button class="btn-edit-icon" onclick="openEditBagModal('${bag.id}')" title="編輯此包包名稱與設定">✏️</button>
-                <button class="btn-del-icon" onclick="deleteBag('${bag.id}')" title="刪除此包包">🗑️</button>
+                <button class="btn-edit-icon" onclick="openEditBagModal('${escapeHtml(bag.id)}')" title="編輯此包包名稱與設定">✏️</button>
+                <button class="btn-del-icon" onclick="deleteBag('${escapeHtml(bag.id)}')" title="刪除此包包">🗑️</button>
               </div>
             </div>
 
@@ -3128,16 +3174,16 @@
               ${bagItems.length === 0 ? '<div style="color: var(--text-muted); font-size: 0.95rem; text-align: center; padding: 24px;">目前尚無收納物品</div>' : ''}
               ${bagItems.map(item => `
                 <div class="bag-mini-item ${item.checked ? 'checked' : ''}">
-                  <div class="bag-item-left" onclick="toggleItem(${item.id})">
+                  <div class="bag-item-left" onclick="toggleItem(${Number(item.id)})">
                     <div class="mini-check-box">
                       <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </div>
                     <span>${escapeHtml(item.name)}</span>
                   </div>
                   <div class="bag-item-right">
-                    <span class="note-tag" onclick="event.stopPropagation(); openNoteModal(${item.id})" title="點選編輯備註">${item.note ? escapeHtml(item.note) : '＋備註'}</span>
-                    <button class="btn-edit-icon" onclick="event.stopPropagation(); openEditItemModal(${item.id})" title="編輯此物品" style="padding: 2px 4px; font-size: 0.85rem;">✏️</button>
-                    <button class="btn-del-icon" onclick="event.stopPropagation(); deleteItem(${item.id})" title="刪除此物品" style="padding: 2px 5px; font-size: 0.85rem;">✕</button>
+                    <span class="note-tag" onclick="event.stopPropagation(); openNoteModal(${Number(item.id)})" title="點選編輯備註">${item.note ? escapeHtml(item.note) : '＋備註'}</span>
+                    <button class="btn-edit-icon" onclick="event.stopPropagation(); openEditItemModal(${Number(item.id)})" title="編輯此物品" style="padding: 2px 4px; font-size: 0.85rem;">✏️</button>
+                    <button class="btn-del-icon" onclick="event.stopPropagation(); deleteItem(${Number(item.id)})" title="刪除此物品" style="padding: 2px 5px; font-size: 0.85rem;">✕</button>
                   </div>
                 </div>
               `).join('')}
@@ -3145,10 +3191,10 @@
 
             <!-- 卡片底列操作 -->
             <div class="bag-card-bottom">
-              <button class="btn-bag-action seal" onclick="toggleSealBag('${bag.id}')">
+              <button class="btn-bag-action seal" onclick="toggleSealBag('${escapeHtml(bag.id)}')">
                 ${isSealed ? '🔓 解除封箱' : '🔒 一鍵封箱'}
               </button>
-              <button class="btn-bag-action add" onclick="openAddModal('${escapeHtml(bag.name)}')">
+              <button class="btn-bag-action add" data-bag-name="${escapeHtml(bag.name)}" onclick="openAddModal(this.dataset.bagName)">
                 ＋ 塞入新物品
               </button>
             </div>
@@ -3281,9 +3327,9 @@
       container.innerHTML = bags.map(b => {
         const isSelected = selectedEditItemBags.includes(b.name);
         return `
-          <button type="button" class="bag-chip-select ${isSelected ? 'active' : ''}" onclick="toggleEditItemBagChip('${escapeHtml(b.name)}')">
+          <button type="button" class="bag-chip-select ${isSelected ? 'active' : ''}" data-bag-name="${escapeHtml(b.name)}" onclick="toggleEditItemBagChip(this.dataset.bagName)">
             <span>${isSelected ? '✓' : '＋'}</span>
-            <span>${b.icon} ${escapeHtml(b.name)}</span>
+            <span>${escapeHtml(b.icon)} ${escapeHtml(b.name)}</span>
           </button>
         `;
       }).join('');
@@ -3436,7 +3482,7 @@
       if (!container) return;
 
       container.innerHTML = bags.map((b, index) => `
-        <div class="manage-bag-card" id="bag-card-${b.id}" data-index="${index}" draggable="true"
+        <div class="manage-bag-card" id="bag-card-${escapeHtml(b.id)}" data-index="${index}" draggable="true"
           ondragstart="handleBagDragStart(event, ${index})"
           ondragover="handleBagDragOver(event, ${index})"
           ondragleave="handleBagDragLeave(event)"
@@ -3447,8 +3493,8 @@
           <div class="manage-bag-top-row">
             <div class="manage-bag-left">
               <div class="drag-handle" title="按住拖曳調整順序" ontouchstart="handleBagTouchStart(event, ${index})">⋮⋮</div>
-              <span class="manage-bag-icon" onclick="openEditBagModal('${b.id}')" title="點選編輯">${b.icon}</span>
-              <div class="manage-bag-title-wrap" onclick="openEditBagModal('${b.id}')" title="點選編輯此包包">
+              <span class="manage-bag-icon" onclick="openEditBagModal('${escapeHtml(b.id)}')" title="點選編輯">${escapeHtml(b.icon)}</span>
+              <div class="manage-bag-title-wrap" onclick="openEditBagModal('${escapeHtml(b.id)}')" title="點選編輯此包包">
                 <div class="manage-bag-name-text">${escapeHtml(b.name)}</div>
                 ${b.desc ? `<div class="manage-bag-desc-text">${escapeHtml(b.desc)}</div>` : ''}
               </div>
@@ -3459,15 +3505,15 @@
                 <button type="button" class="btn-sort-arrow" onclick="moveBagOrder(${index}, -1)" ${index === 0 ? 'disabled' : ''} title="向上移動一位">▲</button>
                 <button type="button" class="btn-sort-arrow" onclick="moveBagOrder(${index}, 1)" ${index === bags.length - 1 ? 'disabled' : ''} title="向下移動一位">▼</button>
               </div>
-              <button type="button" class="btn-item-tool" onclick="openEditBagModal('${b.id}')" title="編輯此包包">✏️</button>
-              <button type="button" class="btn-item-tool del" onclick="deleteBag('${b.id}')" title="刪除此包包">🗑️</button>
+              <button type="button" class="btn-item-tool" onclick="openEditBagModal('${escapeHtml(b.id)}')" title="編輯此包包">✏️</button>
+              <button type="button" class="btn-item-tool del" onclick="deleteBag('${escapeHtml(b.id)}')" title="刪除此包包">🗑️</button>
             </div>
           </div>
 
           <!-- 下層：備註輸入框 (簡潔通用) -->
           <div class="manage-bag-bottom-row">
             <span class="manage-bag-pwd-label">備註：</span>
-            <input type="text" class="manage-bag-pwd-input" placeholder="備註" value="${escapeHtml(b.pwd || '')}" onchange="updateBagPwd('${b.id}', this.value)" title="輸入備註或開鎖密碼">
+            <input type="text" class="manage-bag-pwd-input" placeholder="備註" value="${escapeHtml(b.pwd || '')}" onchange="updateBagPwd('${escapeHtml(b.id)}', this.value)" title="輸入備註或開鎖密碼">
           </div>
         </div>
       `).join('');
@@ -3617,8 +3663,8 @@
         const count = items.filter(i => getItemLocs(i).includes(b.name)).length;
         const isActive = currentFilterBag === b.name;
         html += `
-          <button class="filter-pill ${isActive ? 'active' : ''}" onclick="setBagFilter('${escapeHtml(b.name)}')">
-            <span>${b.icon} ${escapeHtml(b.name)}</span>
+          <button class="filter-pill ${isActive ? 'active' : ''}" data-bag-name="${escapeHtml(b.name)}" onclick="setBagFilter(this.dataset.bagName)">
+            <span>${escapeHtml(b.icon)} ${escapeHtml(b.name)}</span>
             <span class="count">${count}</span>
           </button>
         `;
@@ -3669,7 +3715,7 @@
           <div style="text-align: center; padding: 50px; color: var(--text-sub);">
             <div style="font-size: 2.2rem; margin-bottom: 8px;">✨</div>
             <div>查無符合條件的打包物品</div>
-            <button class="btn-action gold" style="margin-top: 14px;" onclick="openAddModal('${currentFilterBag !== 'ALL' && currentFilterBag !== 'TODO' ? currentFilterBag : ''}')">
+            <button class="btn-action gold" style="margin-top: 14px;" data-bag-name="${escapeHtml(currentFilterBag !== 'ALL' && currentFilterBag !== 'TODO' ? currentFilterBag : '')}" onclick="openAddModal(this.dataset.bagName)">
               ＋ 新增物品到此包包
             </button>
           </div>
@@ -3721,7 +3767,7 @@
           } else if (itemLocs.length === 1) {
             const bName = itemLocs[0];
             const bagObj = bags.find(b => b.name === bName);
-            const bagIcon = bagObj ? bagObj.icon : '📍';
+            const bagIcon = bagObj ? escapeHtml(bagObj.icon) : '📍';
             if (bName.includes('大黑箱') || bName.includes('行李箱')) bagStyleClass += ' box';
             else if (bName.includes('防盜') || bName.includes('錢包')) bagStyleClass += ' safe';
             else if (bName.includes('相機')) bagStyleClass += ' cam';
@@ -3730,7 +3776,7 @@
             // 複選多個包包
             const icons = itemLocs.map(l => {
               const bg = bags.find(b => b.name === l);
-              return bg ? bg.icon : '🧳';
+              return bg ? escapeHtml(bg.icon) : '🧳';
             }).slice(0, 2).join('');
             bagStyleClass += ' safe';
             bagLabelHtml = `<span>${icons}</span><span>${escapeHtml(itemLocs[0])} 等 ${itemLocs.length} 包</span><span class="arrow">▼</span>`;
@@ -3753,7 +3799,7 @@
 
           html += `
             <div class="item-row ${item.checked ? 'checked' : ''} ${isDanger ? 'has-danger' : ''}">
-              <div class="check-area" onclick="toggleItem(${item.id})">
+              <div class="check-area" onclick="toggleItem(${Number(item.id)})">
                 <div class="custom-check">
                   <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </div>
@@ -3762,20 +3808,20 @@
               <div class="item-main-content">
                 <!-- 第一行：物品名稱 ＋ 編輯/刪除操作按鈕 -->
                 <div class="item-header-line">
-                  <span class="item-name" onclick="toggleItem(${item.id})">${escapeHtml(item.name)}</span>
+                  <span class="item-name" onclick="toggleItem(${Number(item.id)})">${escapeHtml(item.name)}</span>
                   <div class="item-action-btns" onclick="event.stopPropagation()">
-                    <button type="button" class="btn-item-tool" onclick="openEditItemModal(${item.id})" title="編輯此物品">✏️</button>
-                    <button type="button" class="btn-item-tool del" onclick="deleteItem(${item.id})" title="刪除此物品">🗑️</button>
+                    <button type="button" class="btn-item-tool" onclick="openEditItemModal(${Number(item.id)})" title="編輯此物品">✏️</button>
+                    <button type="button" class="btn-item-tool del" onclick="deleteItem(${Number(item.id)})" title="刪除此物品">🗑️</button>
                   </div>
                 </div>
 
                 <!-- 第二行：包包歸屬標籤 ＋ 打包狀態 ＋ 備註 -->
                 <div class="item-footer-line" onclick="event.stopPropagation()">
-                  <button type="button" class="${bagStyleClass}" onclick="openBagPicker(${item.id})" title="點選選擇收納包包">
+                  <button type="button" class="${bagStyleClass}" onclick="openBagPicker(${Number(item.id)})" title="點選選擇收納包包">
                     ${bagLabelHtml}
                   </button>
                   ${statusHtml}
-                  <span class="note-tag" onclick="openNoteModal(${item.id})" title="點選編輯備註">${item.note ? '📝 ' + escapeHtml(item.note) : '＋備註'}</span>
+                  <span class="note-tag" onclick="openNoteModal(${Number(item.id)})" title="點選編輯備註">${item.note ? '📝 ' + escapeHtml(item.note) : '＋備註'}</span>
                 </div>
               </div>
             </div>
@@ -3824,10 +3870,10 @@
         const isSelected = tempPickerBagNames.includes(b.name);
         const itemCount = items.filter(i => getItemLocs(i).includes(b.name)).length;
         return `
-          <div class="bag-picker-item ${isSelected ? 'selected' : ''}" onclick="toggleBagPickerSelection('${escapeHtml(b.name)}')">
+          <div class="bag-picker-item ${isSelected ? 'selected' : ''}" data-bag-name="${escapeHtml(b.name)}" onclick="toggleBagPickerSelection(this.dataset.bagName)">
             <div class="bag-picker-left">
               <div class="picker-check">${isSelected ? '✓' : ''}</div>
-              <span class="bag-picker-icon">${b.icon}</span>
+              <span class="bag-picker-icon">${escapeHtml(b.icon)}</span>
               <div>
                 <div class="bag-picker-name">${escapeHtml(b.name)}</div>
               </div>
@@ -3970,8 +4016,8 @@
       tagContainer.innerHTML = bags.map(b => {
         const isSelected = currentLocs.includes(b.name);
         return `
-          <button type="button" class="btn-choose-bag ${isSelected ? 'safe' : ''}" style="font-size: 0.78rem; padding: 5px 10px;" onclick="toggleAddModalBag('${escapeHtml(b.name)}')">
-            <span>${isSelected ? '✓ ' : ''}${b.icon} ${escapeHtml(b.name)}</span>
+          <button type="button" class="btn-choose-bag ${isSelected ? 'safe' : ''}" style="font-size: 0.78rem; padding: 5px 10px;" data-bag-name="${escapeHtml(b.name)}" onclick="toggleAddModalBag(this.dataset.bagName)">
+            <span>${isSelected ? '✓ ' : ''}${escapeHtml(b.icon)} ${escapeHtml(b.name)}</span>
           </button>
         `;
       }).join('');
